@@ -43,28 +43,38 @@
   <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
 
   <script>
-    document.getElementById("loveLetterForm").addEventListener("submit", function (e) {
-      e.preventDefault();
+  document.getElementById("loveLetterForm").addEventListener("submit", async function (e) {
+    e.preventDefault();
 
-      const destinatario = document.getElementById("destinatario").value;
-      const mensaje = document.getElementById("mensaje").value;
-      const estilo = document.getElementById("estilo").value || "romántico";
+    const destinatario = document.getElementById("destinatario").value.trim();
+    const mensaje = document.getElementById("mensaje").value.trim();
+    const estilo = document.getElementById("estilo").value.trim() || "romántico";
 
-      const carta = `
-        Querido/a ${destinatario},<br><br>
-        ${mensaje}<br><br>
-        Con todo mi cariño,<br>
-        (Tu nombre)
-      `;
+    try {
+      const respuesta = await fetch("/api/generar-carta", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ destinatario, mensaje, estilo })
+      });
 
-      document.getElementById("contenidoCarta").innerHTML = carta;
-      document.getElementById("cartaGenerada").classList.remove("hidden");
-    });
+      const data = await respuesta.json();
 
-    function descargarPDF() {
-      const element = document.getElementById("contenidoCarta");
-      html2pdf().from(element).save("Carta_Lettera.pdf");
+      if (data.carta) {
+        document.getElementById("contenidoCarta").innerHTML = data.carta.replace(/\n/g, "<br>");
+        document.getElementById("cartaGenerada").classList.remove("hidden");
+      } else {
+        alert("❌ Error generando la carta:\n" + (data.error || "Desconocido"));
+      }
+    } catch (err) {
+      alert("⚠️ Error al conectar con el servidor:\n" + err.message);
     }
-  </script>
+  });
+
+  function descargarPDF() {
+    const element = document.getElementById("contenidoCarta");
+    html2pdf().from(element).save("Carta_Lettera.pdf");
+  }
+</script>
+
 </body>
 </html>
