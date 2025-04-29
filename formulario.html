@@ -1,74 +1,91 @@
-<form id="loveLetterForm" class="bg-white p-6 rounded-xl shadow space-y-4">
-
-  <!-- Tipo de carta -->
-  <div>
-    <label class="block font-semibold mb-1">¿Qué tipo de carta querés?</label>
-    <select id="tipoCarta" name="tipoCarta" class="w-full border p-2 rounded" required>
-      <option value="amor">Carta de Amor</option>
-      <option value="perdon">Carta de Perdón</option>
-      <option value="felicitacion">Carta de Felicitación</option>
-      <option value="agradecimiento">Carta de Agradecimiento</option>
-      <option value="laboral">Carta de Presentación Laboral</option>
-      <option value="libro">Libro Personalizado</option>
-    </select>
-  </div>
-
-  <!-- Plan -->
-  <div>
-    <label class="block font-semibold mb-1">Elegí el plan</label>
-    <select id="plan" name="plan" class="w-full border p-2 rounded" required>
-      <option value="basico">Básico (hasta 200 palabras)</option>
-      <option value="intermedio">Intermedio (hasta 350 palabras)</option>
-      <option value="completo">Completo (hasta 500 palabras)</option>
-    </select>
-  </div>
-
-  <!-- Nombre destinatario -->
-  <div>
-    <label class="block font-semibold">¿A quién va dirigida la carta?</label>
-    <input type="text" id="destinatario" class="w-full border p-2 rounded" required />
-  </div>
-
-  <!-- Contenido emocional -->
-  <div>
-    <label class="block font-semibold">¿Qué querés transmitir?</label>
-    <textarea id="mensaje" class="w-full border p-2 rounded" rows="4" required></textarea>
-  </div>
-
-  <!-- Estilo -->
-  <div>
-    <label class="block font-semibold">Estilo deseado (romántico, formal, divertido, etc.):</label>
-    <input type="text" id="estilo" class="w-full border p-2 rounded" />
-  </div>
-
-  <!-- Método de entrega -->
-  <div>
-    <label class="block font-semibold">¿Cómo querés recibir la carta?</label>
-    <select id="entrega" name="entrega" class="w-full border p-2 rounded">
-      <option value="pdf">Descargar como PDF</option>
-      <option value="email">Recibir por correo electrónico</option>
-      <option value="ambos">Ambas opciones</option>
-    </select>
-  </div>
-
-  <!-- Firma -->
-  <div>
-    <label class="block font-semibold">¿Querés que sea anónima o con tu nombre?</label>
-    <select id="firmaTipo" name="firmaTipo" class="w-full border p-2 rounded">
-      <option value="anonima">Anónima</option>
-      <option value="conNombre">Mostrar mi nombre</option>
-    </select>
-  </div>
-
-  <!-- Firma personalizada -->
-  <div>
-    <label class="block font-semibold">Firma personalizada (opcional)</label>
-    <input type="text" id="firmaPersonalizada" name="firmaPersonalizada" placeholder="Ej: Enviado por alguien que te quiere..." class="w-full border p-2 rounded" />
-  </div>
-
-  <!-- Botón de envío -->
-  <button type="submit" class="w-full bg-blue-600 text-white py-2 rounded-xl hover:bg-blue-700">
-    Generar carta
-  </button>
-</form>
-
+<!DOCTYPE html>
+ <html lang="es">
+ <head>
+   <meta charset="UTF-8" />
+   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+   <title>Formulario - Lettera</title>
+   <script src="https://cdn.tailwindcss.com"></script>
+ </head>
+ <body class="bg-gray-100 text-gray-900 font-sans">
+   <main class="max-w-xl mx-auto py-10">
+     <h1 class="text-3xl font-bold mb-6 text-center">Formulario: Carta de Amor</h1>
+     <form id="loveLetterForm" class="bg-white p-6 rounded-xl shadow space-y-4">
+       <div>
+         <label class="block font-semibold">¿A quién va dirigida la carta?</label>
+         <input type="text" id="destinatario" class="w-full border p-2 rounded" required />
+       </div>
+       <div>
+         <label class="block font-semibold">¿Qué querés transmitir?</label>
+         <textarea id="mensaje" class="w-full border p-2 rounded" rows="4" required></textarea>
+       </div>
+       <div>
+         <label class="block font-semibold">Estilo deseado (romántico, formal, divertido, etc.):</label>
+         <input type="text" id="estilo" class="w-full border p-2 rounded" />
+       </div>
+       <button type="submit" class="w-full bg-blue-600 text-white py-2 rounded-xl hover:bg-blue-700">
+         Generar carta
+       </button>
+     </form>
+ 
+     <!-- Aquí se mostrará la carta -->
+     <section id="cartaGenerada" class="bg-white p-6 mt-10 rounded-xl shadow hidden">
+       <h2 class="text-2xl font-bold mb-4 text-center">Tu Carta Generada</h2>
+       <div id="contenidoCarta" class="text-gray-700 space-y-4"></div>
+       <div class="text-center mt-6">
+         <button onclick="descargarPDF()" class="px-6 py-3 bg-green-600 text-white rounded-xl hover:bg-green-700">
+           Descargar como PDF
+         </button>
+       </div>
+     </section>
+   </main>
+ 
+   <!-- Librería para exportar a PDF -->
+   <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+ 
+   <script>
+   document.getElementById("loveLetterForm").addEventListener("submit", async function (e) {
+     e.preventDefault();
+ 
+     const destinatario = document.getElementById("destinatario").value.trim();
+     const mensaje = document.getElementById("mensaje").value.trim();
+     const estilo = document.getElementById("estilo").value.trim() || "romántico";
+    
+     // Mostrar el loader
+      document.getElementById("loaderOverlay").classList.remove("hidden");
+ 
+     try {
+       const respuesta = await fetch("/api/generar-carta", {
+         method: "POST",
+         headers: { "Content-Type": "application/json" },
+         body: JSON.stringify({ destinatario, mensaje, estilo })
+       });
+ 
+       const data = await respuesta.json();
+ 
+       // Ocultar el loader
+       document.getElementById("loaderOverlay").classList.add("hidden");
+       
+       if (data.carta) {
+         document.getElementById("contenidoCarta").innerHTML = data.carta.replace(/\n/g, "<br>");
+         document.getElementById("cartaGenerada").classList.remove("hidden");
+       } else {
+         alert("❌ Error generando la carta:\n" + (data.error || "Desconocido"));
+       }
+     } catch (err) {
+       alert("⚠️ Error al conectar con el servidor:\n" + err.message);
+     }
+   });
+ 
+   function descargarPDF() {
+     const element = document.getElementById("contenidoCarta");
+     html2pdf().from(element).save("Carta_Lettera.pdf");
+   }
+ </script>
+ 
+ <!-- Loader elegante -->
+ <div id="loaderOverlay" class="fixed inset-0 bg-white bg-opacity-80 flex flex-col items-center justify-center z-50 hidden">
+   <div class="animate-spin rounded-full h-16 w-16 border-t-4 border-blue-600 border-opacity-50 mb-4"></div>
+   <p class="text-gray-700 text-lg font-medium">Generando tu carta... por favor esperá unos segundos.</p>
+ </div>
+ </body>
+ </html>
