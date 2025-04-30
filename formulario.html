@@ -1,14 +1,17 @@
 <!DOCTYPE html>
-<html lang="es">
+<html lang="es" class="h-full">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Formulario - Lettera</title>
   <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    html, body { height: 100%; margin: 0; }
+  </style>
 </head>
-<body class="text-gray-900 font-sans relative">
+<body class="h-full w-full m-0 p-0 text-gray-900 font-sans relative">
   <!-- Fondo dinámico con degradado y patrón de círculos -->
-  <div id="pageBackground" class="absolute inset-0 -z-10" style="
+  <div id="pageBackground" class="absolute inset-0 h-full w-full -z-10" style="
     background: linear-gradient(135deg, #FFE4E6 0%, #FECDEB 100%);
     background-image: radial-gradient(circle, rgba(255,255,255,0.3) 10%, transparent 10%),
                      radial-gradient(circle, rgba(255,255,255,0.3) 10%, transparent 10%);
@@ -16,7 +19,7 @@
     background-position: 0 0, 20px 20px;
   "></div>
 
-  <main id="mainContainer" class="max-w-xl mx-auto py-10 relative z-10">
+  <main id="mainContainer" class="max-w-xl mx-auto py-10 relative z-10 h-full overflow-auto">
     <h1 id="tituloFormulario" class="text-3xl font-bold mb-6 text-center text-pink-800">Formulario: Carta</h1>
 
     <form id="loveLetterForm" class="p-6 rounded-xl shadow-2xl space-y-4 bg-white bg-opacity-90 backdrop-blur-md relative overflow-visible">
@@ -113,6 +116,7 @@
       const form = document.getElementById("loveLetterForm");
       const boton = document.getElementById("submitBtn");
       const titulo = document.getElementById("tituloFormulario");
+      const pageBg = document.getElementById("pageBackground");
 
       // Populamos selects
       const opcionesTipo = { amor: "Carta de Amor", perdon: "Carta de Perdón", felicitacion: "Carta de Felicitación", agradecimiento: "Carta de Agradecimiento", laboral: "Carta Laboral", libro: "Libro Personalizado" };
@@ -131,9 +135,33 @@
 
       // Envío del formulario
       form.addEventListener("submit", async e => {
-        e.preventDefault(); document.getElementById("loaderOverlay").classList.remove("hidden");
-        const datos = { tipoCarta: hiddenTipo.value, plan: hiddenPlan.value, destinatario: document.getElementById("destinatario").value.trim(), mensaje: document.getElementById("mensaje").value.trim(), estilo: document.getElementById("estilo").value.trim()|| 'romántico', entrega: document.getElementById("entrega").value, firmaTipo: document.getElementById("firmaTipo").value, firmaPersonalizada: document.getElementById("firmaPersonalizada").value.trim() };
-        try { const res = await fetch("/api/generar-carta",{ method:"POST", headers:{"Content-Type":"application/json"}, body: JSON.stringify(datos)}); const data = await res.json(); document.getElementById("loaderOverlay").classList.add("hidden"); if(data.carta){ document.getElementById("contenidoCarta").innerHTML = data.carta.replace(/\n/g,"<br>"); document.getElementById("cartaGenerada").classList.remove("hidden"); } else alert("❌ Error generando la carta: " + (data.error||"Desconocido")); } catch(err){ document.getElementById("loaderOverlay").classList.add("hidden"); alert("⚠️ Error al conectar con el servidor:\n"+err.message);} });
+        e.preventDefault();
+        document.getElementById("loaderOverlay").classList.remove("hidden");
+        const datos = {
+          tipoCarta: hiddenTipo.value,
+          plan: hiddenPlan.value,
+          destinatario: document.getElementById("destinatario").value.trim(),
+          mensaje: document.getElementById("mensaje").value.trim(),
+          estilo: document.getElementById("estilo").value.trim() || 'romántico',
+          entrega: document.getElementById("entrega").value,
+          firmaTipo: document.getElementById("firmaTipo").value,
+          firmaPersonalizada: document.getElementById("firmaPersonalizada").value.trim()
+        };
+        try {
+          const res = await fetch("/api/generar-carta",{ method:"POST", headers:{"Content-Type":"application/json"}, body: JSON.stringify(datos) });
+          const data = await res.json();
+          document.getElementById("loaderOverlay").classList.add("hidden");
+          if(data.carta) { 
+            document.getElementById("contenidoCarta").innerHTML = data.carta.replace(/\n/g,"<br>");
+            document.getElementById("cartaGenerada").classList.remove("hidden");
+          } else {
+            alert("❌ Error generando la carta: " + (data.error||"Desconocido"));
+          }
+        } catch(err) {
+          document.getElementById("loaderOverlay").classList.add("hidden");
+          alert("⚠️ Error al conectar con el servidor:\n"+err.message);
+        }
+      });
 
       // Descargar PDF
       window.descargarPDF = () => html2pdf().from(document.getElementById("contenidoCarta")).save("Carta_Lettera.pdf");
