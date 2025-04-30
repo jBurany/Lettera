@@ -55,8 +55,47 @@
 
       </div>
     </div>
+
+    <!-- BOTÓN MERCADOPAGO -->
+<button onclick="pagarConMercadoPago()" class="w-full bg-indigo-600 hover:bg-indigo-700 text-white py-2 rounded-xl mt-4">
+  Pagar con MercadoPago 💳
+</button>
+
+<script>
+  async function pagarConMercadoPago() {
+    const tipoCarta = new URLSearchParams(window.location.search).get("tipoCarta");
+    const plan = prompt("¿Qué plan querés pagar? Escribí: basico, intermedio o completo");
+
+    if (!["basico", "intermedio", "completo"].includes(plan)) {
+      alert("⚠️ Plan inválido. Escribí exactamente: basico, intermedio o completo.");
+      return;
+    }
+
+    try {
+      const response = await fetch("/api/crear-preferencia", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ tipoCarta, plan })
+      });
+
+      const data = await response.json();
+
+      if (data.link) {
+        window.location.href = data.link;
+      } else {
+        alert("❌ Error al crear el link de pago");
+      }
+    } catch (err) {
+      alert("❌ Error al conectar con el servidor");
+      console.error(err);
+    }
+  }
+</script>
+
   </main>
 
+
+  
   <script>
     // Obtener tipo de carta de la URL
     const params = new URLSearchParams(window.location.search);
