@@ -145,10 +145,16 @@
         form.classList.add(estilo.fondo, estilo.borde);
         boton.className = `w-full text-white py-2 rounded-xl ${estilo.boton}`;
 
+        const nombrePlan = {
+          basico: 'Básico (hasta 200 palabras)',
+          intermedio: 'Intermedio (hasta 350 palabras)',
+          completo: 'Completo (hasta 500 palabras)'
+        }[plan] || plan;
+
         const planWrapper = document.getElementById("planWrapper");
         const textoPlan = `
           <label class="block font-semibold mb-1">Elegí el plan</label>
-          <p class="font-semibold text-sm mt-1">Plan seleccionado: ${plan.charAt(0).toUpperCase() + plan.slice(1)} (hasta ${plan === 'basico' ? '200' : plan === 'intermedio' ? '350' : '500'} palabras)</p>
+          <p class="font-semibold text-sm mt-1">Plan seleccionado: ${nombrePlan}</p>
         `;
         planWrapper.innerHTML = textoPlan;
       }
