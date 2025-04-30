@@ -1,3 +1,4 @@
+<!-- pago.html -->
 <!DOCTYPE html>
 <html lang="es">
 <head>
@@ -16,8 +17,7 @@
       <h2 class="text-lg font-semibold mb-2 text-center">Elegí tu plan:</h2>
 
       <div class="space-y-4">
-
-        <!-- Botón Plan Básico -->
+        <!-- Plan Básico -->
         <form id="btnBasico" action="https://www.paypal.com/cgi-bin/webscr" method="post" target="_top">
           <input type="hidden" name="business" value="juanpab737@gmail.com">
           <input type="hidden" name="cmd" value="_xclick">
@@ -29,7 +29,7 @@
           <input type="submit" value="Comprar Plan Básico – $4 USD" class="w-full bg-blue-600 text-white py-2 rounded-xl hover:bg-blue-700">
         </form>
 
-        <!-- Botón Plan Intermedio -->
+        <!-- Plan Intermedio -->
         <form id="btnIntermedio" action="https://www.paypal.com/cgi-bin/webscr" method="post" target="_top">
           <input type="hidden" name="business" value="juanpab737@gmail.com">
           <input type="hidden" name="cmd" value="_xclick">
@@ -41,7 +41,7 @@
           <input type="submit" value="Comprar Plan Intermedio – $6 USD" class="w-full bg-yellow-500 text-white py-2 rounded-xl hover:bg-yellow-600">
         </form>
 
-        <!-- Botón Plan Completo -->
+        <!-- Plan Completo -->
         <form id="btnCompleto" action="https://www.paypal.com/cgi-bin/webscr" method="post" target="_top">
           <input type="hidden" name="business" value="juanpab737@gmail.com">
           <input type="hidden" name="cmd" value="_xclick">
@@ -52,7 +52,6 @@
           <input type="hidden" name="cancel_return" value="https://lettera-one.vercel.app/">
           <input type="submit" value="Comprar Plan Completo – $9 USD" class="w-full bg-green-600 text-white py-2 rounded-xl hover:bg-green-700">
         </form>
-
       </div>
     </div>
 
@@ -61,54 +60,19 @@
       Pagar con MercadoPago 💳
     </button>
 
-    <script>
-      async function pagarConMercadoPago() {
-        const tipoCarta = new URLSearchParams(window.location.search).get("tipoCarta");
-        const plan = prompt("¿Qué plan querés pagar? Escribí: basico, intermedio o completo");
-
-        if (!["basico", "intermedio", "completo"].includes(plan)) {
-          alert("⚠️ Plan inválido. Escribí exactamente: basico, intermedio o completo.");
-          return;
-        }
-
-        try {
-          const response = await fetch("/api/crear-preferencia", {
-            method: "POST",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({ tipoCarta, plan })
-          });
-
-          const data = await response.json();
-
-          if (data.link) {
-            window.location.href = data.link;
-          } else {
-            alert("❌ Error al crear el link de pago");
-          }
-        } catch (err) {
-          alert("❌ Error al conectar con el servidor");
-          console.error(err);
-        }
-      }
-    </script>
-
   </main>
 
   <script>
-    // Obtener tipo de carta de la URL
+    // Obtener tipo de carta
     const params = new URLSearchParams(window.location.search);
     const tipo = params.get("tipoCarta") || "amor";
 
-    // Definir títulos y descripciones
+    // Títulos y descripciones
     const titulos = {
-      amor: "Carta de Amor",
-      perdon: "Carta de Perdón",
-      felicitacion: "Carta de Felicitación",
-      agradecimiento: "Carta de Agradecimiento",
-      laboral: "Carta Laboral",
-      libro: "Libro Personalizado"
+      amor: "Carta de Amor", perdon: "Carta de Perdón",
+      felicitacion: "Carta de Felicitación", agradecimiento: "Carta de Agradecimiento",
+      laboral: "Carta Laboral", libro: "Libro Personalizado"
     };
-
     const descripciones = {
       amor: "Expresá tus sentimientos con una carta romántica y personalizada.",
       perdon: "Decí lo que sentís con una carta sincera y empática.",
@@ -118,15 +82,36 @@
       libro: "Un regalo literario hecho a medida, emocional y único."
     };
 
-    // Cambiar título y descripción
-    document.getElementById("tituloCarta").textContent = titulos[tipo] || "Carta Lettera";
-    document.getElementById("descripcionCarta").textContent = descripciones[tipo] || "";
+    // Actualizar texto
+    document.getElementById("tituloCarta").textContent = titulos[tipo];
+    document.getElementById("descripcionCarta").textContent = descripciones[tipo];
 
-    // Redirección PayPal con paid=true
+    // Base de la URL de regreso
     const base = "https://lettera-one.vercel.app/formulario.html";
-    document.getElementById("returnBasico").value = `${base}?tipoCarta=${tipo}&plan=basico&paid=true`;
-    document.getElementById("returnIntermedio").value = `${base}?tipoCarta=${tipo}&plan=intermedio&paid=true`;
-    document.getElementById("returnCompleto").value = `${base}?tipoCarta=${tipo}&plan=completo&paid=true`;
+    document.getElementById("returnBasico").value      = `${base}?tipoCarta=${tipo}&plan=basico&paid=true`;
+    document.getElementById("returnIntermedio").value  = `${base}?tipoCarta=${tipo}&plan=intermedio&paid=true`;
+    document.getElementById("returnCompleto").value    = `${base}?tipoCarta=${tipo}&plan=completo&paid=true`;
+
+    // Pago con MercadoPago
+    async function pagarConMercadoPago() {
+      const plan = prompt("¿Qué plan querés pagar? Escribí: basico, intermedio o completo");
+      if (!["basico", "intermedio", "completo"].includes(plan)) {
+        alert("⚠️ Plan inválido.");
+        return;
+      }
+      try {
+        const resp = await fetch("/api/crear-preferencia", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ tipoCarta: tipo, plan })
+        });
+        const data = await resp.json();
+        if (data.link) window.location.href = data.link;
+        else alert("❌ Error al crear link de pago");
+      } catch {
+        alert("❌ Error al conectar con el servidor");
+      }
+    }
   </script>
 </body>
 </html>
