@@ -144,19 +144,32 @@
       };
       document.getElementById('tipoCartaText').textContent = tituloEl.textContent.replace('Formulario: ', '');
       document.getElementById('planText').textContent = planMap[plan] || '';
-      // Decorative hearts
+      // Decorative shapes
       const decor = document.getElementById('decorHearts');
       const counts = { basico: 2, intermedio: 8, completo: 15 };
-      const heartCount = counts[plan] || 0;
-      let heartsHTML = '';
-      for (let i = 0; i < heartCount; i++) {
-        const size = plan === 'basico' ? 2 : plan === 'intermedio' ? 2 + Math.floor(Math.random()*2) : 3 + Math.floor(Math.random()*3);
-        const top = Math.random()*80 + 5;
-        const left = Math.random()*80 + 5;
+      const shapeMap = {
+        amor: '❤️',
+        perdon: '💧',
+        felicitacion: '🎉',
+        agradecimiento: '🙏',
+        laboral: '💼',
+        libro: '📖'
+      };
+      const symbol = shapeMap[tipoCarta] || '❤️';
+      const count = counts[plan] || 0;
+      let shapesHTML = '';
+      for (let i = 0; i < count; i++) {
+        const size = plan === 'basico'
+          ? 2
+          : plan === 'intermedio'
+            ? 2 + Math.floor(Math.random() * 2)
+            : 3 + Math.floor(Math.random() * 3);
+        const top = Math.random() * 80 + 5;
+        const left = Math.random() * 80 + 5;
         const anim = plan === 'intermedio' ? 'animate-bounce' : 'animate-pulse';
-        heartsHTML += `<span class="absolute text-${size}xl ${anim}" style="top:${top}%; left:${left}%; color:rgba(255,0,0,1)">❤️</span>`;
+        shapesHTML += `<span class="absolute text-${size}xl ${anim}" style="top:${top}%; left:${left}%;;">${symbol}</span>`;
       }
-      decor.innerHTML = heartsHTML;
+      decor.innerHTML = shapesHTML;
       // Initialize particles
       particlesJS('particles-js', {
         particles: { number:{ value:150, density:{ enable:true, value_area:600 }}, color:{ value:['#ff69b4','#ff1493','#ffc0cb'] }, shape:{ type:'circle' }, opacity:{ value:1 }, size:{ value:6, random:true }, move:{ enable:true, speed:1.5, out_mode:'out' } },
