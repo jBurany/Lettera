@@ -307,6 +307,41 @@
     }
   });
 </script>
+<script>
+  document.addEventListener("DOMContentLoaded", function () {
+    const params = new URLSearchParams(window.location.search);
+    const plan = params.get("plan");
+
+    const form = document.getElementById("loveLetterForm");
+    const boton = form?.querySelector("button[type='submit']");
+
+    const estilosPorPlan = {
+      basico: {
+        fondo: "bg-gray-100",
+        borde: "border border-gray-300",
+        boton: "bg-blue-600 hover:bg-blue-700"
+      },
+      intermedio: {
+        fondo: "bg-yellow-50",
+        borde: "border-2 border-yellow-400 shadow",
+        boton: "bg-yellow-600 hover:bg-yellow-700"
+      },
+      completo: {
+        fondo: "bg-gradient-to-br from-green-100 to-white",
+        borde: "border-4 border-green-500 shadow-xl",
+        boton: "bg-green-700 hover:bg-green-800"
+      }
+    };
+
+    if (plan && estilosPorPlan[plan] && form && boton) {
+      const estilo = estilosPorPlan[plan];
+
+      // Aplica clases visuales al formulario
+      form.classList.add(estilo.fondo, estilo.borde);
+      boton.className = `w-full text-white py-2 rounded-xl ${estilo.boton}`;
+    }
+  });
+</script>
 
 
  </body>
