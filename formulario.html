@@ -1,4 +1,3 @@
-<!-- Restauración con estilos dinámicos por tipo y plan -->
 <!DOCTYPE html>
 <html lang="es">
 <head>
@@ -134,7 +133,7 @@
         texto.className = "font-semibold text-sm mt-1";
         label.parentNode.insertBefore(texto, tipoSelect.nextSibling);
 
-        document.body.classList.add(estilosTipo[tipoCarta].fondo, estilosTipo[tipoCarta].texto);
+        document.body.classList.add(...estilosTipo[tipoCarta].fondo.split(" "), estilosTipo[tipoCarta].texto);
         titulo.textContent = estilosTipo[tipoCarta].titulo;
         boton.className = `w-full text-white py-2 rounded-xl ${estilosTipo[tipoCarta].boton}`;
       }
@@ -149,7 +148,7 @@
         texto.className = "font-semibold text-sm mt-1";
         label.parentNode.insertBefore(texto, planSelect.nextSibling);
 
-        form.classList.add(estilosPlan[plan]);
+        estilosPlan[plan].split(" ").forEach(c => form.classList.add(c));
       }
     });
 
