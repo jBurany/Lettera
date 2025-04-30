@@ -123,8 +123,6 @@
         completo: { fondo: "bg-gradient-to-br from-green-100 to-white", borde: "border-4 border-green-500 shadow-xl", boton: "bg-green-700 hover:bg-green-800" }
       };
 
-      console.log("Parámetros detectados:", { tipoCarta, plan });
-
       if (tipoCarta && estilosPorTipo[tipoCarta]) {
         const estilo = estilosPorTipo[tipoCarta];
         document.body.className = `${estilo.fondo} ${estilo.texto} font-sans`;
@@ -137,8 +135,8 @@
         textoTipo.textContent = `Tipo seleccionado: ${tipoSelect.options[tipoSelect.selectedIndex].text}`;
         textoTipo.className = "font-semibold text-sm mt-1";
 
-        tipoSelect.style.display = "none";
-        tipoSelect.disabled = true;
+        tipoSelect.classList.add("hidden");
+        tipoSelect.setAttribute("disabled", true);
         tipoLabel.parentNode.insertBefore(textoTipo, tipoSelect.nextSibling);
       }
 
@@ -153,8 +151,8 @@
         textoPlan.textContent = `Plan seleccionado: ${planSelect.options[planSelect.selectedIndex].text}`;
         textoPlan.className = "font-semibold text-sm mt-1";
 
-        planSelect.style.display = "none";
-        planSelect.disabled = true;
+        planSelect.classList.add("hidden");
+        planSelect.setAttribute("disabled", true);
         planLabel.parentNode.insertBefore(textoPlan, planSelect.nextSibling);
       }
     });
@@ -208,4 +206,5 @@
   </div>
 </body>
 </html>
+
 
