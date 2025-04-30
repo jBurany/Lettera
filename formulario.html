@@ -123,6 +123,8 @@
         completo: { fondo: "bg-gradient-to-br from-green-100 to-white", borde: "border-4 border-green-500 shadow-xl", boton: "bg-green-700 hover:bg-green-800" }
       };
 
+      console.log("Parámetros detectados:", { tipoCarta, plan });
+
       if (tipoCarta && estilosPorTipo[tipoCarta]) {
         const estilo = estilosPorTipo[tipoCarta];
         document.body.className = `${estilo.fondo} ${estilo.texto} font-sans`;
@@ -130,7 +132,6 @@
         if (boton) boton.className = `w-full text-white py-2 rounded-xl ${estilo.boton}`;
         tipoSelect.value = tipoCarta;
 
-        // Ocultar selector de tipoCarta y mostrar como texto
         const tipoLabel = tipoSelect.closest("div").querySelector("label");
         const textoTipo = document.createElement("p");
         textoTipo.textContent = `Tipo seleccionado: ${tipoSelect.options[tipoSelect.selectedIndex].text}`;
@@ -207,3 +208,4 @@
   </div>
 </body>
 </html>
+
