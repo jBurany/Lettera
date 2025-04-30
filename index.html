@@ -129,7 +129,7 @@
     document.querySelectorAll('#langOverlay button').forEach(btn => {
       btn.addEventListener('click', () => {
         const lang = btn.getAttribute('data-lang');
-        localStorage.setItem('lang', lang);
+        
         setLanguage(lang);
         document.getElementById('langOverlay').style.display = 'none';
         document.getElementById('mainContent').style.visibility = 'visible';
@@ -137,15 +137,8 @@
     });
 
     window.addEventListener('DOMContentLoaded', () => {
-      const saved = localStorage.getItem('lang');
-      if (saved) {
-        setLanguage(saved);
-        document.getElementById('langOverlay').style.display = 'none';
-        document.getElementById('mainContent').style.visibility = 'visible';
-      } else {
-        // No hay idioma guardado: mostrar overlay y esperar selección
-        document.getElementById('langOverlay').style.display = 'flex';
-      }
+      // Mostrar siempre selector de idioma al cargar
+      document.getElementById('langOverlay').style.display = 'flex';
     });
 
     function irAFormulario(tipo) {
