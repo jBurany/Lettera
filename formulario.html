@@ -144,20 +144,14 @@
         const estilo = estilosPorPlan[plan];
         form.classList.add(estilo.fondo, estilo.borde);
         boton.className = `w-full text-white py-2 rounded-xl ${estilo.boton}`;
-        planSelect.value = plan;
 
-        planSelect.value = plan;
-
-       // Establecer valor seleccionado
-        planSelect.value = plan;
-        
-        // Eliminar el selector completamente del DOM
-        const planWrapper = planSelect.closest("div");
-        planWrapper.innerHTML = `
+        // Reemplazar el selector de plan por texto fijo
+        const planWrapper = document.getElementById("planWrapper");
+        const textoPlan = `
           <label class="block font-semibold mb-1">Elegí el plan</label>
           <p class="font-semibold text-sm mt-1">Plan seleccionado: ${planSelect.options[planSelect.selectedIndex].text}</p>
         `;
-
+        planWrapper.innerHTML = textoPlan;
       }
     });
 
@@ -167,7 +161,7 @@
 
       const datos = {
         tipoCarta: document.getElementById("tipoCarta").value,
-        plan: document.getElementById("plan").value,
+        plan: document.getElementById("plan") ? document.getElementById("plan").value : "",
         destinatario: document.getElementById("destinatario").value.trim(),
         mensaje: document.getElementById("mensaje").value.trim(),
         estilo: document.getElementById("estilo").value.trim() || "romántico",
@@ -210,5 +204,3 @@
   </div>
 </body>
 </html>
-
-
