@@ -15,13 +15,8 @@
   </style>
 </head>
 <body class="h-full w-full text-gray-900 font-sans relative overflow-auto bg-transparent">
-
-  <!-- Fondo imagen + animado -->
-  <div id="pageBackground" class="fixed inset-0 z-0">
-    <!-- Imagen de fondo repetida -->
-    <div class="absolute inset-0" style="background-image: url('https://i.imgur.com/3jB6X0j.png'); background-repeat: repeat; background-size: 150px 150px;"></div>
-    <!-- Gradiente y patrón animado -->
-    <div class="absolute inset-0" style="
+  <!-- Fondo animado degradado y patrón de círculos, sin imagen externa -->
+  <div id="pageBackground" class="fixed inset-0 -z-10" style="
       background: linear-gradient(135deg, #FFE4E6 0%, #FECDEB 100%);
       background-image:
         radial-gradient(circle, rgba(255,255,255,0.3) 10%, transparent 10%),
@@ -29,7 +24,6 @@
       background-size: 40px 40px, 40px 40px;
       animation: floatBG 30s linear infinite;
     "></div>
-  </div>
 
   <main class="relative z-10 max-w-3xl mx-auto p-4 md:p-10">
     <h1 class="text-4xl font-bold mb-8 text-center text-pink-800">Formulario: Carta</h1>
@@ -39,6 +33,7 @@
       <input type="hidden" id="hiddenTipoCarta" name="tipoCarta">
       <input type="hidden" id="hiddenPlan" name="plan">
 
+      <!-- Campos -->
       <div>
         <label class="block font-semibold mb-2">¿Qué tipo de carta querés?</label>
         <select id="tipoCarta" class="w-full border p-3 rounded-lg bg-gray-200 cursor-not-allowed" disabled required></select>
@@ -83,9 +78,11 @@
         Generar carta
       </button>
 
+      <!-- Corazones decorativos -->
       <div class="absolute inset-0 pointer-events-none" id="decorHearts"></div>
     </form>
 
+    <!-- Carta generada -->
     <section id="cartaGenerada" class="bg-white p-6 mt-10 rounded-xl shadow-lg hidden">
       <h2 class="text-2xl font-bold mb-4 text-center text-pink-800">Tu Carta Generada</h2>
       <div id="contenidoCarta" class="text-gray-700 space-y-4"></div>
@@ -123,34 +120,56 @@
       Object.entries(opcionesTipo).forEach(([val,label]) => selectTipo.append(Object.assign(document.createElement("option"),{value:val,textContent:label})));
       Object.entries(opcionesPlan).forEach(([val,label]) => selectPlan.append(Object.assign(document.createElement("option"),{value:val,textContent:label})));
 
-      if(tipoCarta){ selectTipo.value = tipoCarta; hiddenTipo.value = tipoCarta; }
-      if(plan){ selectPlan.value = plan; hiddenPlan.value = plan; }
+      if (tipoCarta) { selectTipo.value = tipoCarta; hiddenTipo.value = tipoCarta; }
+      if (plan) { selectPlan.value = plan; hiddenPlan.value = plan; }
 
-      // Decor hearts logic
-      if(tipoCarta === 'amor'){
-        let hearts = '';
-        let count = plan==='basico'?2: plan==='intermedio'?8: plan==='completo'?15: 0;
-        for(let i=0; i<count; i++){
-          const size = plan==='basico'?2 : plan==='intermedio'?2+Math.floor(Math.random()*2):3+Math.floor(Math.random()*3);
-          const top = Math.random()*80+5;
-          const left = Math.random()*80+5;
-          const opacity = plan==='completo'?0.2 + Math.random()*0.3:0.2 + Math.random()*0.2;
-          const anim = plan==='intermedio'? 'animate-bounce':'animate-pulse';
-          hearts += `<span class="absolute text-${size}xl ${anim}" style="top:${top}%; left:${left}%; color:rgba(255,0,0,${opacity})">❤️</span>`;
-        }
-        decorContainer.innerHTML = hearts;
+      // Decoración de corazones
+      let count = plan === 'basico' ? 2 : plan === 'intermedio' ? 8 : plan === 'completo' ? 15 : 0;
+      for (let i = 0; i < count; i++) {
+        const size = (plan === 'basico' ? 2 : plan === 'intermedio' ? 2 + Math.floor(Math.random()*2) : 3 + Math.floor(Math.random()*3));
+        const top = Math.random()*80 + 5;
+        const left = Math.random()*80 + 5;
+        const opacity = plan === 'completo' ? 0.2 + Math.random()*0.3 : 0.2 + Math.random()*0.2;
+        const anim = plan === 'intermedio' ? 'animate-bounce' : 'animate-pulse';
+        decorContainer.innerHTML += `<span class="absolute text-${size}xl ${anim}" style="top:${top}%; left:${left}%; color:rgba(255,0,0,${opacity})">❤️</span>`;
       }
 
-      // Título y botón por tipo
+      // Título y botón
       const estilosTipo = { amor:{titulo:"Formulario: Carta de Amor",btn:"bg-pink-600 hover:bg-pink-700"}, perdon:{titulo:"Formulario: Carta de Perdón",btn:"bg-yellow-600 hover:bg-yellow-700"} };
-      if(estilosTipo[tipoCarta]){ titulo.textContent = estilosTipo[tipoCarta].titulo; boton.className = `w-full text-white py-3 rounded-xl transition ${estilosTipo[tipoCarta].btn}`; }
+      if (estilosTipo[tipoCarta]) {
+        titulo.textContent = estilosTipo[tipoCarta].titulo;
+        boton.className = `w-full text-white py-3 rounded-xl transition ${estilosTipo[tipoCarta].btn}`;
+      }
 
-      // Submit handler
-      document.getElementById('loveLetterForm').addEventListener('submit', async e=>{
+      // Evento submit
+      document.getElementById('loveLetterForm').addEventListener('submit', async e => {
         e.preventDefault(); document.getElementById('loaderOverlay').classList.remove('hidden');
-        const datos={ tipoCarta:hiddenTipo.value, plan:hiddenPlan.value, destinatario:document.getElementById('destinatario').value.trim(), mensaje:document.getElementById('mensaje').value.trim(), estilo:document.getElementById('estilo').value.trim()||'romántico', entrega:document.getElementById('entrega').value, firmaTipo:document.getElementById('firmaTipo').value, firmaPersonalizada:document.getElementById('firmaPersonalizada').value.trim() };
-        try { const res=await fetch('/api/generar-carta',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(datos)}); const data=await res.json(); document.getElementById('loaderOverlay').classList.add('hidden'); if(data.carta){ document.getElementById('contenidoCarta').innerHTML=data.carta.replace(/\n/g,'<br>'); document.getElementById('cartaGenerada').classList.remove('hidden'); } else alert('❌ Error generando la carta: '+(data.error||'Desconocido')); } catch(err){ document.getElementById('loaderOverlay').classList.add('hidden'); alert('⚠️ Error al conectar con el servidor:\n'+err.message); } });
+        const datos = {
+          tipoCarta: hiddenTipo.value,
+          plan: hiddenPlan.value,
+          destinatario: document.getElementById('destinatario').value.trim(),
+          mensaje: document.getElementById('mensaje').value.trim(),
+          estilo: document.getElementById('estilo').value.trim() || 'romántico',
+          entrega: document.getElementById('entrega').value,
+          firmaTipo: document.getElementById('firmaTipo').value,
+          firmaPersonalizada: document.getElementById('firmaPersonalizada').value.trim()
+        };
+        try {
+          const res = await fetch('/api/generar-carta', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(datos) });
+          const data = await res.json(); document.getElementById('loaderOverlay').classList.add('hidden');
+          if (data.carta) {
+            document.getElementById('contenidoCarta').innerHTML = data.carta.replace(/\n/g, '<br>');
+            document.getElementById('cartaGenerada').classList.remove('hidden');
+          } else {
+            alert('❌ Error generando la carta: ' + (data.error || 'Desconocido'));
+          }
+        } catch (err) {
+          document.getElementById('loaderOverlay').classList.add('hidden');
+          alert('⚠️ Error al conectar con el servidor:\n' + err.message);
+        }
+      });
 
+      // Descargar PDF
       window.descargarPDF = () => html2pdf().from(document.getElementById('contenidoCarta')).save('Carta_Lettera.pdf');
     });
   </script>
