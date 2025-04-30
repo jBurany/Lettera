@@ -34,6 +34,18 @@
         </select>
       </div>
 
+      <!-- Color de fondo -->
+      <div>
+        <label class="block font-semibold mb-1">Color de fondo de la carta</label>
+        <select id="colorFondo" name="colorFondo" class="w-full border p-2 rounded">
+          <option value="#ffffff">Blanco</option>
+          <option value="#f3f4f6">Gris claro</option>
+          <option value="#ffe4e6">Rosa suave</option>
+          <option value="#e0f2fe">Celeste claro</option>
+          <option value="#fef3c7">Beige cálido</option>
+        </select>
+      </div>
+
       <!-- Nombre destinatario -->
       <div>
         <label class="block font-semibold">¿A quién va dirigida la carta?</label>
@@ -78,7 +90,7 @@
       </div>
 
       <!-- Botón de envío -->
-      <button type="submit" class="w-full text-white py-2 rounded-xl">
+      <button type="submit" class="w-full bg-blue-600 text-white py-2 rounded-xl hover:bg-blue-700">
         Generar carta
       </button>
     </form>
@@ -86,7 +98,7 @@
     <!-- Aquí se mostrará la carta -->
     <section id="cartaGenerada" class="bg-white p-6 mt-10 rounded-xl shadow hidden">
       <h2 class="text-2xl font-bold mb-4 text-center">Tu Carta Generada</h2>
-      <div id="contenidoCarta" class="text-gray-700 space-y-4"></div>
+      <div id="contenidoCarta" class="text-gray-700 space-y-4 p-6 rounded-xl border" style="background-color: #ffffff;"></div>
       <div class="text-center mt-6">
         <button onclick="descargarPDF()" class="px-6 py-3 bg-green-600 text-white rounded-xl hover:bg-green-700">
           Descargar como PDF
@@ -166,6 +178,7 @@
       e.preventDefault();
       document.getElementById("loaderOverlay").classList.remove("hidden");
 
+      const colorFondo = document.getElementById("colorFondo").value;
       const datos = {
         tipoCarta: document.getElementById("tipoCarta")?.value || "",
         plan: document.getElementById("plan")?.value || "",
@@ -174,7 +187,8 @@
         estilo: document.getElementById("estilo").value.trim() || "romántico",
         entrega: document.getElementById("entrega").value,
         firmaTipo: document.getElementById("firmaTipo").value,
-        firmaPersonalizada: document.getElementById("firmaPersonalizada").value.trim()
+        firmaPersonalizada: document.getElementById("firmaPersonalizada").value.trim(),
+        colorFondo
       };
 
       try {
@@ -188,7 +202,9 @@
         document.getElementById("loaderOverlay").classList.add("hidden");
 
         if (data.carta) {
-          document.getElementById("contenidoCarta").innerHTML = data.carta.replace(/\n/g, "<br>");
+          const carta = document.getElementById("contenidoCarta");
+          carta.innerHTML = data.carta.replace(/\n/g, "<br>");
+          carta.style.backgroundColor = colorFondo;
           document.getElementById("cartaGenerada").classList.remove("hidden");
         } else {
           alert("❌ Error generando la carta: " + (data.error || "Desconocido"));
