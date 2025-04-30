@@ -268,6 +268,45 @@
   });
 </script>
 
+<script>
+  document.addEventListener("DOMContentLoaded", function () {
+    const params = new URLSearchParams(window.location.search);
+    const tipoCartaParam = params.get("tipoCarta");
+    const planParam = params.get("plan");
+
+    const selectTipo = document.getElementById("tipoCarta");
+    const selectPlan = document.getElementById("plan");
+    const titulo = document.querySelector("h1");
+
+    const titulosPorTipo = {
+      amor: "Formulario: Carta de Amor",
+      perdon: "Formulario: Carta de Perdón",
+      felicitacion: "Formulario: Carta de Felicitación",
+      agradecimiento: "Formulario: Carta de Agradecimiento",
+      laboral: "Formulario: Carta de Presentación Laboral",
+      libro: "Formulario: Libro Personalizado"
+    };
+
+    // Seleccionar tipo de carta
+    if (tipoCartaParam && selectTipo) {
+      const optionTipo = selectTipo.querySelector(`option[value="${tipoCartaParam}"]`);
+      if (optionTipo) {
+        optionTipo.selected = true;
+        if (titulo && titulosPorTipo[tipoCartaParam]) {
+          titulo.textContent = titulosPorTipo[tipoCartaParam];
+        }
+      }
+    }
+
+    // Seleccionar plan
+    if (planParam && selectPlan) {
+      const optionPlan = selectPlan.querySelector(`option[value="${planParam}"]`);
+      if (optionPlan) {
+        optionPlan.selected = true;
+      }
+    }
+  });
+</script>
 
 
  </body>
