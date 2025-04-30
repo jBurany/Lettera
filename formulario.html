@@ -195,6 +195,78 @@
   });
 </script>
 
+<script>
+  document.addEventListener("DOMContentLoaded", function () {
+    const params = new URLSearchParams(window.location.search);
+    const tipoCartaParam = params.get("tipoCarta");
+
+    const select = document.getElementById("tipoCarta");
+    const titulo = document.querySelector("h1");
+    const body = document.body;
+    const btnGenerar = document.querySelector("button[type='submit']");
+
+    // Mapas de estilos por tipo de carta
+    const estilosPorTipo = {
+      amor: {
+        titulo: "Formulario: Carta de Amor",
+        fondo: "bg-pink-100",
+        boton: "bg-pink-600 hover:bg-pink-700",
+        texto: "text-pink-900"
+      },
+      perdon: {
+        titulo: "Formulario: Carta de Perdón",
+        fondo: "bg-yellow-100",
+        boton: "bg-yellow-600 hover:bg-yellow-700",
+        texto: "text-yellow-900"
+      },
+      laboral: {
+        titulo: "Formulario: Carta Laboral",
+        fondo: "bg-blue-100",
+        boton: "bg-blue-600 hover:bg-blue-700",
+        texto: "text-blue-900"
+      },
+      agradecimiento: {
+        titulo: "Formulario: Carta de Agradecimiento",
+        fondo: "bg-green-100",
+        boton: "bg-green-600 hover:bg-green-700",
+        texto: "text-green-900"
+      },
+      felicitacion: {
+        titulo: "Formulario: Carta de Felicitación",
+        fondo: "bg-purple-100",
+        boton: "bg-purple-600 hover:bg-purple-700",
+        texto: "text-purple-900"
+      },
+      libro: {
+        titulo: "Formulario: Libro Personalizado",
+        fondo: "bg-gray-200",
+        boton: "bg-gray-700 hover:bg-gray-800",
+        texto: "text-gray-800"
+      }
+    };
+
+    if (tipoCartaParam && estilosPorTipo[tipoCartaParam]) {
+      const estilo = estilosPorTipo[tipoCartaParam];
+
+      // Cambiar título
+      if (titulo) titulo.textContent = estilo.titulo;
+
+      // Cambiar fondo general del body
+      body.className = `${estilo.fondo} ${estilo.texto} font-sans`;
+
+      // Cambiar botón principal
+      if (btnGenerar) {
+        btnGenerar.className = `w-full text-white py-2 rounded-xl ${estilo.boton}`;
+      }
+
+      // Seleccionar automáticamente el tipo
+      if (select) {
+        const optionToSelect = select.querySelector(`option[value="${tipoCartaParam}"]`);
+        if (optionToSelect) optionToSelect.selected = true;
+      }
+    }
+  });
+</script>
 
 
 
