@@ -94,7 +94,20 @@
        </div>
      </section>
    </main>
- 
+ <script>
+  // Leer parámetros de la URL
+  const params = new URLSearchParams(window.location.search);
+  const tipoCartaParam = params.get("tipoCarta");
+
+  // Si existe tipoCarta en la URL, seleccionar ese valor
+  if (tipoCartaParam) {
+    const selectCarta = document.getElementById("tipoCarta");
+    if (selectCarta) {
+      selectCarta.value = tipoCartaParam;
+    }
+  }
+</script>
+
    <!-- Librería para exportar a PDF -->
    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
  
