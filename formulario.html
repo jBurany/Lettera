@@ -46,12 +46,14 @@
       <input type="hidden" id="hiddenTipoCarta" name="tipoCarta">
       <input type="hidden" id="hiddenPlan" name="plan">
       <!-- fields -->
-      <div><label class="block font-semibold mb-2">¿Qué tipo de carta querés?</label><select id="tipoCarta" class="w-full border p-3 rounded-lg bg-pink-200 text-gray-900 cursor-not-allowed pointer-events-none" aria-disabled="true">
-        $1
-      </select></div>
-      <div><label class="block font-semibold mb-2">Elegí el plan</label><select id="plan" class="w-full border p-3 rounded-lg bg-pink-200 text-gray-900 cursor-not-allowed pointer-events-none" aria-disabled="true">
-        $1
-      </select></div>
+      <div>
+        <label class="block font-semibold mb-2">Tipo de carta</label>
+        <input type="text" id="tipoCartaDisplay" class="w-full border p-3 rounded-lg bg-pink-200 text-gray-900" readonly />
+      </div>
+      <div>
+        <label class="block font-semibold mb-2">Plan seleccionado</label>
+        <input type="text" id="planDisplay" class="w-full border p-3 rounded-lg bg-pink-200 text-gray-900" readonly />
+      </div>
       <div><label class="block font-semibold mb-2">¿A quién va dirigida la carta?</label><input type="text" id="destinatario" class="w-full border p-3 rounded-lg" required></div>
       <div><label class="block font-semibold mb-2">¿Qué querés transmitir?</label><textarea id="mensaje" class="w-full border p-3 rounded-lg" rows="4" required></textarea></div>
       <div><label class="block font-semibold mb-2">Estilo deseado (romántico, formal, divertido, etc.):</label><input type="text" id="estilo" class="w-full border p-3 rounded-lg"></div>
@@ -88,6 +90,19 @@
         agradecimiento: 'Formulario: Carta de Agradecimiento',
         laboral: 'Formulario: Carta Laboral',
         libro: 'Formulario: Libro Personalizado'
+      };
+      const tituloEl = document.getElementById('tituloFormulario');
+      if (tituloMap[tipoCarta]) tituloEl.textContent = tituloMap[tipoCarta];
+      // Set display fields
+      const planMap = {
+        basico: 'Básico (hasta 200 palabras)',
+        intermedio: 'Intermedio (hasta 350 palabras)',
+        completo: 'Completo (hasta 500 palabras)'
+      };
+      const tipoDisp = document.getElementById('tipoCartaDisplay');
+      const planDisp = document.getElementById('planDisplay');
+      if (tipoCarta && tituloMap[tipoCarta]) tipoDisp.value = tituloMap[tipoCarta].replace('Formulario: ', '');
+      if (plan && planMap[plan]) planDisp.value = planMap[plan];
       };
       const tituloEl = document.getElementById('tituloFormulario');
       if (tituloMap[tipoCarta]) tituloEl.textContent = tituloMap[tipoCarta];
