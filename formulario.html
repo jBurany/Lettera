@@ -11,83 +11,60 @@
     <h1 id="tituloFormulario" class="text-3xl font-bold mb-6 text-center">Formulario: Carta</h1>
 
     <form id="loveLetterForm" class="p-6 rounded-xl shadow space-y-4">
-      <!-- Campos ocultos para mantener valores -->
+      <!-- Campos ocultos -->
       <input type="hidden" id="hiddenTipoCarta" name="tipoCarta">
       <input type="hidden" id="hiddenPlan" name="plan">
 
       <!-- Tipo de carta -->
       <div id="tipoCartaContainer">
         <label class="block font-semibold mb-1">¿Qué tipo de carta querés?</label>
-        <select id="tipoCarta" name="tipoCartaSelect" class="w-full border p-2 rounded" required>
-          <option value="amor">Carta de Amor</option>
-          <option value="perdon">Carta de Perdón</option>
-          <option value="felicitacion">Carta de Felicitación</option>
-          <option value="agradecimiento">Carta de Agradecimiento</option>
-          <option value="laboral">Carta de Presentación Laboral</option>
-          <option value="libro">Libro Personalizado</option>
-        </select>
+        <select id="tipoCarta" class="w-full border p-2 rounded" required></select>
       </div>
 
       <!-- Plan -->
       <div id="planContainer">
         <label class="block font-semibold mb-1">Elegí el plan</label>
-        <select id="plan" name="planSelect" class="w-full border p-2 rounded" required>
-          <option value="basico">Básico (hasta 200 palabras)</option>
-          <option value="intermedio">Intermedio (hasta 350 palabras)</option>
-          <option value="completo">Completo (hasta 500 palabras)</option>
-        </select>
+        <select id="plan" class="w-full border p-2 rounded" required></select>
       </div>
 
-      <!-- Nombre destinatario -->
+      <!-- Otros campos -->
       <div>
         <label class="block font-semibold">¿A quién va dirigida la carta?</label>
-        <input type="text" id="destinatario" name="destinatario" class="w-full border p-2 rounded" required />
+        <input type="text" id="destinatario" class="w-full border p-2 rounded" required />
       </div>
-
-      <!-- Contenido emocional -->
       <div>
         <label class="block font-semibold">¿Qué querés transmitir?</label>
-        <textarea id="mensaje" name="mensaje" class="w-full border p-2 rounded" rows="4" required></textarea>
+        <textarea id="mensaje" class="w-full border p-2 rounded" rows="4" required></textarea>
       </div>
-
-      <!-- Estilo -->
       <div>
-        <label class="block font-semibold">Estilo deseado (romántico, formal, divertido, etc.):</label>
-        <input type="text" id="estilo" name="estilo" class="w-full border p-2 rounded" />
+        <label class="block font-semibold">Estilo deseado:</label>
+        <input type="text" id="estilo" class="w-full border p-2 rounded" />
       </div>
-
-      <!-- Método de entrega -->
       <div>
         <label class="block font-semibold">¿Cómo querés recibir la carta?</label>
-        <select id="entrega" name="entrega" class="w-full border p-2 rounded">
+        <select id="entrega" class="w-full border p-2 rounded">
           <option value="pdf">Descargar como PDF</option>
           <option value="email">Recibir por correo electrónico</option>
           <option value="ambos">Ambas opciones</option>
         </select>
       </div>
-
-      <!-- Firma -->
       <div>
-        <label class="block font-semibold">¿Querés que sea anónima o con tu nombre?</label>
-        <select id="firmaTipo" name="firmaTipo" class="w-full border p-2 rounded">
+        <label class="block font-semibold">¿Firma anónima o con tu nombre?</label>
+        <select id="firmaTipo" class="w-full border p-2 rounded">
           <option value="anonima">Anónima</option>
-          <option value="conNombre">Mostrar mi nombre</option>
+          <option value="conNombre">Con nombre</option>
         </select>
       </div>
-
-      <!-- Firma personalizada -->
       <div>
         <label class="block font-semibold">Firma personalizada (opcional)</label>
-        <input type="text" id="firmaPersonalizada" name="firmaPersonalizada" placeholder="Ej: Enviado por alguien que te quiere..." class="w-full border p-2 rounded" />
+        <input type="text" id="firmaPersonalizada" class="w-full border p-2 rounded" />
       </div>
 
-      <!-- Botón de envío -->
       <button type="submit" id="submitBtn" class="w-full text-white py-2 rounded-xl bg-blue-600 hover:bg-blue-700">
         Generar carta
       </button>
     </form>
 
-    <!-- Aquí se mostrará la carta -->
     <section id="cartaGenerada" class="bg-white p-6 mt-10 rounded-xl shadow hidden">
       <h2 class="text-2xl font-bold mb-4 text-center">Tu Carta Generada</h2>
       <div id="contenidoCarta" class="text-gray-700 space-y-4"></div>
@@ -99,94 +76,97 @@
     </section>
   </main>
 
-  <!-- Librerías -->
   <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
-
-  <!-- Scripts funcionales -->
   <script>
-    document.addEventListener("DOMContentLoaded", function () {
+    document.addEventListener("DOMContentLoaded", () => {
       const params = new URLSearchParams(window.location.search);
-      const tipoCartaParam = params.get("tipoCarta");
-      const planParam = params.get("plan");
+      const tipoCarta = params.get("tipoCarta");
+      const plan = params.get("plan");
       const paid = params.get("paid") === "true";
 
-      const form = document.getElementById("loveLetterForm");
-      const boton = document.getElementById("submitBtn");
-      const titulo = document.getElementById("tituloFormulario");
       const selectTipo = document.getElementById("tipoCarta");
       const selectPlan = document.getElementById("plan");
       const hiddenTipo = document.getElementById("hiddenTipoCarta");
       const hiddenPlan = document.getElementById("hiddenPlan");
       const tipoContainer = document.getElementById("tipoCartaContainer");
       const planContainer = document.getElementById("planContainer");
+      const form = document.getElementById("loveLetterForm");
+      const boton = document.getElementById("submitBtn");
+      const titulo = document.getElementById("tituloFormulario");
 
-      const labelPorTipo = {
+      // Populamos opciones
+      const opcionesTipo = {
         amor: "Carta de Amor", perdon: "Carta de Perdón",
         felicitacion: "Carta de Felicitación", agradecimiento: "Carta de Agradecimiento",
-        laboral: "Carta de Presentación Laboral", libro: "Libro Personalizado"
+        laboral: "Carta Laboral", libro: "Libro Personalizado"
       };
-      const labelPorPlan = {
+      const opcionesPlan = {
         basico: "Básico (hasta 200 palabras)",
         intermedio: "Intermedio (hasta 350 palabras)",
         completo: "Completo (hasta 500 palabras)"
       };
+      Object.entries(opcionesTipo).forEach(([val, label]) => {
+        const opt = document.createElement("option");
+        opt.value = val; opt.textContent = label;
+        selectTipo.appendChild(opt);
+      });
+      Object.entries(opcionesPlan).forEach(([val, label]) => {
+        const opt = document.createElement("option");
+        opt.value = val; opt.textContent = label;
+        selectPlan.appendChild(opt);
+      });
 
-      // Asignar valores ocultos
-      hiddenTipo.value = tipoCartaParam;
-      hiddenPlan.value = planParam;
+      // Asignar valores
+      if (tipoCarta) {
+        selectTipo.value = tipoCarta;
+        hiddenTipo.value = tipoCarta;
+      }
+      if (plan) {
+        selectPlan.value = plan;
+        hiddenPlan.value = plan;
+      }
 
-      // Estilos por tipo
-      const estilosPorTipo = {
-        amor: { titulo: "Formulario: Carta de Amor", fondo: "bg-pink-100", botonCls: "bg-pink-600 hover:bg-pink-700", texto: "text-pink-900" },
-        perdon: { titulo: "Formulario: Carta de Perdón", fondo: "bg-yellow-100", botonCls: "bg-yellow-600 hover:bg-yellow-700", texto: "text-yellow-900" },
-        felicitacion: { titulo: "Formulario: Carta de Felicitación", fondo: "bg-purple-100", botonCls: "bg-purple-600 hover:bg-purple-700", texto: "text-purple-900" },
-        agradecimiento: { titulo: "Formulario: Carta de Agradecimiento", fondo: "bg-green-100", botonCls: "bg-green-600 hover:bg-green-700", texto: "text-green-900" },
-        laboral: { titulo: "Formulario: Carta Laboral", fondo: "bg-blue-100", botonCls: "bg-blue-600 hover:bg-blue-700", texto: "text-blue-900" },
-        libro: { titulo: "Formulario: Libro Personalizado", fondo: "bg-gray-200", botonCls: "bg-gray-700 hover:bg-gray-800", texto: "text-gray-800" }
+      // Estilos dinámicos
+      const estilosTipo = {
+        amor: { titulo: "Formulario: Carta de Amor", fondo: "bg-pink-100 text-pink-900", btn: "bg-pink-600 hover:bg-pink-700" },
+        perdon: { titulo: "Formulario: Carta de Perdón", fondo: "bg-yellow-100 text-yellow-900", btn: "bg-yellow-600 hover:bg-yellow-700" },
+        felicitacion: { titulo: "Formulario: Carta de Felicitación", fondo: "bg-purple-100 text-purple-900", btn: "bg-purple-600 hover:bg-purple-700" },
+        agradecimiento: { titulo: "Formulario: Carta de Agradecimiento", fondo: "bg-green-100 text-green-900", btn: "bg-green-600 hover:bg-green-700" },
+        laboral: { titulo: "Formulario: Carta Laboral", fondo: "bg-blue-100 text-blue-900", btn: "bg-blue-600 hover:bg-blue-700" },
+        libro: { titulo: "Formulario: Libro Personalizado", fondo: "bg-gray-200 text-gray-800", btn: "bg-gray-700 hover:bg-gray-800" }
       };
-      if (tipoCartaParam && estilosPorTipo[tipoCartaParam]) {
-        const e = estilosPorTipo[tipoCartaParam];
-        document.body.className = `${e.fondo} ${e.texto} font-sans`;
+      if (tipoCarta && estilosTipo[tipoCarta]) {
+        const e = estilosTipo[tipoCarta];
+        document.body.className = `${e.fondo} font-sans`;
         titulo.textContent = e.titulo;
-        boton.className = `w-full text-white py-2 rounded-xl ${e.botonCls}`;
+        boton.className = `w-full text-white py-2 rounded-xl ${e.btn}`;
       }
 
-      // Si está pagado: mostrar texto fijo y ocultar selects
+      // Bloquear selects en etapa pagada
       if (paid) {
-        const pTipo = document.createElement("p");
-        pTipo.textContent = labelPorTipo[tipoCartaParam] || tipoCartaParam;
-        pTipo.className = "p-2 bg-white rounded border mb-4";
-        tipoContainer.replaceChild(pTipo, selectTipo);
-
-        const pPlan = document.createElement("p");
-        pPlan.textContent = labelPorPlan[planParam] || planParam;
-        pPlan.className = "p-2 bg-white rounded border mb-4";
-        planContainer.replaceChild(pPlan, selectPlan);
-      } else {
-        // Si no ha pagado: precargar selects y aplicar estilos por plan
-        if (tipoCartaParam) selectTipo.value = tipoCartaParam;
-        if (planParam) selectPlan.value = planParam;
-
-        const estilosPorPlan = {
-          basico: { fondo: "bg-gray-100", bordeCls: "border border-gray-300", botonCls: "bg-blue-600 hover:bg-blue-700" },
-          intermedio: { fondo: "bg-yellow-50", bordeCls: "border-2 border-yellow-400 shadow", botonCls: "bg-yellow-600 hover:bg-yellow-700" },
-          completo: { fondo: "bg-gradient-to-br from-green-100 to-white", bordeCls: "border-4 border-green-500 shadow-xl", botonCls: "bg-green-700 hover:bg-green-800" }
-        };
-        if (planParam && estilosPorPlan[planParam]) {
-          const ep = estilosPorPlan[planParam];
-          // Agregar fondo y borde
-          form.classList.add(ep.fondo);
-          ep.bordeCls.split(" ").forEach(cls => form.classList.add(cls));
-          // Botón
-          boton.className = `w-full text-white py-2 rounded-xl ${ep.botonCls}`;
-        }
+        selectTipo.disabled = true;
+        selectTipo.classList.add("bg-gray-200", "cursor-not-allowed");
+        selectPlan.disabled = true;
+        selectPlan.classList.add("bg-gray-200", "cursor-not-allowed");
       }
 
-      // Envío del formulario
-      form.addEventListener("submit", async function (e) {
+      // Estilos por plan cuando no está pagado
+      if (!paid && plan) {
+        const stylesByPlan = {
+          basico: { bg: "bg-gray-100", border: ["border", "border-gray-300"], btn: "bg-blue-600 hover:bg-blue-700" },
+          intermedio: { bg: "bg-yellow-50", border: ["border-2", "border-yellow-400", "shadow"], btn: "bg-yellow-600 hover:bg-yellow-700" },
+          completo: { bg: "bg-gradient-to-br from-green-100 to-white", border: ["border-4", "border-green-500", "shadow-xl"], btn: "bg-green-700 hover:bg-green-800" }
+        };
+        const ep = stylesByPlan[plan];
+        form.classList.add(ep.bg);
+        ep.border.forEach(cls => form.classList.add(cls));
+        boton.className = `w-full text-white py-2 rounded-xl ${ep.btn}`;
+      }
+
+      // Manejo de envío
+      form.addEventListener("submit", async e => {
         e.preventDefault();
         document.getElementById("loaderOverlay").classList.remove("hidden");
-
         const datos = {
           tipoCarta: hiddenTipo.value,
           plan: hiddenPlan.value,
@@ -197,7 +177,6 @@
           firmaTipo: document.getElementById("firmaTipo").value,
           firmaPersonalizada: document.getElementById("firmaPersonalizada").value.trim()
         };
-
         try {
           const res = await fetch("/api/generar-carta", {
             method: "POST",
@@ -218,15 +197,12 @@
         }
       });
 
-      // Función para descargar PDF
-      window.descargarPDF = function () {
-        const element = document.getElementById("contenidoCarta");
-        html2pdf().from(element).save("Carta_Lettera.pdf");
-      }
+      window.descargarPDF = () => {
+        html2pdf().from(document.getElementById("contenidoCarta")).save("Carta_Lettera.pdf");
+      };
     });
   </script>
 
-  <!-- Loader -->
   <div id="loaderOverlay" class="fixed inset-0 bg-white bg-opacity-80 flex flex-col items-center justify-center z-50 hidden">
     <div class="animate-spin rounded-full h-16 w-16 border-t-4 border-blue-600 border-opacity-50 mb-4"></div>
     <p class="text-gray-700 text-lg font-medium">Generando tu carta... por favor esperá unos segundos.</p>
