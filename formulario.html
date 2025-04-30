@@ -169,6 +169,34 @@
       if (plan === 'completo') {
         particlesJS('particles-extra2', { particles:{ number:{ value:20, density:{ enable:true, value_area:600 }}, shape:{ type:'triangle' }, color:{ value:'#ff1493' }, opacity:{ value:1 }, size:{ value:20, random:true }, move:{ enable:true, speed:1, out_mode:'out' } }, interactivity:{ events:{ onhover:{ enable:false}, onclick:{ enable:false} }}, retina_detect:true });
       }
+            // Dynamic styling by typeCarta
+      const formEl = document.getElementById('loveLetterForm');
+      const btnEl = document.getElementById('submitBtn');
+      const gradientRemovals = ['from-pink-100','via-pink-50','to-pink-100','from-yellow-100','via-yellow-50','to-yellow-100','from-purple-100','via-purple-50','to-purple-100','from-green-100','via-green-50','to-green-100','from-blue-100','via-blue-50','to-blue-100','from-gray-100','via-gray-50','to-gray-100'];
+      const btnRemovals = ['bg-pink-600','hover:bg-pink-700','bg-yellow-600','hover:bg-yellow-700','bg-purple-600','hover:bg-purple-700','bg-green-600','hover:bg-green-700','bg-blue-600','hover:bg-blue-700','bg-gray-600','hover:bg-gray-700'];
+      const gradientAdds = {
+        amor: ['from-pink-100','via-pink-50','to-pink-100'],
+        perdon: ['from-yellow-100','via-yellow-50','to-yellow-100'],
+        felicitacion: ['from-purple-100','via-purple-50','to-purple-100'],
+        agradecimiento: ['from-green-100','via-green-50','to-green-100'],
+        laboral: ['from-blue-100','via-blue-50','to-blue-100'],
+        libro: ['from-gray-100','via-gray-50','to-gray-100']
+      };
+      const btnAdds = {
+        amor: ['bg-pink-600','hover:bg-pink-700'],
+        perdon: ['bg-yellow-600','hover:bg-yellow-700'],
+        felicitacion: ['bg-purple-600','hover:bg-purple-700'],
+        agradecimiento: ['bg-green-600','hover:bg-green-700'],
+        laboral: ['bg-blue-600','hover:bg-blue-700'],
+        libro: ['bg-gray-600','hover:bg-gray-700']
+      };
+      // Remove existing theme classes
+      gradientRemovals.forEach(c => formEl.classList.remove(c));
+      btnRemovals.forEach(c => btnEl.classList.remove(c));
+      // Add new theme classes
+      if (gradientAdds[tipoCarta]) formEl.classList.add('bg-gradient-to-tr', ...gradientAdds[tipoCarta]);
+      if (btnAdds[tipoCarta]) btnEl.classList.add(...btnAdds[tipoCarta]);
+
       // Form submission
       document.getElementById('loveLetterForm').addEventListener('submit', async e => {
         e.preventDefault();
