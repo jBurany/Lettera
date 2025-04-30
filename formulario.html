@@ -6,14 +6,14 @@
   <title>Formulario - Lettera</title>
   <script src="https://cdn.tailwindcss.com"></script>
 </head>
-<body class="relative overflow-hidden">
+<body class="bg-gray-100 text-gray-900 font-sans relative">
   <!-- Fondo dinámico de página -->
   <div id="pageBackground" class="absolute inset-0 -z-10"></div>
 
-  <main id="mainContainer" class="max-w-xl mx-auto py-10 relative">
+  <main id="mainContainer" class="max-w-xl mx-auto py-10 relative z-10">
     <h1 id="tituloFormulario" class="text-3xl font-bold mb-6 text-center">Formulario: Carta</h1>
 
-    <form id="loveLetterForm" class="p-6 rounded-xl shadow space-y-4 relative overflow-hidden">
+    <form id="loveLetterForm" class="p-6 rounded-xl shadow space-y-4 relative">
       <!-- Campos ocultos -->
       <input type="hidden" id="hiddenTipoCarta" name="tipoCarta">
       <input type="hidden" id="hiddenPlan" name="plan">
@@ -40,7 +40,7 @@
         <textarea id="mensaje" class="w-full border p-2 rounded" rows="4" required></textarea>
       </div>
       <div>
-        <label class="block font-semibold">Estilo deseado:</label>
+        <label class="block font-semibold">Estilo deseado (romántico, formal, divertido, etc.):</label>
         <input type="text" id="estilo" class="w-full border p-2 rounded" />
       </div>
       <div>
@@ -78,6 +78,12 @@
       </div>
     </section>
   </main>
+
+  <!-- Loader -->
+  <div id="loaderOverlay" class="fixed inset-0 bg-white bg-opacity-80 flex flex-col items-center justify-center z-50 hidden">
+    <div class="animate-spin rounded-full h-16 w-16 border-t-4 border-blue-600 border-opacity-50 mb-4"></div>
+    <p class="text-gray-700 text-lg font-medium">Generando tu carta... por favor esperá unos segundos.</p>
+  </div>
 
   <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
   <script>
@@ -120,41 +126,32 @@
       if (tipoCarta) { selectTipo.value = tipoCarta; hiddenTipo.value = tipoCarta; }
       if (plan) { selectPlan.value = plan; hiddenPlan.value = plan; }
 
-      // Siempre bloquear selects
+      // Bloquear selects siempre
       [selectTipo, selectPlan].forEach(el => {
         el.disabled = true;
         el.classList.add("bg-gray-200", "cursor-not-allowed");
       });
 
-      // Definición de decoraciones por tipo y plan
+      // Decoración por tipo y plan
       const decoraciones = {
         amor: {
-          basico: {
-            pageBg: 'bg-pink-50',
-            decor: ''
-          },
+          basico: { pageBg: 'bg-pink-50', decor: '' },
           intermedio: {
             pageBg: 'bg-gradient-to-br from-pink-50 via-white to-pink-50',
             decor: `<span class="absolute text-2xl animate-bounce" style="top:1rem; left:2rem; color:rgba(255,0,0,0.2)">❤️</span>
                     <span class="absolute text-3xl animate-bounce" style="bottom:2rem; right:1.5rem; color:rgba(255,0,0,0.15)">❤️</span>
                     <span class="absolute text-xl animate-pulse" style="top:50%; left:80%; color:rgba(255,0,0,0.1)">❤️</span>`
           },
-          completo: {
-            pageBg: 'bg-gradient-to-br from-pink-100 via-white to-pink-100',
-            decor: ''
-          }
+          completo: { pageBg: 'bg-gradient-to-br from-pink-100 via-white to-pink-100', decor: '' }
         },
         perdon: {
           basico: { pageBg: 'bg-yellow-50', decor: '' },
           intermedio: { pageBg: 'bg-gradient-to-br from-yellow-50 via-white to-yellow-50', decor: '' },
           completo: { pageBg: 'bg-gradient-to-br from-yellow-100 via-white to-yellow-100', decor: '' }
         }
-        // Agregar más tipos y planes según sea necesario
       };
-
-      // Aplicar decoración específica
-      if (decoraciones[tipoCarta] && decoraciones[tipoCarta][plan]) {
-        const conf = decoraciones[tipoCarta][plan];
+      const conf = decoraciones[tipoCarta]?.[plan];
+      if (conf) {
         pageBg.className = `absolute inset-0 -z-10 ${conf.pageBg}`;
         if (conf.decor) {
           const divDecor = document.createElement('div');
@@ -164,19 +161,17 @@
         }
       }
 
-      // Estilos dinámicos por tipo
+      // Estilos por tipo
       const estilosTipo = {
         amor: { titulo: "Formulario: Carta de Amor", btn: "bg-pink-600 hover:bg-pink-700" },
         perdon: { titulo: "Formulario: Carta de Perdón", btn: "bg-yellow-600 hover:bg-yellow-700" }
-        // etc.
       };
-      if (tipoCarta && estilosTipo[tipoCarta]) {
-        const e = estilosTipo[tipoCarta];
-        titulo.textContent = e.titulo;
-        boton.className = `w-full text-white py-2 rounded-xl ${e.btn}`;
+      if (estilosTipo[tipoCarta]) {
+        titulo.textContent = estilosTipo[tipoCarta].titulo;
+        boton.className = `w-full text-white py-2 rounded-xl ${estilosTipo[tipoCarta].btn}`;
       }
 
-      // Manejo de envío
+      // Envío
       form.addEventListener("submit", async e => {
         e.preventDefault();
         document.getElementById("loaderOverlay").classList.remove("hidden");
@@ -191,9 +186,7 @@
           firmaPersonalizada: document.getElementById("firmaPersonalizada").value.trim()
         };
         try {
-          const res = await fetch("/api/generar-carta", {
-            method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify(datos)
-          });
+          const res = await fetch("/api/generar-carta", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify(datos) });
           const data = await res.json();
           document.getElementById("loaderOverlay").classList.add("hidden");
           if (data.carta) {
@@ -212,10 +205,5 @@
       window.descargarPDF = () => html2pdf().from(document.getElementById("contenidoCarta")).save("Carta_Lettera.pdf");
     });
   </script>
-
-  <div id="loaderOverlay" class="fixed inset-0 bg-white bg-opacity-80 flex flex-col items-center justify-center z-50 hidden">
-    <div class="animate-spin rounded-full h-16 w-16 border-t-4 border-blue-600 border-opacity-50 mb-4"></div>
-    <p class="text-gray-700 text-lg font-medium">Generando tu carta... por favor esperá unos segundos.</p>
-  </div>
 </body>
 </html>
