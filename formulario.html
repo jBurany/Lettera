@@ -9,23 +9,33 @@
   <script src="https://cdn.jsdelivr.net/npm/particles.js@2.0.0/particles.min.js"></script>
   <style>
     html, body { height: 100%; margin: 0; padding: 0; }
+    /* Animated gradient pattern */
     @keyframes floatBG {
       0% { background-position: 0 0, 20px 20px; }
       50% { background-position: 40px 40px, 0 0; }
       100% { background-position: 0 0, 20px 20px; }
     }
-    /* Fullscreen canvas for particles */
+    #pageBackground {
+      position: fixed;
+      inset: 0;
+      z-index: -20;
+      background: linear-gradient(135deg, #FFE4E6 0%, #FECDEB 100%);
+      background-image: radial-gradient(circle, rgba(255,255,255,0.3) 10%, transparent 10%),
+                        radial-gradient(circle, rgba(255,255,255,0.3) 10%, transparent 10%);
+      background-size: 40px 40px, 40px 40px;
+      animation: floatBG 30s linear infinite;
+    }
     #particles-js {
       position: fixed;
-      width: 100%;
-      height: 100%;
-      top: 0;
-      left: 0;
-      z-index: -1;
+      inset: 0;
+      z-index: -10;
     }
   </style>
 </head>
 <body class="h-full w-full text-gray-900 font-sans relative overflow-auto bg-transparent">
+
+  <!-- Static animated gradient/pattern background -->
+  <div id="pageBackground"></div>
 
   <!-- Particle background container -->
   <div id="particles-js"></div>
@@ -101,26 +111,103 @@
     <p class="text-gray-700 text-lg font-medium">Generando tu carta... por favor esperá unos segundos.</p>
   </div>
 
-  <!-- Initialize Particles.js -->
+  <!-- Initialize Particles.js with higher visibility and color -->
   <script>
     particlesJS('particles-js', {
       particles: {
-        number: { value: 60, density: { enable: true, value_area: 800 } },
-        color: { value: ['#ff7fa3', '#ffc0cb'] },
+        number: { value: 150, density: { enable: true, value_area: 600 } },
+        color: { value: ['#ff69b4', '#ff1493', '#ffc0cb'] },
         shape: { type: 'circle' },
-        opacity: { value: 0.4, random: true },
-        size: { value: 4, random: true },
-        move: { enable: true, speed: 1, direction: 'none', out_mode: 'out' }
+        opacity: { value: 0.7, random: true },
+        size: { value: 6, random: true },
+        line_linked: { enable: false },
+        move: { enable: true, speed: 1.5, direction: 'none', out_mode: 'out' }
       },
       interactivity: {
         detect_on: 'canvas',
-        events: { onhover: { enable: true, mode: 'repulse' }, onclick: { enable: true, mode: 'push' } },
-        modes: { repulse: { distance: 100 }, push: { particles_nb: 4 } }
+        events: { onhover: { enable: true, mode: 'repulse' }, onclick: { enable: true, mode: 'push' }, resize: true },
+        modes: { repulse: { distance: 100 }, push: { particles_nb: 6 } }
       },
       retina_detect: true
     });
   </script>
 
+  <!-- Existing generation and download scripts -->
   <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      const params = new URLSearchParams(window.location.search);
+      const tipoCarta = params.get('tipoCarta');
+      const plan = params.get('plan');
+      const hiddenTipo = document.getElementById('hiddenTipoCarta');
+      const hiddenPlan = document.getElementById('hiddenPlan');
+      const selectTipo = document.getElementById('tipoCarta');
+      const selectPlan = document.getElementById('plan');
+      const decorContainer = document.getElementById('decorHearts');
+      const boton = document.getElementById('submitBtn');
+      const titulo = document.querySelector('h1');
+
+      // Populate selects
+      const opcionesTipo = { amor: 'Carta de Amor', perdon: 'Carta de Perdón', felicitacion: 'Carta de Felicitación', agradecimiento: 'Carta de Agradecimiento', laboral: 'Carta Laboral', libro: 'Libro Personalizado' };
+      const opcionesPlan = { basico: 'Básico (200 palabras)', intermedio: 'Intermedio (350 palabras)', completo: 'Completo (500 palabras)' };
+      Object.entries(opcionesTipo).forEach(([val, label]) => selectTipo.append(Object.assign(document.createElement('option'), { value: val, textContent: label })));
+      Object.entries(opcionesPlan).forEach(([val, label]) => selectPlan.append(Object.assign(document.createElement('option'), { value: val, textContent: label })));
+
+      // Assign values
+      if (tipoCarta) { selectTipo.value = tipoCarta; hiddenTipo.value = tipoCarta; }
+      if (plan) { selectPlan.value = plan; hiddenPlan.value = plan; }
+
+      // Re-add decorative hearts
+      const count = plan === 'basico' ? 2 : plan === 'intermedio' ? 8 : plan === 'completo' ? 15 : 0;
+      for (let i = 0; i < count; i++) {
+        const size = plan === 'basico' ? 2 : plan === 'intermedio' ? 2 + Math.floor(Math.random() * 2) : 3 + Math.floor(Math.random() * 3);
+        const top = Math.random() * 80 + 5;
+        const left = Math.random() * 80 + 5;
+        const opacity = plan === 'completo' ? 0.2 + Math.random() * 0.3 : 0.2 + Math.random() * 0.2;
+        const anim = plan === 'intermedio' ? 'animate-bounce' : 'animate-pulse';
+        decorContainer.innerHTML += `<span class="absolute text-${size}xl ${anim}" style="top:${top}%; left:${left}%; color:rgba(255,0,0,${opacity})">❤️</span>`;
+      }
+
+      // Title and button style
+      const estilosTipo = { amor: { titulo: 'Formulario: Carta de Amor', btn: 'bg-pink-600 hover:bg-pink-700' }, perdon: { titulo: 'Formulario: Carta de Perdón', btn: 'bg-yellow-600 hover:bg-yellow-700' } };
+      if (estilosTipo[tipoCarta]) {
+        titulo.textContent = estilosTipo[tipoCarta].titulo;
+        boton.className = `w-full text-white py-3 rounded-xl transition ${estilosTipo[tipoCarta].btn}`;
+      }
+
+      // Form submission
+      document.getElementById('loveLetterForm').addEventListener('submit', async e => {
+        e.preventDefault();
+        document.getElementById('loaderOverlay').classList.remove('hidden');
+        const datos = {
+          tipoCarta: hiddenTipo.value,
+          plan: hiddenPlan.value,
+          destinatario: document.getElementById('destinatario').value.trim(),
+          mensaje: document.getElementById('mensaje').value.trim(),
+          estilo: document.getElementById('estilo').value.trim() || 'romántico',
+          entrega: document.getElementById('entrega').value,
+          firmaTipo: document.getElementById('firmaTipo').value,
+          firmaPersonalizada: document.getElementById('firmaPersonalizada').value.trim()
+        };
+        try {
+          const res = await fetch('/api/generar-carta', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(datos) });
+          const data = await res.json();
+          document.getElementById('loaderOverlay').classList.add('hidden');
+          if (data.carta) {
+            document.getElementById('contenidoCarta').innerHTML = data.carta.replace(/\n/g, '<br>');
+            document.getElementById('cartaGenerada').classList.remove('hidden');
+          } else {
+            alert('❌ Error generando la carta: ' + (data.error || 'Desconocido'));
+          }
+        } catch (err) {
+          document.getElementById('loaderOverlay').classList.add('hidden');
+          alert('⚠️ Error al conectar con el servidor:\n' + err.message);
+        }
+      });
+
+      // Download PDF
+      window.descargarPDF = () => html2pdf().from(document.getElementById('contenidoCarta')).save('Carta_Lettera.pdf');
+    });
+  </script>
 </body>
 </html>
