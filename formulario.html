@@ -9,19 +9,7 @@
  <body class="bg-gray-100 text-gray-900 font-sans">
    <main class="max-w-xl mx-auto py-10">
      <h1 class="text-3xl font-bold mb-6 text-center">Formulario: Carta de Amor</h1>
-     <script>
-  // Leer parámetros de la URL
-  const params = new URLSearchParams(window.location.search);
-  const tipoCartaParam = params.get("tipoCarta");
-
-  // Si existe tipoCarta en la URL, seleccionar ese valor
-  if (tipoCartaParam) {
-    const selectCarta = document.getElementById("tipoCarta");
-    if (selectCarta) {
-      selectCarta.value = tipoCartaParam;
-    }
-  }
-</script>
+    
   <form id="loveLetterForm" class="bg-white p-6 rounded-xl shadow space-y-4">
   <!-- Tipo de carta -->
   <div>
@@ -172,5 +160,20 @@
    <div class="animate-spin rounded-full h-16 w-16 border-t-4 border-blue-600 border-opacity-50 mb-4"></div>
    <p class="text-gray-700 text-lg font-medium">Generando tu carta... por favor esperá unos segundos.</p>
  </div>
+  
+  <script>
+  document.addEventListener("DOMContentLoaded", () => {
+    const params = new URLSearchParams(window.location.search);
+    const tipoCartaParam = params.get("tipoCarta");
+
+    if (tipoCartaParam) {
+      const selectCarta = document.getElementById("tipoCarta");
+      if (selectCarta) {
+        selectCarta.value = tipoCartaParam;
+      }
+    }
+  });
+</script>
+
  </body>
  </html>
