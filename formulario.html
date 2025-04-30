@@ -146,14 +146,18 @@
         boton.className = `w-full text-white py-2 rounded-xl ${estilo.boton}`;
         planSelect.value = plan;
 
-        const planLabel = planSelect.closest("div").querySelector("label");
-        const textoPlan = document.createElement("p");
-        textoPlan.textContent = `Plan seleccionado: ${planSelect.options[planSelect.selectedIndex].text}`;
-        textoPlan.className = "font-semibold text-sm mt-1";
+        planSelect.value = plan;
 
-        planSelect.classList.add("hidden");
-        planSelect.setAttribute("disabled", true);
-        planLabel.parentNode.insertBefore(textoPlan, planSelect.nextSibling);
+       // Establecer valor seleccionado
+        planSelect.value = plan;
+        
+        // Eliminar el selector completamente del DOM
+        const planWrapper = planSelect.closest("div");
+        planWrapper.innerHTML = `
+          <label class="block font-semibold mb-1">Elegí el plan</label>
+          <p class="font-semibold text-sm mt-1">Plan seleccionado: ${planSelect.options[planSelect.selectedIndex].text}</p>
+        `;
+
       }
     });
 
