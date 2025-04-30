@@ -140,6 +140,20 @@
         boton.className = `w-full text-white py-2 rounded-xl ${estilo.boton}`;
         const planSelect = document.getElementById("plan");
         planSelect.value = plan;
+
+        // Si ya viene con plan por la URL, ocultamos el selector
+          if (plan && selectPlan) {
+            const label = selectPlan.closest("div").querySelector("label");
+            const textoPlan = document.createElement("p");
+            textoPlan.textContent = `Plan seleccionado: ${selectPlan.options[selectPlan.selectedIndex].text}`;
+            textoPlan.className = "font-semibold text-sm mt-1";
+          
+            // Ocultar select y mostrar texto
+            selectPlan.style.display = "none";
+            label.parentNode.insertBefore(textoPlan, selectPlan.nextSibling);
+          }
+
+        
       }
     });
 
