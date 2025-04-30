@@ -1,100 +1,103 @@
 <!DOCTYPE html>
-<html lang="es" class="h-full">
+<html lang="es" class="w-full h-full">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Formulario - Lettera</title>
   <script src="https://cdn.tailwindcss.com"></script>
   <style>
-    html, body { height: 100%; margin: 0; }
+    html, body { height: 100%; margin: 0; padding: 0; }
   </style>
 </head>
-<body class="h-full w-full m-0 p-0 text-gray-900 font-sans relative">
+<body class="w-full h-full text-gray-900 font-sans relative">
   <!-- Fondo dinámico con degradado y patrón de círculos -->
-  <div id="pageBackground" class="absolute inset-0 h-full w-full -z-10" style="
+  <div id="pageBackground" class="fixed inset-0 -z-10" style="
     background: linear-gradient(135deg, #FFE4E6 0%, #FECDEB 100%);
-    background-image: radial-gradient(circle, rgba(255,255,255,0.3) 10%, transparent 10%),
-                     radial-gradient(circle, rgba(255,255,255,0.3) 10%, transparent 10%);
+    background-image:
+      radial-gradient(circle, rgba(255,255,255,0.3) 10%, transparent 10%),
+      radial-gradient(circle, rgba(255,255,255,0.3) 10%, transparent 10%);
     background-size: 40px 40px, 40px 40px;
     background-position: 0 0, 20px 20px;
   "></div>
 
-  <main id="mainContainer" class="max-w-xl mx-auto py-10 relative z-10 h-full overflow-auto">
-    <h1 id="tituloFormulario" class="text-3xl font-bold mb-6 text-center text-pink-800">Formulario: Carta</h1>
+  <main id="mainContainer" class="w-full h-full overflow-auto p-4 md:p-10 relative z-10">
+    <div class="max-w-3xl mx-auto">
+      <h1 id="tituloFormulario" class="text-4xl font-bold mb-8 text-center text-pink-800">Formulario: Carta</h1>
 
-    <form id="loveLetterForm" class="p-6 rounded-xl shadow-2xl space-y-4 bg-white bg-opacity-90 backdrop-blur-md relative overflow-visible">
-      <!-- Campos ocultos -->
-      <input type="hidden" id="hiddenTipoCarta" name="tipoCarta">
-      <input type="hidden" id="hiddenPlan" name="plan">
+      <form id="loveLetterForm" class="p-8 rounded-2xl shadow-2xl space-y-6 bg-white bg-opacity-90 backdrop-blur-md overflow-visible relative">
+        <!-- Campos ocultos -->
+        <input type="hidden" id="hiddenTipoCarta" name="tipoCarta">
+        <input type="hidden" id="hiddenPlan" name="plan">
 
-      <!-- Tipo de carta -->
-      <div id="tipoCartaContainer">
-        <label class="block font-semibold mb-1">¿Qué tipo de carta querés?</label>
-        <select id="tipoCarta" class="w-full border p-2 rounded" required></select>
-      </div>
+        <!-- Tipo de carta -->
+        <div id="tipoCartaContainer">
+          <label class="block font-semibold mb-2">¿Qué tipo de carta querés?</label>
+          <select id="tipoCarta" class="w-full border p-3 rounded-lg" required></select>
+        </div>
 
-      <!-- Plan -->
-      <div id="planContainer">
-        <label class="block font-semibold mb-1">Elegí el plan</label>
-        <select id="plan" class="w-full border p-2 rounded" required></select>
-      </div>
+        <!-- Plan -->
+        <div id="planContainer">
+          <label class="block font-semibold mb-2">Elegí el plan</label>
+          <select id="plan" class="w-full border p-3 rounded-lg" required></select>
+        </div>
 
-      <!-- Otros campos -->
-      <div>
-        <label class="block font-semibold">¿A quién va dirigida la carta?</label>
-        <input type="text" id="destinatario" class="w-full border p-2 rounded" required />
-      </div>
-      <div>
-        <label class="block font-semibold">¿Qué querés transmitir?</label>
-        <textarea id="mensaje" class="w-full border p-2 rounded" rows="4" required></textarea>
-      </div>
-      <div>
-        <label class="block font-semibold">Estilo deseado (romántico, formal, divertido, etc.):</label>
-        <input type="text" id="estilo" class="w-full border p-2 rounded" />
-      </div>
-      <div>
-        <label class="block font-semibold">¿Cómo querés recibir la carta?</label>
-        <select id="entrega" class="w-full border p-2 rounded">
-          <option value="pdf">Descargar como PDF</option>
-          <option value="email">Recibir por correo electrónico</option>
-          <option value="ambos">Ambas opciones</option>
-        </select>
-      </div>
-      <div>
-        <label class="block font-semibold">¿Firma anónima o con tu nombre?</label>
-        <select id="firmaTipo" class="w-full border p-2 rounded">
-          <option value="anonima">Anónima</option>
-          <option value="conNombre">Con nombre</option>
-        </select>
-      </div>
-      <div>
-        <label class="block font-semibold">Firma personalizada (opcional)</label>
-        <input type="text" id="firmaPersonalizada" class="w-full border p-2 rounded" />
-      </div>
+        <!-- Otros campos -->
+        <div>
+          <label class="block font-semibold mb-2">¿A quién va dirigida la carta?</label>
+          <input type="text" id="destinatario" class="w-full border p-3 rounded-lg" required />
+        </div>
+        <div>
+          <label class="block font-semibold mb-2">¿Qué querés transmitir?</label>
+          <textarea id="mensaje" class="w-full border p-3 rounded-lg" rows="4" required></textarea>
+        </div>
+        <div>
+          <label class="block font-semibold mb-2">Estilo deseado (romántico, formal, divertido, etc.):</label>
+          <input type="text" id="estilo" class="w-full border p-3 rounded-lg" />
+        </div>
+        <div>
+          <label class="block font-semibold mb-2">¿Cómo querés recibir la carta?</label>
+          <select id="entrega" class="w-full border p-3 rounded-lg">
+            <option value="pdf">Descargar como PDF</option>
+            <option value="email">Recibir por correo electrónico</option>
+            <option value="ambos">Ambas opciones</option>
+          </select>
+        </div>
+        <div>
+          <label class="block font-semibold mb-2">¿Firma anónima o con tu nombre?</label>
+          <select id="firmaTipo" class="w-full border p-3 rounded-lg">
+            <option value="anonima">Anónima</option>
+            <option value="conNombre">Con nombre</option>
+          </select>
+        </div>
+        <div>
+          <label class="block font-semibold mb-2">Firma personalizada (opcional)</label>
+          <input type="text" id="firmaPersonalizada" class="w-full border p-3 rounded-lg" />
+        </div>
 
-      <button type="submit" id="submitBtn" class="w-full text-white py-2 rounded-xl bg-pink-600 hover:bg-pink-700">
-        Generar carta
-      </button>
-
-      <!-- Corazones decorativos adicionales -->
-      <div class="absolute inset-0 pointer-events-none">
-        <span class="absolute text-3xl animate-bounce" style="top:5%; left:10%; color:rgba(255,0,0,0.3)">❤️</span>
-        <span class="absolute text-2xl animate-pulse" style="top:20%; left:80%; color:rgba(255,0,0,0.2)">❤️</span>
-        <span class="absolute text-4xl animate-bounce" style="bottom:15%; left:15%; color:rgba(255,0,0,0.25)">❤️</span>
-        <span class="absolute text-2xl animate-pulse" style="bottom:20%; right:20%; color:rgba(255,0,0,0.2)">❤️</span>
-        <span class="absolute text-3xl animate-bounce" style="top:50%; left:50%; color:rgba(255,0,0,0.15)">❤️</span>
-      </div>
-    </form>
-
-    <section id="cartaGenerada" class="bg-white p-6 mt-10 rounded-xl shadow-lg hidden">
-      <h2 class="text-2xl font-bold mb-4 text-center text-pink-800">Tu Carta Generada</h2>
-      <div id="contenidoCarta" class="text-gray-700 space-y-4"></div>
-      <div class="text-center mt-6">
-        <button onclick="descargarPDF()" class="px-6 py-3 bg-green-600 text-white rounded-xl hover:bg-green-700">
-          Descargar como PDF
+        <button type="submit" id="submitBtn" class="w-full text-white py-3 rounded-xl bg-pink-600 hover:bg-pink-700 transition">
+          Generar carta
         </button>
-      </div>
-    </section>
+
+        <!-- Corazones decorativos adicionales -->
+        <div class="absolute inset-0 pointer-events-none">
+          <span class="absolute text-4xl animate-bounce" style="top:5%; left:10%; color:rgba(255,0,0,0.3)">❤️</span>
+          <span class="absolute text-3xl animate-pulse" style="top:20%; left:80%; color:rgba(255,0,0,0.2)">❤️</span>
+          <span class="absolute text-5xl animate-bounce" style="bottom:15%; left:15%; color:rgba(255,0,0,0.25)">❤️</span>
+          <span class="absolute text-3xl animate-pulse" style="bottom:20%; right:20%; color:rgba(255,0,0,0.2)">❤️</span>
+          <span class="absolute text-4xl animate-bounce" style="top:50%; left:50%; color:rgba(255,0,0,0.15)">❤️</span>
+        </div>
+      </form>
+
+      <section id="cartaGenerada" class="bg-white p-6 mt-10 rounded-xl shadow-lg hidden">
+        <h2 class="text-2xl font-bold mb-4 text-center text-pink-800">Tu Carta Generada</h2>
+        <div id="contenidoCarta" class="text-gray-700 space-y-4"></div>
+        <div class="text-center mt-6">
+          <button onclick="descargarPDF()" class="px-6 py-3 bg-green-600 text-white rounded-xl hover:bg-green-700 transition">
+            Descargar como PDF
+          </button>
+        </div>
+      </section>
+    </div>
   </main>
 
   <!-- Loader -->
@@ -116,7 +119,6 @@
       const form = document.getElementById("loveLetterForm");
       const boton = document.getElementById("submitBtn");
       const titulo = document.getElementById("tituloFormulario");
-      const pageBg = document.getElementById("pageBackground");
 
       // Populamos selects
       const opcionesTipo = { amor: "Carta de Amor", perdon: "Carta de Perdón", felicitacion: "Carta de Felicitación", agradecimiento: "Carta de Agradecimiento", laboral: "Carta Laboral", libro: "Libro Personalizado" };
@@ -131,37 +133,13 @@
 
       // Ajuste de estilos por tipo
       const estilosTipo = { amor: { titulo: "Formulario: Carta de Amor", btn: "bg-pink-600 hover:bg-pink-700" }, perdon: { titulo: "Formulario: Carta de Perdón", btn: "bg-yellow-600 hover:bg-yellow-700" } };
-      if (estilosTipo[tipoCarta]) { titulo.textContent = estilosTipo[tipoCarta].titulo; boton.className = `w-full text-white py-2 rounded-xl ${estilosTipo[tipoCarta].btn}`; }
+      if (estilosTipo[tipoCarta]) { titulo.textContent = estilosTipo[tipoCarta].titulo; boton.className = `w-full text-white py-3 rounded-xl transition ${estilosTipo[tipoCarta].btn}`; }
 
-      // Envío del formulario
+      // Manejo de envío
       form.addEventListener("submit", async e => {
-        e.preventDefault();
-        document.getElementById("loaderOverlay").classList.remove("hidden");
-        const datos = {
-          tipoCarta: hiddenTipo.value,
-          plan: hiddenPlan.value,
-          destinatario: document.getElementById("destinatario").value.trim(),
-          mensaje: document.getElementById("mensaje").value.trim(),
-          estilo: document.getElementById("estilo").value.trim() || 'romántico',
-          entrega: document.getElementById("entrega").value,
-          firmaTipo: document.getElementById("firmaTipo").value,
-          firmaPersonalizada: document.getElementById("firmaPersonalizada").value.trim()
-        };
-        try {
-          const res = await fetch("/api/generar-carta",{ method:"POST", headers:{"Content-Type":"application/json"}, body: JSON.stringify(datos) });
-          const data = await res.json();
-          document.getElementById("loaderOverlay").classList.add("hidden");
-          if(data.carta) { 
-            document.getElementById("contenidoCarta").innerHTML = data.carta.replace(/\n/g,"<br>");
-            document.getElementById("cartaGenerada").classList.remove("hidden");
-          } else {
-            alert("❌ Error generando la carta: " + (data.error||"Desconocido"));
-          }
-        } catch(err) {
-          document.getElementById("loaderOverlay").classList.add("hidden");
-          alert("⚠️ Error al conectar con el servidor:\n"+err.message);
-        }
-      });
+        e.preventDefault(); document.getElementById("loaderOverlay").classList.remove("hidden");
+        const datos = { tipoCarta: hiddenTipo.value, plan: hiddenPlan.value, destinatario: document.getElementById("destinatario").value.trim(), mensaje: document.getElementById("mensaje").value.trim(), estilo: document.getElementById("estilo").value.trim() || 'romántico', entrega: document.getElementById("entrega").value, firmaTipo: document.getElementById("firmaTipo").value, firmaPersonalizada: document.getElementById("firmaPersonalizada").value.trim() };
+        try { const res = await fetch("/api/generar-carta", { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(datos) }); const data = await res.json(); document.getElementById("loaderOverlay").classList.add("hidden"); if (data.carta) { document.getElementById("contenidoCarta").innerHTML = data.carta.replace(/\n/g, "<br>"); document.getElementById("cartaGenerada").classList.remove("hidden"); } else { alert("❌ Error generando la carta: " + (data.error || "Desconocido")); } } catch (err) { document.getElementById("loaderOverlay").classList.add("hidden"); alert("⚠️ Error al conectar con el servidor:\n" + err.message); } });
 
       // Descargar PDF
       window.descargarPDF = () => html2pdf().from(document.getElementById("contenidoCarta")).save("Carta_Lettera.pdf");
