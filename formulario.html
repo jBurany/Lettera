@@ -145,11 +145,10 @@
         form.classList.add(estilo.fondo, estilo.borde);
         boton.className = `w-full text-white py-2 rounded-xl ${estilo.boton}`;
 
-        // Reemplazar el selector de plan por texto fijo
         const planWrapper = document.getElementById("planWrapper");
         const textoPlan = `
           <label class="block font-semibold mb-1">Elegí el plan</label>
-          <p class="font-semibold text-sm mt-1">Plan seleccionado: ${planSelect.options[planSelect.selectedIndex].text}</p>
+          <p class="font-semibold text-sm mt-1">Plan seleccionado: ${plan.charAt(0).toUpperCase() + plan.slice(1)} (hasta ${plan === 'basico' ? '200' : plan === 'intermedio' ? '350' : '500'} palabras)</p>
         `;
         planWrapper.innerHTML = textoPlan;
       }
@@ -160,8 +159,8 @@
       document.getElementById("loaderOverlay").classList.remove("hidden");
 
       const datos = {
-        tipoCarta: document.getElementById("tipoCarta").value,
-        plan: document.getElementById("plan") ? document.getElementById("plan").value : "",
+        tipoCarta: document.getElementById("tipoCarta")?.value || "",
+        plan: document.getElementById("plan")?.value || "",
         destinatario: document.getElementById("destinatario").value.trim(),
         mensaje: document.getElementById("mensaje").value.trim(),
         estilo: document.getElementById("estilo").value.trim() || "romántico",
