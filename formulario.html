@@ -63,18 +63,12 @@
         <input type="text" id="firmaPersonalizada" class="w-full border p-3 rounded-lg" />
       </div>
 
-      <button type="submit" id="submitBtn" class="w-full text-white py-3 rounded-xl bg-pink-600 hover:bg-pink-700 transition">
+      <button type="submit" id="submitBtn" class="w-full text-white py-3 rounded-xl transition bg-pink-600 hover:bg-pink-700">
         Generar carta
       </button>
 
-      <!-- Corazones decorativos extras -->
-      <div class="absolute inset-0 pointer-events-none">
-        <span class="absolute text-4xl animate-bounce" style="top:5%; left:10%; color:rgba(255,0,0,0.4)">❤️</span>
-        <span class="absolute text-3xl animate-pulse" style="top:20%; left:80%; color:rgba(255,0,0,0.3)">❤️</span>
-        <span class="absolute text-5xl animate-bounce" style="bottom:15%; left:15%; color:rgba(255,0,0,0.35)">❤️</span>
-        <span class="absolute text-3xl animate-pulse" style="bottom:20%; right:20%; color:rgba(255,0,0,0.3)">❤️</span>
-        <span class="absolute text-4xl animate-bounce" style="top:50%; left:50%; color:rgba(255,0,0,0.25)">❤️</span>
-      </div>
+      <!-- Corazones decorativos -->
+      <div class="absolute inset-0 pointer-events-none" id="decorHearts"></div>
     </form>
 
     <section id="cartaGenerada" class="bg-white p-6 mt-10 rounded-xl shadow-lg hidden">
@@ -105,57 +99,73 @@
       const selectTipo = document.getElementById("tipoCarta");
       const selectPlan = document.getElementById("plan");
       const form = document.getElementById("loveLetterForm");
+      const decorContainer = document.getElementById("decorHearts");
       const boton = document.getElementById("submitBtn");
       const titulo = document.getElementById("tituloFormulario");
 
       // Poblamos selects
       const opcionesTipo = { amor: "Carta de Amor", perdon: "Carta de Perdón", felicitacion: "Carta de Felicitación", agradecimiento: "Carta de Agradecimiento", laboral: "Carta Laboral", libro: "Libro Personalizado" };
-      const opcionesPlan = { basico: "Básico (200 palabras)", intermedio: "Intermedio (350 palabras)", completo: "Completo (500 palabras)" };
-      Object.entries(opcionesTipo).forEach(([val, label]) => selectTipo.append(Object.assign(document.createElement("option"), { value: val, textContent: label })));
-      Object.entries(opcionesPlan).forEach(([val, label]) => selectPlan.append(Object.assign(document.createElement("option"), { value: val, textContent: label })));
+      const opcionesPlan = { basico: "Básico (hasta 200 palabras)", intermedio: "Intermedio (hasta 350 palabras)", completo: "Completo (hasta 500 palabras)" };
+      Object.entries(opcionesTipo).forEach(([val,label]) => selectTipo.append(Object.assign(document.createElement("option"),{value:val,textContent:label})));
+      Object.entries(opcionesPlan).forEach(([val,label]) => selectPlan.append(Object.assign(document.createElement("option"),{value:val,textContent:label})));
 
       // Asignamos valores y bloqueamos selects
-      if (tipoCarta) { selectTipo.value = tipoCarta; hiddenTipo.value = tipoCarta; }
-      if (plan) { selectPlan.value = plan; hiddenPlan.value = plan; }
-      [selectTipo, selectPlan].forEach(el => el.disabled = true);
+      if(tipoCarta){ selectTipo.value=tipoCarta; hiddenTipo.value=tipoCarta; }
+      if(plan){ selectPlan.value=plan; hiddenPlan.value=plan; }
 
-      // Ajuste de estilos por tipo
-      const estilosTipo = { amor: { titulo: "Formulario: Carta de Amor", btn: "bg-pink-600 hover:bg-pink-700" }, perdon: { titulo: "Formulario: Carta de Perdón", btn: "bg-yellow-600 hover:bg-yellow-700" } };
-      if (estilosTipo[tipoCarta]) {
-        titulo.textContent = estilosTipo[tipoCarta].titulo;
-        boton.className = `w-full text-white py-3 rounded-xl transition ${estilosTipo[tipoCarta].btn}`;
+      // Decoración específica para Amor
+      if(tipoCarta==='amor'){
+        if(plan==='basico'){
+          form.classList.replace('bg-gradient-to-tr','bg-gradient-to-br');
+          form.classList.replace('from-white','from-pink-50');
+          form.classList.replace('via-pink-50','via-white');
+          form.classList.replace('to-white','to-pink-50');
+          // corazones sutiles
+          decorContainer.innerHTML = `
+            <span class="absolute text-2xl animate-pulse" style="top:10%; left:15%; color:rgba(255,0,0,0.2)">❤️</span>
+            <span class="absolute text-2xl animate-pulse" style="bottom:10%; right:20%; color:rgba(255,0,0,0.2)">❤️</span>
+          `;
+        } else if(plan==='intermedio'){
+          // decoración ya aplicada
+        } else if(plan==='completo'){
+          form.classList.replace('bg-gradient-to-tr','bg-gradient-to-br');
+          form.classList.replace('from-white','from-pink-100');
+          form.classList.replace('via-pink-50','via-white');
+          form.classList.replace('to-white','to-pink-100');
+          decorContainer.innerHTML = `
+            <span class="absolute text-4xl animate-bounce" style="top:5%; right:10%; color:rgba(255,0,0,0.3)">❤️</span>
+            <span class="absolute text-4xl animate-pulse" style="bottom:5%; left:10%; color:rgba(255,0,0,0.3)">❤️</span>
+            <span class="absolute text-5xl animate-bounce" style="top:50%; left:50%; color:rgba(255,0,0,0.25)">❤️</span>
+          `;
+        }
       }
 
+      // Ajuste de estilos por tipo general
+      const estilosTipo = { amor:{titulo:"Formulario: Carta de Amor",btn:"bg-pink-600 hover:bg-pink-700"}, perdon:{titulo:"Formulario: Carta de Perdón",btn:"bg-yellow-600 hover:bg-yellow-700"}};
+      if(estilosTipo[tipoCarta]){ titulo.textContent=estilosTipo[tipoCarta].titulo; boton.className=`w-full text-white py-3 rounded-xl transition ${estilosTipo[tipoCarta].btn}`; }
+
       // Envío del formulario
-      form.addEventListener("submit", async e => {
-        e.preventDefault(); document.getElementById("loaderOverlay").classList.remove("hidden");
-        const datos = {
-          tipoCarta: hiddenTipo.value,
-          plan: hiddenPlan.value,
-          destinatario: document.getElementById("destinatario").value.trim(),
-          mensaje: document.getElementById("mensaje").value.trim(),
-          estilo: document.getElementById("estilo").value.trim() || "romántico",
-          entrega: document.getElementById("entrega").value,
-          firmaTipo: document.getElementById("firmaTipo").value,
-          firmaPersonalizada: document.getElementById("firmaPersonalizada").value.trim()
+      form.addEventListener('submit', async e=>{
+        e.preventDefault(); document.getElementById('loaderOverlay').classList.remove('hidden');
+        const datos={
+          tipoCarta:hiddenTipo.value, plan:hiddenPlan.value,
+          destinatario:document.getElementById('destinatario').value.trim(),
+          mensaje:document.getElementById('mensaje').value.trim(),
+          estilo:document.getElementById('estilo').value.trim()||'romántico',
+          entrega:document.getElementById('entrega').value,
+          firmaTipo:document.getElementById('firmaTipo').value,
+          firmaPersonalizada:document.getElementById('firmaPersonalizada').value.trim()
         };
-        try {
-          const res = await fetch("/api/generar-carta", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify(datos) });
-          const data = await res.json(); document.getElementById("loaderOverlay").classList.add("hidden");
-          if (data.carta) {
-            document.getElementById("contenidoCarta").innerHTML = data.carta.replace(/\n/g, "<br>");
-            document.getElementById("cartaGenerada").classList.remove("hidden");
-          } else {
-            alert("❌ Error generando la carta: " + (data.error || "Desconocido"));
-          }
-        } catch (err) {
-          document.getElementById("loaderOverlay").classList.add("hidden");
-          alert("⚠️ Error al conectar con el servidor:\n" + err.message);
-        }
+        try{
+          const res=await fetch('/api/generar-carta',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(datos)});
+          const data=await res.json(); document.getElementById('loaderOverlay').classList.add('hidden');
+          if(data.carta){ document.getElementById('contenidoCarta').innerHTML=data.carta.replace(/\n/g,'<br>'); document.getElementById('cartaGenerada').classList.remove('hidden'); }
+          else alert('❌ Error generando la carta: '+(data.error||'Desconocido'));
+        }catch(err){ document.getElementById('loaderOverlay').classList.add('hidden'); alert('⚠️ Error al conectar con el servidor:\n'+err.message); }
       });
 
       // Descargar PDF
-      window.descargarPDF = () => html2pdf().from(document.getElementById("contenidoCarta")).save("Carta_Lettera.pdf");
+      window.descargarPDF=()=>html2pdf().from(document.getElementById('contenidoCarta')).save('Carta_Lettera.pdf');
     });
   </script>
 </body>
