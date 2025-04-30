@@ -73,7 +73,7 @@
       </div>
       <div>
         <label class="block font-semibold mb-1">¿Cómo querés recibir la carta?</label>
-        <select id="entrega" class="block w-full border p-3 rounded-lg bg-white bg-opacity-50 backdrop-blur-sm text-gray-900">
+        <select id="entrega" onchange="toggleEmailRegalo()" class="$1">
           <option value="pdf">Descargar como PDF</option>
           <option value="email">Recibir por correo electrónico</option>
           <option value="regalo">Enviar como regalo</option>
@@ -187,6 +187,20 @@
       // PDF download
       window.descargarPDF = () => html2pdf().from(document.getElementById('contenidoCarta')).save('Carta_Lettera.pdf');
     });
+  </script>
+  <script>
+    function toggleEmailRegalo() {
+      const sel = document.getElementById('entrega');
+      const container = document.getElementById('emailRegaloContainer');
+      const emailInput = document.getElementById('emailRegalo');
+      if (sel.value === 'regalo') {
+        container.classList.remove('hidden');
+        emailInput.required = true;
+      } else {
+        container.classList.add('hidden');
+        emailInput.required = false;
+      }
+    }
   </script>
 </body>
 </html>
