@@ -44,7 +44,7 @@
       <div><label class="block font-semibold mb-1">Estilo (romántico, formal...)</label><input id="estilo" class="$1 bg-white bg-opacity-90 backdrop-blur-sm text-gray-900"></div>
       <div>
         <label class="block font-semibold mb-1">¿Cómo recibir la carta?</label>
-        <select id="entrega" class="$1 bg-white bg-opacity-90 backdrop-blur-sm text-gray-900">
+        <select id="entrega" class="block w-full $1">
           <option value="pdf">Descargar PDF</option>
           <option value="email">Por email</option>
           <option value="regalo">Enviar como regalo</option>
@@ -55,7 +55,7 @@
           <input id="emailRegalo" type="email" class="$1 bg-white bg-opacity-90 backdrop-blur-sm text-gray-900" placeholder="ejemplo@dominio.com">
         </div>
       </div>
-      <div><label class="block font-semibold mb-1">Firma anónima o con nombre</label><select id="firmaTipo" class="$1 bg-white bg-opacity-90 backdrop-blur-sm text-gray-900"><option value="anonima">Anónima</option><option value="conNombre">Con nombre</option></select></div>
+      <div><label class="block font-semibold mb-1">Firma anónima o con nombre</label><select id="firmaTipo" class="block w-full $1"><option value="anonima">Anónima</option><option value="conNombre">Con nombre</option></select></div>
       <div><label class="block font-semibold mb-1">Firma personalizada (opcional)</label><input id="firmaPersonalizada" class="$1 bg-white bg-opacity-90 backdrop-blur-sm text-gray-900"></div>
       <button type="submit" id="submitBtn" class="w-full text-white py-3 rounded-xl transition">Generar carta</button>
       <div id="decorHearts" class="absolute inset-0 pointer-events-none -z-10"></div>
