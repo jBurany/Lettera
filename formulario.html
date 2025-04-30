@@ -12,7 +12,7 @@
 
     <form id="loveLetterForm" class="p-6 rounded-xl shadow space-y-4">
       <!-- Tipo de carta -->
-      <div>
+      <div id="tipoWrapper">
         <label class="block font-semibold mb-1">¿Qué tipo de carta querés?</label>
         <select id="tipoCarta" name="tipoCarta" class="w-full border p-2 rounded" required>
           <option value="amor">Carta de Amor</option>
@@ -25,7 +25,7 @@
       </div>
 
       <!-- Plan -->
-      <div>
+      <div id="planWrapper">
         <label class="block font-semibold mb-1">Elegí el plan</label>
         <select id="plan" name="plan" class="w-full border p-2 rounded" required>
           <option value="basico">Básico (hasta 200 palabras)</option>
@@ -95,10 +95,8 @@
     </section>
   </main>
 
-  <!-- Librerías -->
   <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
 
-  <!-- Scripts funcionales -->
   <script>
     document.addEventListener("DOMContentLoaded", function () {
       const params = new URLSearchParams(window.location.search);
@@ -107,8 +105,9 @@
       const form = document.getElementById("loveLetterForm");
       const boton = form.querySelector("button[type='submit']");
       const titulo = document.querySelector("h1");
+      const planSelect = document.getElementById("plan");
+      const tipoSelect = document.getElementById("tipoCarta");
 
-      // Aplicar títulos y colores por tipo de carta
       const estilosPorTipo = {
         amor: { titulo: "Formulario: Carta de Amor", fondo: "bg-pink-100", boton: "bg-pink-600 hover:bg-pink-700", texto: "text-pink-900" },
         perdon: { titulo: "Formulario: Carta de Perdón", fondo: "bg-yellow-100", boton: "bg-yellow-600 hover:bg-yellow-700", texto: "text-yellow-900" },
@@ -118,42 +117,42 @@
         libro: { titulo: "Formulario: Libro Personalizado", fondo: "bg-gray-200", boton: "bg-gray-700 hover:bg-gray-800", texto: "text-gray-800" }
       };
 
-      if (tipoCarta && estilosPorTipo[tipoCarta]) {
-        const estilo = estilosPorTipo[tipoCarta];
-        document.body.className = `${estilo.fondo} ${estilo.texto} font-sans`;
-        if (titulo) titulo.textContent = estilo.titulo;
-        if (boton) boton.className = `w-full text-white py-2 rounded-xl ${estilo.boton}`;
-        const tipoSelect = document.getElementById("tipoCarta");
-        tipoSelect.value = tipoCarta;
-      }
-
-      // Aplicar visual por plan
       const estilosPorPlan = {
         basico: { fondo: "bg-gray-100", borde: "border border-gray-300", boton: "bg-blue-600 hover:bg-blue-700" },
         intermedio: { fondo: "bg-yellow-50", borde: "border-2 border-yellow-400 shadow", boton: "bg-yellow-600 hover:bg-yellow-700" },
         completo: { fondo: "bg-gradient-to-br from-green-100 to-white", borde: "border-4 border-green-500 shadow-xl", boton: "bg-green-700 hover:bg-green-800" }
       };
 
+      if (tipoCarta && estilosPorTipo[tipoCarta]) {
+        const estilo = estilosPorTipo[tipoCarta];
+        document.body.className = `${estilo.fondo} ${estilo.texto} font-sans`;
+        if (titulo) titulo.textContent = estilo.titulo;
+        if (boton) boton.className = `w-full text-white py-2 rounded-xl ${estilo.boton}`;
+        tipoSelect.value = tipoCarta;
+
+        // Ocultar selector de tipoCarta y mostrar como texto
+        const tipoLabel = tipoSelect.closest("div").querySelector("label");
+        const textoTipo = document.createElement("p");
+        textoTipo.textContent = `Tipo seleccionado: ${tipoSelect.options[tipoSelect.selectedIndex].text}`;
+        textoTipo.className = "font-semibold text-sm mt-1";
+
+        tipoSelect.style.display = "none";
+        tipoLabel.parentNode.insertBefore(textoTipo, tipoSelect.nextSibling);
+      }
+
       if (plan && estilosPorPlan[plan]) {
         const estilo = estilosPorPlan[plan];
         form.classList.add(estilo.fondo, estilo.borde);
         boton.className = `w-full text-white py-2 rounded-xl ${estilo.boton}`;
-        const planSelect = document.getElementById("plan");
         planSelect.value = plan;
 
-        // Si ya viene con plan por la URL, ocultamos el selector
-          if (plan && selectPlan) {
-            const label = selectPlan.closest("div").querySelector("label");
-            const textoPlan = document.createElement("p");
-            textoPlan.textContent = `Plan seleccionado: ${selectPlan.options[selectPlan.selectedIndex].text}`;
-            textoPlan.className = "font-semibold text-sm mt-1";
-          
-            // Ocultar select y mostrar texto
-            selectPlan.style.display = "none";
-            label.parentNode.insertBefore(textoPlan, selectPlan.nextSibling);
-          }
+        const planLabel = planSelect.closest("div").querySelector("label");
+        const textoPlan = document.createElement("p");
+        textoPlan.textContent = `Plan seleccionado: ${planSelect.options[planSelect.selectedIndex].text}`;
+        textoPlan.className = "font-semibold text-sm mt-1";
 
-        
+        planSelect.style.display = "none";
+        planLabel.parentNode.insertBefore(textoPlan, planSelect.nextSibling);
       }
     });
 
@@ -200,7 +199,6 @@
     }
   </script>
 
-  <!-- Loader -->
   <div id="loaderOverlay" class="fixed inset-0 bg-white bg-opacity-80 flex flex-col items-center justify-center z-50 hidden">
     <div class="animate-spin rounded-full h-16 w-16 border-t-4 border-blue-600 border-opacity-50 mb-4"></div>
     <p class="text-gray-700 text-lg font-medium">Generando tu carta... por favor esperá unos segundos.</p>
