@@ -154,6 +154,7 @@
       }
 
       if (plan && estilosPorPlan[plan]) {
+        planSelect.setAttribute("disabled", true);
         const estilo = estilosPorPlan[plan];
         estilo.fondo.split(" ").forEach(cl => form.classList.add(cl));
         estilo.borde.split(" ").forEach(cl => form.classList.add(cl));
