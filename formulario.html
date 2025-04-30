@@ -39,12 +39,12 @@
       </div>
 
       <!-- Form fields -->
-      <div><label class="block font-semibold mb-1">¿A quién va dirigida?</label><input id="destinatario" class="block w-full $1 bg-white bg-opacity-95 backdrop-blur-sm text-gray-900" required></div>
-      <div><label class="block font-semibold mb-1">¿Qué querés transmitir?</label><textarea id="mensaje" class="block w-full $1 bg-white bg-opacity-90 backdrop-blur-sm text-gray-900" rows="4" required></textarea></div>
-      <div><label class="block font-semibold mb-1">Estilo (romántico, formal...)</label><input id="estilo" class="block w-full $1 bg-white bg-opacity-90 backdrop-blur-sm text-gray-900"></div>
+      <div><label class="block font-semibold mb-1">¿A quién va dirigida?</label><input id="destinatario" class="block w-full bg-gray-50 border-2 border-gray-300 p-3 rounded-lg text-gray-900" required></div>
+      <div><label class="block font-semibold mb-1">¿Qué querés transmitir?</label><textarea id="mensaje" class="block w-full bg-gray-50 border-2 border-gray-300 p-3 rounded-lg text-gray-900" rows="4" required></textarea></div>
+      <div><label class="block font-semibold mb-1">Estilo (romántico, formal...)</label><input id="estilo" class="block w-full bg-gray-50 border-2 border-gray-300 p-3 rounded-lg text-gray-900"></div>
       <div>
         <label class="block font-semibold mb-1">¿Cómo recibir la carta?</label>
-        <select id="entrega" class="block w-full block w-full $1">
+        <select id="firmaTipo" class="block w-full bg-gray-50 border-2 border-gray-300 p-3 rounded-lg text-gray-900">
           <option value="pdf">Descargar PDF</option>
           <option value="email">Por email</option>
           <option value="regalo">Enviar como regalo</option>
@@ -52,11 +52,11 @@
         </select>
         <div id="emailRegaloContainer" class="mt-4 hidden">
           <label class="block font-semibold mb-1">Email destinatario</label>
-          <input id="emailRegalo" type="email" class="block w-full $1 bg-white bg-opacity-90 backdrop-blur-sm text-gray-900" placeholder="ejemplo@dominio.com">
+          <input id="emailRegalo" type="email" class="block w-full bg-gray-50 border-2 border-gray-300 p-3 rounded-lg text-gray-900" placeholder="ejemplo@dominio.com">
         </div>
       </div>
       <div><label class="block font-semibold mb-1">Firma anónima o con nombre</label><select id="firmaTipo" class="block w-full block w-full $1"><option value="anonima">Anónima</option><option value="conNombre">Con nombre</option></select></div>
-      <div><label class="block font-semibold mb-1">Firma personalizada (opcional)</label><input id="firmaPersonalizada" class="block w-full $1 bg-white bg-opacity-90 backdrop-blur-sm text-gray-900"></div>
+      <div><label class="block font-semibold mb-1">Firma personalizada (opcional)</label><input id="firmaPersonalizada" class="block w-full bg-gray-50 border-2 border-gray-300 p-3 rounded-lg text-gray-900"></div>
       <button type="submit" id="submitBtn" class="w-full text-white py-3 rounded-xl transition">Generar carta</button>
       <div id="decorHearts" class="absolute inset-0 pointer-events-none -z-10"></div>
     </form>
