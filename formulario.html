@@ -142,7 +142,8 @@
 
       if (plan && estilosPorPlan[plan]) {
         const estilo = estilosPorPlan[plan];
-        form.classList.add(estilo.fondo, estilo.borde);
+        form.classList.add(estilo.fondo);
+        estilo.borde.split(" ").forEach(cl => form.classList.add(cl));
         boton.className = `w-full text-white py-2 rounded-xl ${estilo.boton}`;
 
         const nombrePlan = {
