@@ -106,27 +106,25 @@
         completo: "Completo (hasta 500 palabras)"
       };
       Object.entries(opcionesTipo).forEach(([val, label]) => {
-        const opt = document.createElement("option");
-        opt.value = val; opt.textContent = label;
+        const opt = document.createElement("option"); opt.value = val; opt.textContent = label;
         selectTipo.appendChild(opt);
       });
       Object.entries(opcionesPlan).forEach(([val, label]) => {
-        const opt = document.createElement("option");
-        opt.value = val; opt.textContent = label;
+        const opt = document.createElement("option"); opt.value = val; opt.textContent = label;
         selectPlan.appendChild(opt);
       });
 
-      // Asignar valores
-      if (tipoCarta) {
-        selectTipo.value = tipoCarta;
-        hiddenTipo.value = tipoCarta;
-      }
-      if (plan) {
-        selectPlan.value = plan;
-        hiddenPlan.value = plan;
-      }
+      // Asignar valores y ocultos
+      if (tipoCarta) { selectTipo.value = tipoCarta; hiddenTipo.value = tipoCarta; }
+      if (plan) { selectPlan.value = plan; hiddenPlan.value = plan; }
 
-      // Estilos dinámicos
+      // Deshabilitar siempre selectores para esta etapa
+      selectTipo.disabled = true;
+      selectPlan.disabled = true;
+      selectTipo.classList.add("bg-gray-200", "cursor-not-allowed");
+      selectPlan.classList.add("bg-gray-200", "cursor-not-allowed");
+
+      // Estilos dinámicos por tipo
       const estilosTipo = {
         amor: { titulo: "Formulario: Carta de Amor", fondo: "bg-pink-100 text-pink-900", btn: "bg-pink-600 hover:bg-pink-700" },
         perdon: { titulo: "Formulario: Carta de Perdón", fondo: "bg-yellow-100 text-yellow-900", btn: "bg-yellow-600 hover:bg-yellow-700" },
@@ -142,14 +140,6 @@
         boton.className = `w-full text-white py-2 rounded-xl ${e.btn}`;
       }
 
-      // Bloquear selects en etapa pagada
-      if (paid) {
-        selectTipo.disabled = true;
-        selectTipo.classList.add("bg-gray-200", "cursor-not-allowed");
-        selectPlan.disabled = true;
-        selectPlan.classList.add("bg-gray-200", "cursor-not-allowed");
-      }
-
       // Estilos por plan cuando no está pagado
       if (!paid && plan) {
         const stylesByPlan = {
@@ -163,7 +153,7 @@
         boton.className = `w-full text-white py-2 rounded-xl ${ep.btn}`;
       }
 
-      // Manejo de envío
+      // Envío del formulario
       form.addEventListener("submit", async e => {
         e.preventDefault();
         document.getElementById("loaderOverlay").classList.remove("hidden");
@@ -197,6 +187,7 @@
         }
       });
 
+      // Función descargar PDF
       window.descargarPDF = () => {
         html2pdf().from(document.getElementById("contenidoCarta")).save("Carta_Lettera.pdf");
       };
