@@ -99,44 +99,61 @@
    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
  
    <script>
-   document.getElementById("loveLetterForm").addEventListener("submit", async function (e) {
-     e.preventDefault();
- 
-     const destinatario = document.getElementById("destinatario").value.trim();
-     const mensaje = document.getElementById("mensaje").value.trim();
-     const estilo = document.getElementById("estilo").value.trim() || "romántico";
-    
-     // Mostrar el loader
-      document.getElementById("loaderOverlay").classList.remove("hidden");
- 
-     try {
-       const respuesta = await fetch("/api/generar-carta", {
-         method: "POST",
-         headers: { "Content-Type": "application/json" },
-         body: JSON.stringify({ destinatario, mensaje, estilo })
-       });
- 
-       const data = await respuesta.json();
- 
-       // Ocultar el loader
-       document.getElementById("loaderOverlay").classList.add("hidden");
-       
-       if (data.carta) {
-         document.getElementById("contenidoCarta").innerHTML = data.carta.replace(/\n/g, "<br>");
-         document.getElementById("cartaGenerada").classList.remove("hidden");
-       } else {
-         alert("❌ Error generando la carta:\n" + (data.error || "Desconocido"));
-       }
-     } catch (err) {
-       alert("⚠️ Error al conectar con el servidor:\n" + err.message);
-     }
-   });
- 
-   function descargarPDF() {
-     const element = document.getElementById("contenidoCarta");
-     html2pdf().from(element).save("Carta_Lettera.pdf");
-   }
- </script>
+  document.getElementById("loveLetterForm").addEventListener("submit", async function (e) {
+    e.preventDefault();
+
+    // Mostrar el loader
+    document.getElementById("loaderOverlay").classList.remove("hidden");
+
+    // Capturar datos del formulario
+    const tipoCarta = document.getElementById("tipoCarta").value;
+    const plan = document.getElementById("plan").value;
+    const destinatario = document.getElementById("destinatario").value.trim();
+    const mensaje = document.getElementById("mensaje").value.trim();
+    const estilo = document.getElementById("estilo").value.trim() || "romántico";
+    const entrega = document.getElementById("entrega").value;
+    const firmaTipo = document.getElementById("firmaTipo").value;
+    const firmaPersonalizada = document.getElementById("firmaPersonalizada").value.trim();
+
+    try {
+      const respuesta = await fetch("/api/generar-carta", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          tipoCarta,
+          plan,
+          destinatario,
+          mensaje,
+          estilo,
+          entrega,
+          firmaTipo,
+          firmaPersonalizada
+        })
+      });
+
+      const data = await respuesta.json();
+
+      // Ocultar el loader
+      document.getElementById("loaderOverlay").classList.add("hidden");
+
+      if (data.carta) {
+        document.getElementById("contenidoCarta").innerHTML = data.carta.replace(/\n/g, "<br>");
+        document.getElementById("cartaGenerada").classList.remove("hidden");
+      } else {
+        alert("❌ Error generando la carta:\n" + (data.error || "Desconocido"));
+      }
+    } catch (err) {
+      document.getElementById("loaderOverlay").classList.add("hidden");
+      alert("⚠️ Error al conectar con el servidor:\n" + err.message);
+    }
+  });
+
+  function descargarPDF() {
+    const element = document.getElementById("contenidoCarta");
+    html2pdf().from(element).save("Carta_Lettera.pdf");
+  }
+</script>
+
  
  <!-- Loader elegante -->
  <div id="loaderOverlay" class="fixed inset-0 bg-white bg-opacity-80 flex flex-col items-center justify-center z-50 hidden">
