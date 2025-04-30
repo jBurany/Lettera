@@ -5,9 +5,29 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Formulario - Lettera</title>
   <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    .onda {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: radial-gradient(circle at 30% 30%, rgba(255,255,255,0.15), transparent 70%), radial-gradient(circle at 70% 70%, rgba(255,255,255,0.15), transparent 70%);
+      background-size: 200% 200%;
+      animation: moverOndas 6s infinite linear;
+      z-index: -1;
+    }
+
+    @keyframes moverOndas {
+      0% { background-position: 0% 50%; }
+      50% { background-position: 100% 50%; }
+      100% { background-position: 0% 50%; }
+    }
+  </style>
 </head>
-<body class="bg-gray-100 text-gray-900 font-sans">
-  <main class="max-w-4xl mx-auto py-10">
+<body class="bg-gray-100 text-gray-900 font-sans transition-colors duration-500">
+  <main class="max-w-4xl mx-auto py-10 relative">
+    <div class="onda hidden md:block" id="fondoAnimado"></div>
     <h1 class="text-3xl font-bold mb-6 text-center">Formulario: Carta</h1>
 
     <form id="loveLetterForm" class="p-6 rounded-xl shadow space-y-4 bg-white">
@@ -95,12 +115,11 @@
       </button>
     </form>
 
-    <!-- Aquí se mostrará la carta -->
+    <!-- Vista de la carta generada -->
     <section id="cartaGenerada" class="flex items-center justify-center mt-10">
       <div id="contenidoCarta" class="w-[800px] h-[550px] p-10 bg-white shadow-xl rounded-xl border text-center flex items-center justify-center text-lg" style="background-color: #ffffff;">
         Tu carta aparecerá aquí.
       </div>
-
       <div class="text-center mt-6 w-full">
         <button onclick="descargarPDF()" class="px-6 py-3 mt-6 bg-green-600 text-white rounded-xl hover:bg-green-700">
           Descargar como PDF
@@ -112,20 +131,53 @@
   <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
 
   <script>
-    document.getElementById("loveLetterForm").addEventListener("submit", async function (e) {
-      e.preventDefault();
+    document.addEventListener("DOMContentLoaded", function () {
+      const params = new URLSearchParams(window.location.search);
+      const tipo = params.get("tipoCarta");
+      const plan = params.get("plan");
+      const titulo = document.querySelector("h1");
+      const fondoAnimado = document.getElementById("fondoAnimado");
+      const colores = {
+        amor: { bg: "bg-pink-100", texto: "text-pink-900", titulo: "Formulario: Carta de Amor" },
+        perdon: { bg: "bg-yellow-100", texto: "text-yellow-900", titulo: "Formulario: Carta de Perdón" },
+        felicitacion: { bg: "bg-purple-100", texto: "text-purple-900", titulo: "Formulario: Carta de Felicitación" },
+        agradecimiento: { bg: "bg-green-100", texto: "text-green-900", titulo: "Formulario: Carta de Agradecimiento" },
+        laboral: { bg: "bg-blue-100", texto: "text-blue-900", titulo: "Formulario: Carta de Presentación Laboral" },
+        libro: { bg: "bg-gray-200", texto: "text-gray-800", titulo: "Formulario: Libro Personalizado" }
+      };
 
+      if (tipo && colores[tipo]) {
+        const c = colores[tipo];
+        document.body.className = `${c.bg} ${c.texto} font-sans`;
+        if (titulo) titulo.textContent = c.titulo;
+        if (fondoAnimado) fondoAnimado.classList.remove("hidden");
+
+        const select = document.getElementById("tipoCarta");
+        if (select) {
+          select.value = tipo;
+          select.setAttribute("disabled", true);
+        }
+      }
+
+      if (plan) {
+        const selectPlan = document.getElementById("plan");
+        if (selectPlan) {
+          selectPlan.value = plan;
+          selectPlan.setAttribute("disabled", true);
+        }
+      }
+    });
+
+    document.getElementById("loveLetterForm").addEventListener("submit", function (e) {
+      e.preventDefault();
       const colorFondo = document.getElementById("colorFondo").value;
       const destinatario = document.getElementById("destinatario").value.trim();
       const mensaje = document.getElementById("mensaje").value.trim();
       const estilo = document.getElementById("estilo").value.trim() || "romántico";
-      const entrega = document.getElementById("entrega").value;
       const firmaTipo = document.getElementById("firmaTipo").value;
       const firmaPersonalizada = document.getElementById("firmaPersonalizada").value.trim();
 
-      // Simulación del texto generado
       const textoGenerado = `Querido/a ${destinatario},\n\n${mensaje}\n\n${firmaTipo === 'anonima' ? '' : firmaPersonalizada}`;
-
       const carta = document.getElementById("contenidoCarta");
       carta.innerHTML = textoGenerado.replace(/\n/g, "<br>");
       carta.style.backgroundColor = colorFondo;
