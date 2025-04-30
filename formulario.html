@@ -10,7 +10,7 @@
   <main class="max-w-xl mx-auto py-10">
     <h1 id="tituloFormulario" class="text-3xl font-bold mb-6 text-center">Formulario: Carta</h1>
 
-    <form id="loveLetterForm" class="p-6 rounded-xl shadow space-y-4">
+    <form id="loveLetterForm" class="p-6 rounded-xl shadow space-y-4 relative overflow-hidden">
       <!-- Campos ocultos -->
       <input type="hidden" id="hiddenTipoCarta" name="tipoCarta">
       <input type="hidden" id="hiddenPlan" name="plan">
@@ -88,8 +88,6 @@
       const selectPlan = document.getElementById("plan");
       const hiddenTipo = document.getElementById("hiddenTipoCarta");
       const hiddenPlan = document.getElementById("hiddenPlan");
-      const tipoContainer = document.getElementById("tipoCartaContainer");
-      const planContainer = document.getElementById("planContainer");
       const form = document.getElementById("loveLetterForm");
       const boton = document.getElementById("submitBtn");
       const titulo = document.getElementById("tituloFormulario");
@@ -105,55 +103,50 @@
         intermedio: "Intermedio (hasta 350 palabras)",
         completo: "Completo (hasta 500 palabras)"
       };
-      Object.entries(opcionesTipo).forEach(([val, label]) => {
+      for (const [val, label] of Object.entries(opcionesTipo)) {
         const opt = document.createElement("option"); opt.value = val; opt.textContent = label;
         selectTipo.appendChild(opt);
-      });
-      Object.entries(opcionesPlan).forEach(([val, label]) => {
+      }
+      for (const [val, label] of Object.entries(opcionesPlan)) {
         const opt = document.createElement("option"); opt.value = val; opt.textContent = label;
         selectPlan.appendChild(opt);
-      });
+      }
 
       // Asignar valores y ocultos
       if (tipoCarta) { selectTipo.value = tipoCarta; hiddenTipo.value = tipoCarta; }
       if (plan) { selectPlan.value = plan; hiddenPlan.value = plan; }
 
-      // Deshabilitar siempre selectores para esta etapa
-      selectTipo.disabled = true;
-      selectPlan.disabled = true;
-      selectTipo.classList.add("bg-gray-200", "cursor-not-allowed");
-      selectPlan.classList.add("bg-gray-200", "cursor-not-allowed");
+      // Siempre bloquear selects
+      [selectTipo, selectPlan].forEach(el => {
+        el.disabled = true;
+        el.classList.add("bg-gray-200", "cursor-not-allowed");
+      });
 
       // Estilos dinámicos por tipo
       const estilosTipo = {
-        amor: { titulo: "Formulario: Carta de Amor", fondo: "bg-pink-100 text-pink-900", btn: "bg-pink-600 hover:bg-pink-700" },
-        perdon: { titulo: "Formulario: Carta de Perdón", fondo: "bg-yellow-100 text-yellow-900", btn: "bg-yellow-600 hover:bg-yellow-700" },
-        felicitacion: { titulo: "Formulario: Carta de Felicitación", fondo: "bg-purple-100 text-purple-900", btn: "bg-purple-600 hover:bg-purple-700" },
-        agradecimiento: { titulo: "Formulario: Carta de Agradecimiento", fondo: "bg-green-100 text-green-900", btn: "bg-green-600 hover:bg-green-700" },
-        laboral: { titulo: "Formulario: Carta Laboral", fondo: "bg-blue-100 text-blue-900", btn: "bg-blue-600 hover:bg-blue-700" },
-        libro: { titulo: "Formulario: Libro Personalizado", fondo: "bg-gray-200 text-gray-800", btn: "bg-gray-700 hover:bg-gray-800" }
+        amor: { titulo: "Formulario: Carta de Amor", fondo: "bg-pink-50 text-pink-900", btn: "bg-pink-600 hover:bg-pink-700" }
       };
       if (tipoCarta && estilosTipo[tipoCarta]) {
         const e = estilosTipo[tipoCarta];
-        document.body.className = `${e.fondo} font-sans`;
+        form.classList.add(...e.fondo.split(" "));
         titulo.textContent = e.titulo;
         boton.className = `w-full text-white py-2 rounded-xl ${e.btn}`;
       }
 
-      // Estilos por plan cuando no está pagado
-      if (!paid && plan) {
-        const stylesByPlan = {
-          basico: { bg: "bg-gray-100", border: ["border", "border-gray-300"], btn: "bg-blue-600 hover:bg-blue-700" },
-          intermedio: { bg: "bg-yellow-50", border: ["border-2", "border-yellow-400", "shadow"], btn: "bg-yellow-600 hover:bg-yellow-700" },
-          completo: { bg: "bg-gradient-to-br from-green-100 to-white", border: ["border-4", "border-green-500", "shadow-xl"], btn: "bg-green-700 hover:bg-green-800" }
-        };
-        const ep = stylesByPlan[plan];
-        form.classList.add(ep.bg);
-        ep.border.forEach(cls => form.classList.add(cls));
-        boton.className = `w-full text-white py-2 rounded-xl ${ep.btn}`;
+      // Decoración para Amor + Intermedio
+      if (tipoCarta === 'amor' && plan === 'intermedio') {
+        // Corazones flotantes
+        const decor = document.createElement('div');
+        decor.className = 'absolute inset-0 pointer-events-none';
+        decor.innerHTML = `
+          <span class="absolute text-2xl animate-bounce" style="top:1rem; left:2rem; color:rgba(255,0,0,0.2)">❤️</span>
+          <span class="absolute text-3xl animate-bounce" style="bottom:2rem; right:1.5rem; color:rgba(255,0,0,0.15)">❤️</span>
+          <span class="absolute text-xl animate-pulse" style="top:50%; left:80%; color:rgba(255,0,0,0.1)">❤️</span>
+        `;
+        form.appendChild(decor);
       }
 
-      // Envío del formulario
+      // Manejo de envío
       form.addEventListener("submit", async e => {
         e.preventDefault();
         document.getElementById("loaderOverlay").classList.remove("hidden");
@@ -169,8 +162,7 @@
         };
         try {
           const res = await fetch("/api/generar-carta", {
-            method: "POST",
-            headers: { "Content-Type": "application/json" },
+            method: "POST", headers: { "Content-Type": "application/json" },
             body: JSON.stringify(datos)
           });
           const data = await res.json();
@@ -187,10 +179,8 @@
         }
       });
 
-      // Función descargar PDF
-      window.descargarPDF = () => {
-        html2pdf().from(document.getElementById("contenidoCarta")).save("Carta_Lettera.pdf");
-      };
+      // Descargar PDF
+      window.descargarPDF = () => html2pdf().from(document.getElementById("contenidoCarta")).save("Carta_Lettera.pdf");
     });
   </script>
 
