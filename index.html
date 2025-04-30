@@ -137,10 +137,15 @@
     });
 
     window.addEventListener('DOMContentLoaded', () => {
-      const saved = localStorage.getItem('lang') || 'es';
-      setLanguage(saved);
-      document.getElementById('langOverlay').style.display = saved ? 'none' : 'flex';
-      document.getElementById('mainContent').style.visibility = 'visible';
+      const saved = localStorage.getItem('lang');
+      if (saved) {
+        setLanguage(saved);
+        document.getElementById('langOverlay').style.display = 'none';
+        document.getElementById('mainContent').style.visibility = 'visible';
+      } else {
+        // No hay idioma guardado: mostrar overlay y esperar selección
+        document.getElementById('langOverlay').style.display = 'flex';
+      }
     });
 
     function irAFormulario(tipo) {
