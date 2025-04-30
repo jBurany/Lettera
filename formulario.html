@@ -1,223 +1,157 @@
 <!DOCTYPE html>
 <html lang="es" class="h-full w-full">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Formulario - Lettera</title>
   <script src="https://cdn.tailwindcss.com"></script>
-  <!-- Particles.js library -->
+  <!-- Particles.js -->
   <script src="https://cdn.jsdelivr.net/npm/particles.js@2.0.0/particles.min.js"></script>
   <style>
-    html, body { height: 100%; margin: 0; padding: 0; }
+    html, body { height:100%; margin:0; padding:0; }
     @keyframes floatBG {
-      0% { background-position: 0 0, 20px 20px; }
-      50% { background-position: 40px 40px, 0 0; }
-      100% { background-position: 0 0, 20px 20px; }
+      0% { background-position:0 0,20px 20px; }
+      50%{ background-position:40px 40px,0 0; }
+      100%{ background-position:0 0,20px 20px; }
     }
-    /* Base animated gradient pattern */
     #pageBackground {
-      position: fixed;
-      inset: 0;
-      z-index: -30;
-      background: linear-gradient(135deg, #FFE4E6 0%, #FECDEB 100%);
-      background-image: radial-gradient(circle, rgba(255,255,255,0.3) 10%, transparent 10%),
-                        radial-gradient(circle, rgba(255,255,255,0.3) 10%, transparent 10%);
-      background-size: 40px 40px, 40px 40px;
-      animation: floatBG 30s linear infinite;
+      position:fixed; inset:0; z-index:-30;
+      background:linear-gradient(135deg,#FFE4E6 0%,#FECDEB 100%);
+      background-image:
+        radial-gradient(circle,rgba(255,255,255,0.3)10%,transparent 10%),
+        radial-gradient(circle,rgba(255,255,255,0.3)10%,transparent 10%);
+      background-size:40px 40px,40px 40px;
+      animation:floatBG 30s linear infinite;
     }
-    /* Default particle layer */
     #particles-js, #particles-extra1, #particles-extra2 {
-      position: fixed;
-      inset: 0;
+      position:fixed; inset:0;
     }
-    #particles-js { z-index: -20; }
-    #particles-extra1 { z-index: -15; }
-    #particles-extra2 { z-index: -10; }
+    #particles-js { z-index:-20; }
+    #particles-extra1 { z-index:-15; }
+    #particles-extra2 { z-index:-10; }
   </style>
 </head>
-<body class="h-full w-full text-gray-900 font-sans relative overflow-auto bg-transparent">
-
-  <!-- Base gradient/pattern background -->
+<body class="h-full w-full font-sans relative overflow-auto bg-transparent">
+  <!-- Background layers -->
   <div id="pageBackground"></div>
-
-  <!-- Particle background layers -->
   <div id="particles-js"></div>
   <div id="particles-extra1"></div>
   <div id="particles-extra2"></div>
 
   <main class="relative z-10 max-w-3xl mx-auto p-4 md:p-10">
+    <!-- Updated title with id -->
     <h1 id="tituloFormulario" class="text-4xl font-bold mb-8 text-center text-pink-800">Formulario: Carta</h1>
 
     <form id="loveLetterForm" class="p-8 rounded-2xl shadow-2xl space-y-6 bg-gradient-to-tr from-pink-100 via-pink-50 to-pink-100 bg-opacity-90 border border-pink-200 backdrop-blur-md relative overflow-visible">
       <input type="hidden" id="hiddenTipoCarta" name="tipoCarta">
       <input type="hidden" id="hiddenPlan" name="plan">
-
-      <!-- Campos -->
-      <div>
-        <label class="block font-semibold mb-2">¿Qué tipo de carta querés?</label>
-        <select id="tipoCarta" class="w-full border p-3 rounded-lg bg-gray-200 cursor-not-allowed" disabled required></select>
-      </div>
-      <div>
-        <label class="block font-semibold mb-2">Elegí el plan</label>
-        <select id="plan" class="w-full border p-3 rounded-lg bg-gray-200 cursor-not-allowed" disabled required></select>
-      </div>
-      <div>
-        <label class="block font-semibold mb-2">¿A quién va dirigida la carta?</label>
-        <input type="text" id="destinatario" class="w-full border p-3 rounded-lg" required />
-      </div>
-      <div>
-        <label class="block font-semibold mb-2">¿Qué querés transmitir?</label>
-        <textarea id="mensaje" class="w-full border p-3 rounded-lg" rows="4" required></textarea>
-      </div>
-      <div>
-        <label class="block font-semibold mb-2">Estilo deseado (romántico, formal, divertido, etc.):</label>
-        <input type="text" id="estilo" class="w-full border p-3 rounded-lg" />
-      </div>
-      <div>
-        <label class="block font-semibold mb-2">¿Cómo querés recibir la carta?</label>
-        <select id="entrega" class="w-full border p-3 rounded-lg">
-          <option value="pdf">Descargar como PDF</option>
-          <option value="email">Recibir por correo electrónico</option>
-          <option value="ambos">Ambas opciones</option>
-        </select>
-      </div>
-      <div>
-        <label class="block font-semibold mb-2">¿Firma anónima o con tu nombre?</label>
-        <select id="firmaTipo" class="w-full border p-3 rounded-lg">
-          <option value="anonima">Anónima</option>
-          <option value="conNombre">Con nombre</option>
-        </select>
-      </div>
-      <div>
-        <label class="block font-semibold mb-2">Firma personalizada (opcional)</label>
-        <input type="text" id="firmaPersonalizada" class="w-full border p-3 rounded-lg" />
-      </div>
-
-      <button type="submit" id="submitBtn" class="w-full text-white py-3 rounded-xl transition bg-pink-600 hover:bg-pink-700">
-        Generar carta
-      </button>
-
+      <!-- fields -->
+      <div><label class="block font-semibold mb-2">¿Qué tipo de carta querés?</label><select id="tipoCarta" class="w-full border p-3 rounded-lg bg-gray-200 cursor-not-allowed" disabled required></select></div>
+      <div><label class="block font-semibold mb-2">Elegí el plan</label><select id="plan" class="w-full border p-3 rounded-lg bg-gray-200 cursor-not-allowed" disabled required></select></div>
+      <div><label class="block font-semibold mb-2">¿A quién va dirigida la carta?</label><input type="text" id="destinatario" class="w-full border p-3 rounded-lg" required></div>
+      <div><label class="block font-semibold mb-2">¿Qué querés transmitir?</label><textarea id="mensaje" class="w-full border p-3 rounded-lg" rows="4" required></textarea></div>
+      <div><label class="block font-semibold mb-2">Estilo deseado (romántico, formal, divertido, etc.):</label><input type="text" id="estilo" class="w-full border p-3 rounded-lg"></div>
+      <div><label class="block font-semibold mb-2">¿Cómo querés recibir la carta?</label><select id="entrega" class="w-full border p-3 rounded-lg"><option value="pdf">Descargar como PDF</option><option value="email">Recibir por correo electrónico</option><option value="ambos">Ambas opciones</option></select></div>
+      <div><label class="block font-semibold mb-2">¿Firma anónima o con tu nombre?</label><select id="firmaTipo" class="w-full border p-3 rounded-lg"><option value="anonima">Anónima</option><option value="conNombre">Con nombre</option></select></div>
+      <div><label class="block font-semibold mb-2">Firma personalizada (opcional)</label><input type="text" id="firmaPersonalizada" class="w-full border p-3 rounded-lg"></div>
+      <button type="submit" id="submitBtn" class="w-full text-white py-3 rounded-xl transition bg-pink-600 hover:bg-pink-700">Generar carta</button>
       <div class="absolute inset-0 pointer-events-none" id="decorHearts"></div>
     </form>
 
     <section id="cartaGenerada" class="bg-white p-6 mt-10 rounded-xl shadow-lg hidden">
       <h2 class="text-2xl font-bold mb-4 text-center text-pink-800">Tu Carta Generada</h2>
       <div id="contenidoCarta" class="text-gray-700 space-y-4"></div>
-      <div class="text-center mt-6">
-        <button onclick="descargarPDF()" class="px-6 py-3 bg-green-600 text-white rounded-xl hover:bg-green-700 transition">
-          Descargar como PDF
-        </button>
-      </div>
+      <div class="text-center mt-6"><button onclick="descargarPDF()" class="px-6 py-3 bg-green-600 text-white rounded-xl hover:bg-green-700 transition">Descargar como PDF</button></div>
     </section>
   </main>
 
-  <!-- Loader -->
-  <div id="loaderOverlay" class="fixed inset-0 bg-white bg-opacity-80 flex flex-col items-center justify-center z-50 hidden">
-    <div class="animate-spin rounded-full h-16 w-16 border-t-4 border-blue-600 border-opacity-50 mb-4"></div>
-    <p class="text-gray-700 text-lg font-medium">Generando tu carta... por favor esperá unos segundos.</p>
-  </div>
+  <div id="loaderOverlay" class="fixed inset-0 bg-white bg-opacity-80 flex flex-col items-center justify-center z-50 hidden"><div class="animate-spin rounded-full h-16 w-16 border-t-4 border-blue-600 border-opacity-50 mb-4"></div><p class="text-gray-700 text-lg font-medium">Generando tu carta... por favor esperá unos segundos.</p></div>
 
-  <!-- Initialize Particles.js with multiple layers -->
+  <!-- Initialize background and particles, decorative hearts, and title update -->
   <script>
-    // Base layer
-    particlesJS('particles-js', {
-      particles: {
-        number: { value: 150, density: { enable: true, value_area: 600 } },
-        color: { value: ['#ff69b4', '#ff1493', '#ffc0cb'] },
-        shape: { type: 'circle' },
-        opacity: { value: 1, random: false },
-        size: { value: 6, random: true },
-        move: { enable: true, speed: 1.5, direction: 'none', out_mode: 'out' }
-      },
-      interactivity: {
-        detect_on: 'canvas',
-        events: { onhover: { enable: true, mode: 'repulse' }, onclick: { enable: true, mode: 'push' } },
-        modes: { repulse: { distance: 100 }, push: { particles_nb: 6 } }
-      },
-      retina_detect: true
-    });
-
-    // Extra layer for intermedio and completo
     document.addEventListener('DOMContentLoaded', () => {
-      const plan = new URLSearchParams(window.location.search).get('plan');
-      if (plan === 'intermedio' || plan === 'completo') {
-        particlesJS('particles-extra1', {
-          particles: {
-            number: { value: 40, density: { enable: true, value_area: 600 } },
-            shape: { type: 'star' },
-            color: { value: '#ff7fa3' },
-            opacity: { value: 1, random: false },
-            size: { value: 8, random: true },
-            move: { enable: true, speed: 0.5, direction: 'none', out_mode: 'out' }
-          },
-          interactivity: { events: { onhover: { enable: false }, onclick: { enable: false }}},
-          retina_detect: true
-        });
-      }
-      if (plan === 'completo') {
-        particlesJS('particles-extra2', {
-          particles: {
-            number: { value: 20, density: { enable: true, value_area: 600 } },
-            shape: { type: 'triangle' },
-            color: { value: '#ff1493' },
-            opacity: { value: 1, random: false },
-            size: { value: 20, random: true },
-            move: { enable: true, speed: 1, direction: 'none', out_mode: 'out' }
-          },
-          interactivity: { events: { onhover: { enable: false }, onclick: { enable: false }}},
-          retina_detect: true
-        });
-      }
+      const params = new URLSearchParams(window.location.search);
+      const tipoCarta = params.get('tipoCarta');
+      const plan = params.get('plan');
+      // Update hidden fields
+      document.getElementById('hiddenTipoCarta').value = tipoCarta;
+      document.getElementById('hiddenPlan').value = plan;
+      // Update title
+      const tituloMap = {
+        amor: 'Formulario: Carta de Amor',
+        perdon: 'Formulario: Carta de Perdón',
+        felicitacion: 'Formulario: Carta de Felicitación',
+        agradecimiento: 'Formulario: Carta de Agradecimiento',
+        laboral: 'Formulario: Carta Laboral',
+        libro: 'Formulario: Libro Personalizado'
+      };
+      const tituloEl = document.getElementById('tituloFormulario');
+      if (tituloMap[tipoCarta]) tituloEl.textContent = tituloMap[tipoCarta];
 
       // Decorative hearts
-      const decorContainer = document.getElementById('decorHearts');
-      const tipoCarta = new URLSearchParams(window.location.search).get('tipoCarta');
-      const count = (function(p) { return p === 'basico' ? 2 : p === 'intermedio' ? 8 : p === 'completo' ? 15 : 0; })(plan);
-      let hearts = '';
-      for (let i = 0; i < count; i++) {
-        const size = plan === 'basico' ? 2 : plan === 'intermedio' ? 2 + Math.floor(Math.random() * 2) : 3 + Math.floor(Math.random() * 3);
-        const top = Math.random() * 80 + 5;
-        const left = Math.random() * 80 + 5;
-        const opacity = plan === 'completo' ? 1 : 1;
-        const anim = plan === 'intermedio' ? 'animate-bounce' : 'animate-pulse';
-        hearts += `<span class="absolute text-${size}xl ${anim}" style="top:${top}%; left:${left}%; color:rgba(255,0,0,${opacity})">❤️</span>`;
+      const decor = document.getElementById('decorHearts');
+      const counts = { basico:2, intermedio:8, completo:15 };
+      const heartCount = counts[plan] || 0;
+      let heartsHTML = '';
+      for (let i = 0; i < heartCount; i++) {
+        const size = plan==='basico'?2: (plan==='intermedio'?2+Math.floor(Math.random()*2):3+Math.floor(Math.random()*3));
+        const top = Math.random()*80+5;
+        const left = Math.random()*80+5;
+        const opacity = 1;
+        const anim = plan==='intermedio'? 'animate-bounce':'animate-pulse';
+        heartsHTML += `<span class="absolute text-${size}xl ${anim}" style="top:${top}%; left:${left}%; color:rgba(255,0,0,${opacity})">❤️</span>`;
       }
-      decorContainer.innerHTML = hearts;
-    });
+      decor.innerHTML = heartsHTML;
 
-    // Form submission and PDF scripts unchanged below
-    document.addEventListener('DOMContentLoaded', () => {
-      const form = document.getElementById('loveLetterForm');
-      form.addEventListener('submit', async e => {
-        e.preventDefault();
-        document.getElementById('loaderOverlay').classList.remove('hidden');
-        const datos = {
-          tipoCarta: document.getElementById('hiddenTipoCarta').value,
-          plan: document.getElementById('hiddenPlan').value,
-          destinatario: document.getElementById('destinatario').value.trim(),
-          mensaje: document.getElementById('mensaje').value.trim(),
-          estilo: document.getElementById('estilo').value.trim() || 'romántico',
-          entrega: document.getElementById('entrega').value,
-          firmaTipo: document.getElementById('firmaTipo').value,
-          firmaPersonalizada: document.getElementById('firmaPersonalizada').value.trim()
-        };
-        try {
-          const res = await fetch('/api/generar-carta', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(datos) });
-          const data = await res.json();
-          document.getElementById('loaderOverlay').classList.add('hidden');
-          if (data.carta) {
-            document.getElementById('contenidoCarta').innerHTML = data.carta.replace(/\n/g, '<br>');
-            document.getElementById('cartaGenerada').classList.remove('hidden');
-          } else {
-            alert('❌ Error generando la carta: ' + (data.error || 'Desconocido'));
-          }
-        } catch (err) {
-          document.getElementById('loaderOverlay').classList.add('hidden');
-          alert('⚠️ Error al conectar con el servidor:\n' + err.message);
-        }
+      // Initialize particles
+      particlesJS('particles-js', {
+        particles: {
+          number:{value:150,density:{enable:true,value_area:600}},color:{value:['#ff69b4','#ff1493','#ffc0cb']},shape:{type:'circle'},opacity:{value:1,random:false},size:{value:6,random:true},move:{enable:true,speed:1.5,direction:'none',out_mode:'out'}
+        },interactivity:{detect_on:'canvas',events:{onhover:{enable:true,mode:'repulse'},onclick:{enable:true,mode:'push'}},modes:{repulse:{distance:100},push:{particles_nb:6}}},retina_detect:true
       });
-      window.descargarPDF = () => html2pdf().from(document.getElementById('contenidoCarta')).save('Carta_Lettera.pdf');
+      if (plan==='intermedio'||plan==='completo') {
+        particlesJS('particles-extra1',{
+          particles:{number:{value:40,density:{enable:true,value_area:600}},shape:{type:'star'},color:{value:'#ff7fa3'},opacity:{value:1,random:false},size:{value:8,random:true},move:{enable:true,speed:0.5,direction:'none',out_mode:'out'}},interactivity:{events:{onhover:{enable:false},onclick:{enable:false}}},retina_detect:true
+        });
+      }
+      if (plan==='completo') {
+        particlesJS('particles-extra2',{
+          particles:{number:{value:20,density:{enable:true,value_area:600}},shape:{type:'triangle'},color:{value:'#ff1493'},opacity:{value:1,random:false},size:{value:20,random:true},move:{enable:true,speed:1,direction:'none',out_mode:'out'}},interactivity:{events:{onhover:{enable:false},onclick:{enable:false}}},retina_detect:true
+        });
+      }
     });
+  </script>
+
+  <!-- html2pdf and form submit unchanged -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+  <script>
+    document.getElementById('loveLetterForm').addEventListener('submit', async e => {
+      e.preventDefault();
+      document.getElementById('loaderOverlay').classList.remove('hidden');
+      const datos = {
+        tipoCarta: document.getElementById('hiddenTipoCarta').value,
+        plan: document.getElementById('hiddenPlan').value,
+        destinatario: document.getElementById('destinatario').value.trim(),
+        mensaje: document.getElementById('mensaje').value.trim(),
+        estilo: document.getElementById('estilo').value.trim()||'romántico',
+        entrega: document.getElementById('entrega').value,
+        firmaTipo: document.getElementById('firmaTipo').value,
+        firmaPersonalizada: document.getElementById('firmaPersonalizada').value.trim()
+      };
+      try {
+        const res = await fetch('/api/generar-carta',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(datos)});
+        const data = await res.json();
+        document.getElementById('loaderOverlay').classList.add('hidden');
+        if(data.carta){
+          document.getElementById('contenidoCarta').innerHTML = data.carta.replace(/\n/g,'<br>');
+          document.getElementById('cartaGenerada').classList.remove('hidden');
+        } else alert('❌ Error generando la carta: '+(data.error||'Desconocido'));
+      } catch(err) {
+        document.getElementById('loaderOverlay').classList.add('hidden');
+        alert('⚠️ Error al conectar con el servidor:\n'+err.message);
+      }
+    });
+    window.descargarPDF = () => html2pdf().from(document.getElementById('contenidoCarta')).save('Carta_Lettera.pdf');
   </script>
 </body>
 </html>
