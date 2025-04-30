@@ -76,8 +76,13 @@
         <select id="entrega" class="block w-full border p-3 rounded-lg bg-white bg-opacity-50 backdrop-blur-sm text-gray-900">
           <option value="pdf">Descargar como PDF</option>
           <option value="email">Recibir por correo electrónico</option>
+          <option value="regalo">Enviar como regalo</option>
           <option value="ambos">Ambas opciones</option>
         </select>
+      <div id="emailRegaloContainer" class="mt-4 hidden">
+        <label class="block font-semibold mb-1">Correo electrónico del destinatario del regalo</label>
+        <input type="email" id="emailRegalo" class="block w-full border p-3 rounded-lg bg-white bg-opacity-50 backdrop-blur-sm text-gray-900" placeholder="ejemplo@correo.com">
+      </div>
       </div>
       <div>
         <label class="block font-semibold mb-1">¿Firma anónima o con tu nombre?</label>
