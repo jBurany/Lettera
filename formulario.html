@@ -5,243 +5,122 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Formulario - Lettera</title>
   <script src="https://cdn.tailwindcss.com"></script>
-  <!-- Particles.js library -->
+  <!-- Particles.js -->
   <script src="https://cdn.jsdelivr.net/npm/particles.js@2.0.0/particles.min.js"></script>
   <style>
-    html, body { height: 100%; margin: 0; padding: 0; }
-    @keyframes floatBG {
-      0% { background-position: 0 0, 20px 20px; }
-      50% { background-position: 40px 40px, 0 0; }
-      100% { background-position: 0 0, 20px 20px; }
-    }
-    /* Base animated gradient pattern */
-    #pageBackground {
-      position: fixed; inset: 0; z-index: -30;
-      background: linear-gradient(135deg, #FFE4E6 0%, #FECDEB 100%);
-      background-image:
-        radial-gradient(circle, rgba(255,255,255,0.3) 10%, transparent 10%),
-        radial-gradient(circle, rgba(255,255,255,0.3) 10%, transparent 10%);
-      background-size: 40px 40px, 40px 40px;
-      animation: floatBG 30s linear infinite;
-    }
-    #particles-js, #particles-extra1, #particles-extra2 {
-      position: fixed; inset: 0;
-    }
-    #particles-js { z-index: -20; }
-    #particles-extra1 { z-index: -15; }
-    #particles-extra2 { z-index: -10; }
+    html, body { height:100%; margin:0; padding:0; }
+    @keyframes floatPattern { 0% { background-position:0 0,20px 20px;} 50% { background-position:40px 40px,0 0;} 100% { background-position:0 0,20px 20px;} }
+    #pageBackground { position:fixed; inset:0; z-index:-30; animation:floatPattern 30s linear infinite; }
+    #particles-js, #particles-extra1, #particles-extra2 { position:fixed; inset:0; }
+    #particles-js { z-index:-20; } #particles-extra1 { z-index:-15; } #particles-extra2 { z-index:-10; }
   </style>
 </head>
-<body class="h-full w-full font-sans relative overflow-auto bg-transparent">
+<body class="h-full w-full font-sans relative overflow-auto">
 
-  <!-- Background layers -->
+  <!-- Dynamic background container -->
   <div id="pageBackground"></div>
   <div id="particles-js"></div>
   <div id="particles-extra1"></div>
   <div id="particles-extra2"></div>
 
   <main class="relative z-10 max-w-3xl mx-auto p-4 md:p-10">
-    <!-- Dynamic title -->
-    <h1 id="tituloFormulario" class="text-4xl font-bold mb-8 text-center text-pink-800">Formulario: Carta</h1>
-
-    <form id="loveLetterForm" class="p-8 rounded-2xl shadow-2xl space-y-6 bg-gradient-to-tr from-pink-100 via-pink-50 to-pink-100 bg-opacity-90 border border-pink-200 backdrop-blur-md relative overflow-visible">
+    <h1 id="tituloFormulario" class="text-4xl font-bold mb-8 text-center">Formulario: Carta</h1>
+    <form id="loveLetterForm" class="p-8 rounded-2xl shadow-2xl space-y-6 bg-opacity-90 border backdrop-blur-md relative overflow-visible">
       <input type="hidden" id="hiddenTipoCarta" name="tipoCarta">
       <input type="hidden" id="hiddenPlan" name="plan">
 
-      <!-- Display selected type and plan -->
       <div>
         <label class="block font-semibold mb-1">Tipo de carta</label>
-        <p id="tipoCartaText" class="block w-full border p-3 rounded-lg bg-pink-200 text-gray-900"> </p>
+        <p id="tipoCartaText" class="w-full border p-3 rounded-lg"></p>
       </div>
       <div>
         <label class="block font-semibold mb-1">Plan seleccionado</label>
-        <p id="planText" class="block w-full border p-3 rounded-lg bg-pink-200 text-gray-900"> </p>
+        <p id="planText" class="w-full border p-3 rounded-lg"></p>
       </div>
 
-      <!-- Other form fields (semi-transparent) -->
+      <!-- Form fields -->
+      <div><label class="block font-semibold mb-1">¿A quién va dirigida?</label><input id="destinatario" class="block w-full border p-3 rounded-lg" required></div>
+      <div><label class="block font-semibold mb-1">¿Qué querés transmitir?</label><textarea id="mensaje" class="block w-full border p-3 rounded-lg" rows="4" required></textarea></div>
+      <div><label class="block font-semibold mb-1">Estilo (romántico, formal...)</label><input id="estilo" class="block w-full border p-3 rounded-lg"></div>
       <div>
-        <label class="block font-semibold mb-1">¿A quién va dirigida la carta?</label>
-        <input type="text" id="destinatario" class="block w-full border p-3 rounded-lg bg-white bg-opacity-50 backdrop-blur-sm text-gray-900" required>
-      </div>
-      <div>
-        <label class="block font-semibold mb-1">¿Qué querés transmitir?</label>
-        <textarea id="mensaje" class="block w-full border p-3 rounded-lg bg-white bg-opacity-50 backdrop-blur-sm text-gray-900" rows="4" required></textarea>
-      </div>
-      <div>
-        <label class="block font-semibold mb-1">Estilo deseado (romántico, formal, divertido, etc.)</label>
-        <input type="text" id="estilo" class="block w-full border p-3 rounded-lg bg-white bg-opacity-50 backdrop-blur-sm text-gray-900">
-      </div>
-      <div>
-        <label class="block font-semibold mb-1">¿Cómo querés recibir la carta?</label>
-        <select id="entrega" onchange="toggleEmailRegalo()" class="$1">
-          <option value="pdf">Descargar como PDF</option>
-          <option value="email">Recibir por correo electrónico</option>
+        <label class="block font-semibold mb-1">¿Cómo recibir la carta?</label>
+        <select id="entrega" class="block w-full border p-3 rounded-lg">
+          <option value="pdf">Descargar PDF</option>
+          <option value="email">Por email</option>
           <option value="regalo">Enviar como regalo</option>
-          <option value="ambos">Ambas opciones</option>
+          <option value="ambos">Ambas</option>
         </select>
-      <div id="emailRegaloContainer" class="mt-4 hidden">
-        <label class="block font-semibold mb-1">Correo electrónico del destinatario del regalo</label>
-        <input type="email" id="emailRegalo" class="block w-full border p-3 rounded-lg bg-white bg-opacity-50 backdrop-blur-sm text-gray-900" placeholder="ejemplo@correo.com">
+        <div id="emailRegaloContainer" class="mt-4 hidden">
+          <label class="block font-semibold mb-1">Email destinatario</label>
+          <input id="emailRegalo" type="email" class="block w-full border p-3 rounded-lg" placeholder="ejemplo@dominio.com">
+        </div>
       </div>
-      </div>
-      <div>
-        <label class="block font-semibold mb-1">¿Firma anónima o con tu nombre?</label>
-        <select id="firmaTipo" class="block w-full border p-3 rounded-lg bg-white bg-opacity-50 backdrop-blur-sm text-gray-900">
-          <option value="anonima">Anónima</option>
-          <option value="conNombre">Con nombre</option>
-        </select>
-      </div>
-      <div>
-        <label class="block font-semibold mb-1">Firma personalizada (opcional)</label>
-        <input type="text" id="firmaPersonalizada" class="block w-full border p-3 rounded-lg bg-white bg-opacity-50 backdrop-blur-sm text-gray-900">
-      </div>
-
-      <button type="submit" id="submitBtn" class="w-full text-white py-3 rounded-xl transition bg-pink-600 hover:bg-pink-700">Generar carta</button>
-      <div class="absolute inset-0 pointer-events-none -z-10" id="decorHearts"></div>
+      <div><label class="block font-semibold mb-1">Firma anónima o con nombre</label><select id="firmaTipo" class="block w-full border p-3 rounded-lg"><option value="anonima">Anónima</option><option value="conNombre">Con nombre</option></select></div>
+      <div><label class="block font-semibold mb-1">Firma personalizada (opcional)</label><input id="firmaPersonalizada" class="block w-full border p-3 rounded-lg"></div>
+      <button type="submit" id="submitBtn" class="w-full text-white py-3 rounded-xl transition">Generar carta</button>
+      <div id="decorHearts" class="absolute inset-0 pointer-events-none -z-10"></div>
     </form>
 
-    <!-- Generated letter section -->
-    <section id="cartaGenerada" class="bg-white p-6 mt-10 rounded-xl shadow-lg hidden">
-      <h2 class="text-2xl font-bold mb-4 text-center text-pink-800">Tu Carta Generada</h2>
-      <div id="contenidoCarta" class="text-gray-700 space-y-4"></div>
-      <div class="text-center mt-6">
-        <button onclick="descargarPDF()" class="px-6 py-3 bg-green-600 text-white rounded-xl hover:bg-green-700 transition">Descargar como PDF</button>
-      </div>
-    </section>
+    <section id="cartaGenerada" class="bg-white p-6 mt-10 rounded-xl shadow-lg hidden"><h2 class="text-2xl font-bold mb-4 text-center">Tu Carta Generada</h2><div id="contenidoCarta" class="text-gray-700 space-y-4"></div><div class="text-center mt-6"><button onclick="descargarPDF()" class="px-6 py-3 bg-green-600 text-white rounded-xl hover:bg-green-700 transition">Descargar PDF</button></div></section>
   </main>
 
-  <!-- Loader Overlay -->
-  <div id="loaderOverlay" class="fixed inset-0 bg-white bg-opacity-80 flex flex-col items-center justify-center z-50 hidden">
-    <div class="animate-spin rounded-full h-16 w-16 border-t-4 border-blue-600 border-opacity-50 mb-4"></div>
-    <p class="text-gray-700 text-lg font-medium">Generando tu carta... por favor esperá unos segundos.</p>
-  </div>
+  <div id="loaderOverlay" class="fixed inset-0 bg-white bg-opacity-80 flex items-center justify-center z-50 hidden"><div class="animate-spin rounded-full h-16 w-16 border-t-4 border-blue-600 border-opacity-50"></div></div>
 
-  <!-- Initialize animations and logic -->
   <script>
     document.addEventListener('DOMContentLoaded', () => {
       const params = new URLSearchParams(window.location.search);
-      const tipoCarta = params.get('tipoCarta');
+      const tipo = params.get('tipoCarta');
       const plan = params.get('plan');
-      // Hidden fields
-      document.getElementById('hiddenTipoCarta').value = tipoCarta;
-      document.getElementById('hiddenPlan').value = plan;
-      // Title mapping
-      const tituloMap = {
-        amor: 'Formulario: Carta de Amor',
-        perdon: 'Formulario: Carta de Perdón',
-        felicitacion: 'Formulario: Carta de Felicitación',
-        agradecimiento: 'Formulario: Carta de Agradecimiento',
-        laboral: 'Formulario: Carta Laboral',
-        libro: 'Formulario: Libro Personalizado'
+      const bg = document.getElementById('pageBackground');
+      // Background gradients per type
+      const bgGradients = {
+        amor: ['linear-gradient(135deg,#FFE4E6 0%,#FECDEB 100%)','radial-gradient(circle,#ffe4e6 10%,transparent 10%)','radial-gradient(circle,#fecdeb 10%,transparent 10%)'],
+        perdon: ['linear-gradient(135deg,#FEF3C7 0%,#FDE68A 100%)','radial-gradient(circle,#fef3c7 10%,transparent 10%)','radial-gradient(circle,#fde68a 10%,transparent 10%)'],
+        felicitacion: ['linear-gradient(135deg,#EDE9FE 0%,#C4B5FD 100%)','radial-gradient(circle,#ede9fe 10%,transparent 10%)','radial-gradient(circle,#c4b5fd 10%,transparent 10%)'],
+        agradecimiento: ['linear-gradient(135deg,#D1FAE5 0%,#6EE7B7 100%)','radial-gradient(circle,#d1fae5 10%,transparent 10%)','radial-gradient(circle,#6ee7b7 10%,transparent 10%)'],
+        laboral: ['linear-gradient(135deg,#DBEAFE 0%,#93C5FD 100%)','radial-gradient(circle,#dbeafe 10%,transparent 10%)','radial-gradient(circle,#93c5fd 10%,transparent 10%)'],
+        libro: ['linear-gradient(135deg,#F3F4F6 0%,#E5E7EB 100%)','radial-gradient(circle,#f3f4f6 10%,transparent 10%)','radial-gradient(circle,#e5e7eb 10%,transparent 10%)']
       };
-      const tituloEl = document.getElementById('tituloFormulario');
-      if (tituloMap[tipoCarta]) tituloEl.textContent = tituloMap[tipoCarta];
-      // Display selected values
-      const planMap = {
-        basico: 'Básico (hasta 200 palabras)',
-        intermedio: 'Intermedio (hasta 350 palabras)',
-        completo: 'Completo (hasta 500 palabras)'
-      };
-      document.getElementById('tipoCartaText').textContent = tituloEl.textContent.replace('Formulario: ', '');
-      document.getElementById('planText').textContent = planMap[plan] || '';
-      // Decorative shapes
-      const decor = document.getElementById('decorHearts');
-      const counts = { basico: 2, intermedio: 8, completo: 15 };
-      const shapeMap = {
-        amor: '❤️',
-        perdon: '💧',
-        felicitacion: '🎉',
-        agradecimiento: '🙏',
-        laboral: '💼',
-        libro: '📖'
-      };
-      const symbol = shapeMap[tipoCarta] || '❤️';
-      const count = counts[plan] || 0;
-      let shapesHTML = '';
-      for (let i = 0; i < count; i++) {
-        const size = plan === 'basico'
-          ? 2
-          : plan === 'intermedio'
-            ? 2 + Math.floor(Math.random() * 2)
-            : 3 + Math.floor(Math.random() * 3);
-        const top = Math.random() * 80 + 5;
-        const left = Math.random() * 80 + 5;
-        const anim = plan === 'intermedio' ? 'animate-bounce' : 'animate-pulse';
-        shapesHTML += `<span class="absolute text-${size}xl ${anim}" style="top:${top}%; left:${left}%;;">${symbol}</span>`;
+      if(bgGradients[tipo]){
+        const [g,p1,p2]=bgGradients[tipo];
+        bg.style.background = g;
+        bg.style.backgroundImage = p1+','+p2;
       }
-      decor.innerHTML = shapesHTML;
+      // Text and form colors per type
+      const form = document.getElementById('loveLetterForm');
+      const btn = document.getElementById('submitBtn');
+      const textColors = {
+        amor:'text-pink-800',perdon:'text-yellow-800',felicitacion:'text-purple-800',agradecimiento:'text-green-800',laboral:'text-blue-800',libro:'text-gray-800'
+      };
+      const formBg = {
+        amor:['from-pink-100','via-pink-50','to-pink-100'],perdon:['from-yellow-100','via-yellow-50','to-yellow-100'],felicitacion:['from-purple-100','via-purple-50','to-purple-100'],agradecimiento:['from-green-100','via-green-50','to-green-100'],laboral:['from-blue-100','via-blue-50','to-blue-100'],libro:['from-gray-100','via-gray-50','to-gray-100']
+      };
+      const btnColors={amor:['bg-pink-600','hover:bg-pink-700'],perdon:['bg-yellow-600','hover:bg-yellow-700'],felicitacion:['bg-purple-600','hover:bg-purple-700'],agradecimiento:['bg-green-600','hover:bg-green-700'],laboral:['bg-blue-600','hover:bg-blue-700'],libro:['bg-gray-600','hover:bg-gray-700']};
+      // apply classes
+      if(textColors[tipo]) form.classList.add(...formBg[tipo]);
+      if(textColors[tipo]) btn.classList.add(...btnColors[tipo]);
+
+      // Set title and display
+      const titleMap={amor:'Formulario: Carta de Amor',perdon:'Formulario: Carta de Perdón',felicitacion:'Formulario: Carta de Felicitación',agradecimiento:'Formulario: Carta de Agradecimiento',laboral:'Formulario: Carta Laboral',libro:'Formulario: Libro Personalizado'};
+      const tituloEl=document.getElementById('tituloFormulario'); if(titleMap[tipo]) tituloEl.textContent=titleMap[tipo]; tituloEl.classList.add(textColors[tipo]);
+      const planMap={basico:'Básico (200 palabras)',intermedio:'Intermedio (350 palabras)',completo:'Completo (500 palabras)'};
+      document.getElementById('tipoCartaText').textContent=titleMap[tipo].replace('Formulario: ','');
+      document.getElementById('planText').textContent=planMap[plan]||'';
+
+      // Handle entrega change
+      document.getElementById('entrega').addEventListener('change', function(){const c=this.value==='regalo'; document.getElementById('emailRegaloContainer').classList.toggle('hidden',!c); document.getElementById('emailRegalo').required=c;});
+      // Decorative symbols
+      const decor=document.getElementById('decorHearts');decor.innerHTML=''; const shapeMap={amor:'❤️',perdon:'💧',felicitacion:'🎉',agradecimiento:'🙏',laboral:'💼',libro:'📖'}; const countMap={basico:2,intermedio:8,completo:15}; let symHTML=''; for(let i=0;i<(countMap[plan]||0);i++){const size=(plan==='basico'?2:(plan==='intermedio'?2+Math.floor(Math.random()*2):3+Math.floor(Math.random()*3))); const top=(Math.random()*80+5).toFixed(2); const left=(Math.random()*80+5).toFixed(2); const anim=(plan==='intermedio'?'animate-bounce':'animate-pulse'); symHTML+=`<span class="absolute text-${size}xl ${anim}" style="top:${top}%;left:${left}%;color:rgba(0,0,0,0.2)">${shapeMap[tipo]}</span>`;} decor.innerHTML=symHTML;
+
       // Initialize particles
-      particlesJS('particles-js', {
-        particles: { number:{ value:150, density:{ enable:true, value_area:600 }}, color:{ value:['#ff69b4','#ff1493','#ffc0cb'] }, shape:{ type:'circle' }, opacity:{ value:1 }, size:{ value:6, random:true }, move:{ enable:true, speed:1.5, out_mode:'out' } },
-        interactivity:{ detect_on:'canvas', events:{ onhover:{ enable:true, mode:'repulse'}, onclick:{ enable:true, mode:'push'}}, modes:{ repulse:{ distance:100 }, push:{ particles_nb:6 } } },
-        retina_detect:true
-      });
-      if (plan === 'intermedio' || plan === 'completo') {
-        particlesJS('particles-extra1', { particles:{ number:{ value:40, density:{ enable:true, value_area:600 }}, shape:{ type:'star' }, color:{ value:'#ff7fa3' }, opacity:{ value:1 }, size:{ value:8, random:true }, move:{ enable:true, speed:0.5, out_mode:'out' } }, interactivity:{ events:{ onhover:{ enable:false}, onclick:{ enable:false} }}, retina_detect:true });
-      }
-      if (plan === 'completo') {
-        particlesJS('particles-extra2', { particles:{ number:{ value:20, density:{ enable:true, value_area:600 }}, shape:{ type:'triangle' }, color:{ value:'#ff1493' }, opacity:{ value:1 }, size:{ value:20, random:true }, move:{ enable:true, speed:1, out_mode:'out' } }, interactivity:{ events:{ onhover:{ enable:false}, onclick:{ enable:false} }}, retina_detect:true });
-      }
-            // Dynamic styling by typeCarta
-      const formEl = document.getElementById('loveLetterForm');
-      const btnEl = document.getElementById('submitBtn');
-      const gradientRemovals = ['from-pink-100','via-pink-50','to-pink-100','from-yellow-100','via-yellow-50','to-yellow-100','from-purple-100','via-purple-50','to-purple-100','from-green-100','via-green-50','to-green-100','from-blue-100','via-blue-50','to-blue-100','from-gray-100','via-gray-50','to-gray-100'];
-      const btnRemovals = ['bg-pink-600','hover:bg-pink-700','bg-yellow-600','hover:bg-yellow-700','bg-purple-600','hover:bg-purple-700','bg-green-600','hover:bg-green-700','bg-blue-600','hover:bg-blue-700','bg-gray-600','hover:bg-gray-700'];
-      const gradientAdds = {
-        amor: ['from-pink-100','via-pink-50','to-pink-100'],
-        perdon: ['from-yellow-100','via-yellow-50','to-yellow-100'],
-        felicitacion: ['from-purple-100','via-purple-50','to-purple-100'],
-        agradecimiento: ['from-green-100','via-green-50','to-green-100'],
-        laboral: ['from-blue-100','via-blue-50','to-blue-100'],
-        libro: ['from-gray-100','via-gray-50','to-gray-100']
-      };
-      const btnAdds = {
-        amor: ['bg-pink-600','hover:bg-pink-700'],
-        perdon: ['bg-yellow-600','hover:bg-yellow-700'],
-        felicitacion: ['bg-purple-600','hover:bg-purple-700'],
-        agradecimiento: ['bg-green-600','hover:bg-green-700'],
-        laboral: ['bg-blue-600','hover:bg-blue-700'],
-        libro: ['bg-gray-600','hover:bg-gray-700']
-      };
-      // Remove existing theme classes
-      gradientRemovals.forEach(c => formEl.classList.remove(c));
-      btnRemovals.forEach(c => btnEl.classList.remove(c));
-      // Add new theme classes
-      if (gradientAdds[tipoCarta]) formEl.classList.add('bg-gradient-to-tr', ...gradientAdds[tipoCarta]);
-      if (btnAdds[tipoCarta]) btnEl.classList.add(...btnAdds[tipoCarta]);
+      particlesJS('particles-js',{particles:{number:{value:150,density:{enable:true,value_area:600}},color:{value:['#ff69b4','#ff1493','#ffc0cb']},shape:{type:'circle'},opacity:{value:1},size:{value:6,random:true},move:{enable:true,speed:1.5,out_mode:'out'}},interactivity:{detect_on:'canvas',events:{onhover:{enable:true,mode:'repulse'},onclick:{enable:true,mode:'push'}},modes:{repulse:{distance:100},push:{particles_nb:6}}},retina_detect:true});
+      if(['intermedio','completo'].includes(plan)){particlesJS('particles-extra1',{particles:{number:{value:40,density:{enable:true,value_area:600}},shape:{type:'star'},color:{value:'#ff7fa3'},opacity:{value:1},size:{value:8,random:true},move:{enable:true,speed:0.5,out_mode:'out'}},interactivity:{events:{onhover:{enable:false},onclick:{enable:false}}},retina_detect:true});}
+      if(plan==='completo'){particlesJS('particles-extra2',{particles:{number:{value:20,density:{enable:true,value_area:600}},shape:{type:'triangle'},color:{value:'#ff1493'},opacity:{value:1},size:{value:20,random:true},move:{enable:true,speed:1,out_mode:'out'}},interactivity:{events:{onhover:{enable:false},onclick:{enable:false}}},retina_detect:true});}
 
       // Form submission
-      document.getElementById('loveLetterForm').addEventListener('submit', async e => {
-        e.preventDefault();
-        document.getElementById('loaderOverlay').classList.remove('hidden');
-        const datos = {
-          tipoCarta: document.getElementById('hiddenTipoCarta').value,
-          plan: document.getElementById('hiddenPlan').value,
-          destinatario: document.getElementById('destinatario').value.trim(),
-          mensaje: document.getElementById('mensaje').value.trim(),
-          estilo: document.getElementById('estilo').value.trim() || 'romántico',
-          entrega: document.getElementById('entrega').value,
-          firmaTipo: document.getElementById('firmaTipo').value,
-          firmaPersonalizada: document.getElementById('firmaPersonalizada').value.trim()
-        };
-        try { const res = await fetch('/api/generar-carta',{ method:'POST', headers:{ 'Content-Type':'application/json' }, body: JSON.stringify(datos) }); const data = await res.json(); document.getElementById('loaderOverlay').classList.add('hidden'); if (data.carta) { document.getElementById('contenidoCarta').innerHTML = data.carta.replace(/\n/g,'<br>'); document.getElementById('cartaGenerada').classList.remove('hidden'); } else { alert('❌ Error generando la carta: '+(data.error||'Desconocido')); } } catch(err) { document.getElementById('loaderOverlay').classList.add('hidden'); alert('⚠️ Error al conectar con el servidor:\n'+err.message); } });
-      // PDF download
-      window.descargarPDF = () => html2pdf().from(document.getElementById('contenidoCarta')).save('Carta_Lettera.pdf');
+      document.getElementById('loveLetterForm').addEventListener('submit', async e=>{e.preventDefault();document.getElementById('loaderOverlay').classList.remove('hidden');const datos={tipoCarta:tipo,plan:plan,destinatario:document.getElementById('destinatario').value.trim(),mensaje:document.getElementById('mensaje').value.trim(),estilo:document.getElementById('estilo').value.trim()||'romántico',entrega:document.getElementById('entrega').value,firmaTipo:document.getElementById('firmaTipo').value,firmaPersonalizada:document.getElementById('firmaPersonalizada').value.trim(),emailRegalo:document.getElementById('emailRegalo').value.trim()};try{const res=await fetch('/api/generar-carta',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(datos)});const data=await res.json();document.getElementById('loaderOverlay').classList.add('hidden');if(data.carta){document.getElementById('contenidoCarta').innerHTML=data.carta.replace(/\n/g,'<br>');document.getElementById('cartaGenerada').classList.remove('hidden');}else alert('❌ Error: '+(data.error||'Desconocido'));}catch(err){document.getElementById('loaderOverlay').classList.add('hidden');alert('⚠️ Error al conectar: '+err.message);}});
+      window.descargarPDF=()=>html2pdf().from(document.getElementById('contenidoCarta')).save('Carta_Lettera.pdf');
     });
-  </script>
-  <script>
-    function toggleEmailRegalo() {
-      const sel = document.getElementById('entrega');
-      const container = document.getElementById('emailRegaloContainer');
-      const emailInput = document.getElementById('emailRegalo');
-      if (sel.value === 'regalo') {
-        container.classList.remove('hidden');
-        emailInput.required = true;
-      } else {
-        container.classList.add('hidden');
-        emailInput.required = false;
-      }
-    }
   </script>
 </body>
 </html>
