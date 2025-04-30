@@ -3,20 +3,40 @@ export default async function handler(req, res) {
     return res.status(405).json({ error: 'Método no permitido' });
   }
 
-  const { destinatario, mensaje, estilo } = req.body;
+  const {
+    tipoCarta,
+    plan,
+    destinatario,
+    mensaje,
+    estilo,
+    entrega,
+    firmaTipo,
+    firmaPersonalizada
+  } = req.body;
 
-  if (!destinatario || !mensaje) {
+  // Validación básica
+  if (!destinatario || !mensaje || !tipoCarta || !plan) {
     return res.status(400).json({ error: 'Faltan datos necesarios' });
   }
 
+  // Armado del prompt para la IA
   const prompt = `
-Sos un escritor profesional de cartas emocionales. Escribí una carta única, bien redactada y emocional en español, considerando estos datos:
+Sos un escritor profesional de cartas emocionales. Necesito que redactes una carta del tipo "${tipoCarta}" con un estilo "${estilo || 'romántico'}", para una persona llamada "${destinatario}".
 
-- Destinatario: ${destinatario}
-- Estilo: ${estilo}
-- Mensaje emocional: ${mensaje}
+El contenido principal que el cliente quiere transmitir es:
+"${mensaje}"
 
-La carta debe tocar el corazón, tener un inicio directo y un cierre cálido, adaptado al estilo indicado.
+El cliente eligió el plan "${plan}" (hasta ${plan === 'basico' ? 200 : plan === 'intermedio' ? 350 : 500} palabras).
+
+La carta debe ser coherente con este nivel, emocionalmente auténtica y adaptada al contexto.
+
+Firma:
+- Tipo de firma: ${firmaTipo}
+- Texto de firma personalizada: ${firmaPersonalizada || 'No especificada'}
+
+Modo de entrega: ${entrega}
+
+Redactá la carta de forma natural, profunda, y emocional, terminando con una despedida cálida. Si es anónima, evitá cualquier mención de nombre propio en la firma. Si tiene firma personalizada, usala al final.
 `;
 
   try {
@@ -29,11 +49,11 @@ La carta debe tocar el corazón, tener un inicio directo y un cierre cálido, ad
       body: JSON.stringify({
         model: 'gpt-4-turbo',
         messages: [
-          { role: 'system', content: 'Sos un escritor de cartas emocionales que redacta textos auténticos y conmovedores.' },
+          { role: 'system', content: 'Sos un escritor sensible y profesional de cartas emocionales.' },
           { role: 'user', content: prompt }
         ],
         temperature: 0.9,
-        max_tokens: 800
+        max_tokens: 1000
       })
     });
 
@@ -44,7 +64,6 @@ La carta debe tocar el corazón, tener un inicio directo y un cierre cálido, ad
     }
 
     const carta = data.choices[0].message.content;
-
     res.status(200).json({ carta });
 
   } catch (error) {
