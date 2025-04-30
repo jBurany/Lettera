@@ -161,25 +161,41 @@
    <p class="text-gray-700 text-lg font-medium">Generando tu carta... por favor esperá unos segundos.</p>
  </div>
   
-  <script>
+<script>
   document.addEventListener("DOMContentLoaded", function () {
     const params = new URLSearchParams(window.location.search);
     const tipoCartaParam = params.get("tipoCarta");
 
     if (tipoCartaParam) {
       const select = document.getElementById("tipoCarta");
+      const titulo = document.querySelector("h1");
+
+      // Selecciona en el desplegable si la opción existe
       if (select) {
-        // Buscar la opción dentro del select y seleccionarla si existe
-        for (let i = 0; i < select.options.length; i++) {
-          if (select.options[i].value === tipoCartaParam) {
-            select.selectedIndex = i;
-            break;
-          }
+        const optionToSelect = select.querySelector(`option[value="${tipoCartaParam}"]`);
+        if (optionToSelect) {
+          optionToSelect.selected = true;
         }
+      }
+
+      // Cambia el título principal dinámicamente
+      const titulosPorTipo = {
+        amor: "Formulario: Carta de Amor",
+        perdon: "Formulario: Carta de Perdón",
+        felicitacion: "Formulario: Carta de Felicitación",
+        agradecimiento: "Formulario: Carta de Agradecimiento",
+        laboral: "Formulario: Carta de Presentación Laboral",
+        libro: "Formulario: Libro Personalizado"
+      };
+
+      if (titulo && titulosPorTipo[tipoCartaParam]) {
+        titulo.textContent = titulosPorTipo[tipoCartaParam];
       }
     }
   });
 </script>
+
+
 
 
  </body>
