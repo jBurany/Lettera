@@ -7,16 +7,19 @@
   <script src="https://cdn.tailwindcss.com"></script>
 </head>
 <body class="bg-gray-100 text-gray-900 font-sans relative">
-  <!-- Fondo dinámico con gradiente y corazones de fondo -->
-  <div id="pageBackground" class="absolute inset-0 -z-10 bg-gradient-to-br from-pink-200 via-pink-100 to-pink-50 overflow-hidden">
-    <!-- Patrón de corazones de fondo -->
-    <div class="absolute inset-0 opacity-20" style="background-image: url('https://i.imgur.com/3jB6X0j.png'); background-repeat: repeat; background-size: 150px;"></div>
-  </div>
+  <!-- Fondo dinámico con degradado y patrón de círculos -->
+  <div id="pageBackground" class="absolute inset-0 -z-10" style="
+    background: linear-gradient(135deg, #FFE4E6 0%, #FECDEB 100%);
+    background-image: radial-gradient(circle, rgba(255,255,255,0.3) 10%, transparent 10%),
+                     radial-gradient(circle, rgba(255,255,255,0.3) 10%, transparent 10%);
+    background-size: 40px 40px, 40px 40px;
+    background-position: 0 0, 20px 20px;
+  "></div>
 
   <main id="mainContainer" class="max-w-xl mx-auto py-10 relative z-10">
     <h1 id="tituloFormulario" class="text-3xl font-bold mb-6 text-center text-pink-800">Formulario: Carta</h1>
 
-    <form id="loveLetterForm" class="p-6 rounded-xl shadow-2xl space-y-4 bg-white bg-opacity-90 backdrop-blur-md relative overflow-hidden">
+    <form id="loveLetterForm" class="p-6 rounded-xl shadow-2xl space-y-4 bg-white bg-opacity-90 backdrop-blur-md relative overflow-visible">
       <!-- Campos ocultos -->
       <input type="hidden" id="hiddenTipoCarta" name="tipoCarta">
       <input type="hidden" id="hiddenPlan" name="plan">
@@ -70,7 +73,7 @@
         Generar carta
       </button>
 
-      <!-- Corazones decorativos extra -->
+      <!-- Corazones decorativos adicionales -->
       <div class="absolute inset-0 pointer-events-none">
         <span class="absolute text-3xl animate-bounce" style="top:5%; left:10%; color:rgba(255,0,0,0.3)">❤️</span>
         <span class="absolute text-2xl animate-pulse" style="top:20%; left:80%; color:rgba(255,0,0,0.2)">❤️</span>
@@ -103,37 +106,36 @@
       const params = new URLSearchParams(window.location.search);
       const tipoCarta = params.get("tipoCarta");
       const plan = params.get("plan");
-      const paid = params.get("paid") === "true";
-
-      const selectTipo = document.getElementById("tipoCarta");
-      const selectPlan = document.getElementById("plan");
       const hiddenTipo = document.getElementById("hiddenTipoCarta");
       const hiddenPlan = document.getElementById("hiddenPlan");
+      const selectTipo = document.getElementById("tipoCarta");
+      const selectPlan = document.getElementById("plan");
       const form = document.getElementById("loveLetterForm");
       const boton = document.getElementById("submitBtn");
       const titulo = document.getElementById("tituloFormulario");
 
-      // Populamos opciones
+      // Populamos selects
       const opcionesTipo = { amor: "Carta de Amor", perdon: "Carta de Perdón", felicitacion: "Carta de Felicitación", agradecimiento: "Carta de Agradecimiento", laboral: "Carta Laboral", libro: "Libro Personalizado" };
       const opcionesPlan = { basico: "Básico (hasta 200 palabras)", intermedio: "Intermedio (hasta 350 palabras)", completo: "Completo (hasta 500 palabras)" };
-      Object.entries(opcionesTipo).forEach(([val, label]) => selectTipo.append(Object.assign(document.createElement("option"), { value: val, textContent: label })));
-      Object.entries(opcionesPlan).forEach(([val, label]) => selectPlan.append(Object.assign(document.createElement("option"), { value: val, textContent: label })));
+      Object.entries(opcionesTipo).forEach(([val,label]) => selectTipo.append(Object.assign(document.createElement("option"),{ value: val, textContent: label })));
+      Object.entries(opcionesPlan).forEach(([val,label]) => selectPlan.append(Object.assign(document.createElement("option"),{ value: val, textContent: label })));
 
-      // Asignar valores y ocultos, bloquear selects
+      // Asignamos valores y bloqueamos selects
       if (tipoCarta) { selectTipo.value = tipoCarta; hiddenTipo.value = tipoCarta; }
       if (plan) { selectPlan.value = plan; hiddenPlan.value = plan; }
-      [selectTipo, selectPlan].forEach(el => { el.disabled = true; el.classList.add("bg-gray-200", "cursor-not-allowed"); });
+      [selectTipo, selectPlan].forEach(el => { el.disabled = true; el.classList.add("bg-gray-200","cursor-not-allowed"); });
 
-      // Ajustar título y botón por tipo
+      // Ajuste de estilos por tipo
       const estilosTipo = { amor: { titulo: "Formulario: Carta de Amor", btn: "bg-pink-600 hover:bg-pink-700" }, perdon: { titulo: "Formulario: Carta de Perdón", btn: "bg-yellow-600 hover:bg-yellow-700" } };
       if (estilosTipo[tipoCarta]) { titulo.textContent = estilosTipo[tipoCarta].titulo; boton.className = `w-full text-white py-2 rounded-xl ${estilosTipo[tipoCarta].btn}`; }
 
-      // Manejo de envío
+      // Envío del formulario
       form.addEventListener("submit", async e => {
         e.preventDefault(); document.getElementById("loaderOverlay").classList.remove("hidden");
-        const datos = { tipoCarta: hiddenTipo.value, plan: hiddenPlan.value, destinatario: document.getElementById("destinatario").value.trim(), mensaje: document.getElementById("mensaje").value.trim(), estilo: document.getElementById("estilo").value.trim() || "romántico", entrega: document.getElementById("entrega").value, firmaTipo: document.getElementById("firmaTipo").value, firmaPersonalizada: document.getElementById("firmaPersonalizada").value.trim() };
-        try { const res = await fetch("/api/generar-carta", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify(datos) }); const data = await res.json(); document.getElementById("loaderOverlay").classList.add("hidden"); if (data.carta) { document.getElementById("contenidoCarta").innerHTML = data.carta.replace(/\n/g, "<br>"); document.getElementById("cartaGenerada").classList.remove("hidden"); } else { alert("❌ Error generando la carta: " + (data.error || "Desconocido")); } } catch (err) { document.getElementById("loaderOverlay").classList.add("hidden"); alert("⚠️ Error al conectar con el servidor:\n" + err.message); } });
+        const datos = { tipoCarta: hiddenTipo.value, plan: hiddenPlan.value, destinatario: document.getElementById("destinatario").value.trim(), mensaje: document.getElementById("mensaje").value.trim(), estilo: document.getElementById("estilo").value.trim()|| 'romántico', entrega: document.getElementById("entrega").value, firmaTipo: document.getElementById("firmaTipo").value, firmaPersonalizada: document.getElementById("firmaPersonalizada").value.trim() };
+        try { const res = await fetch("/api/generar-carta",{ method:"POST", headers:{"Content-Type":"application/json"}, body: JSON.stringify(datos)}); const data = await res.json(); document.getElementById("loaderOverlay").classList.add("hidden"); if(data.carta){ document.getElementById("contenidoCarta").innerHTML = data.carta.replace(/\n/g,"<br>"); document.getElementById("cartaGenerada").classList.remove("hidden"); } else alert("❌ Error generando la carta: " + (data.error||"Desconocido")); } catch(err){ document.getElementById("loaderOverlay").classList.add("hidden"); alert("⚠️ Error al conectar con el servidor:\n"+err.message);} });
 
+      // Descargar PDF
       window.descargarPDF = () => html2pdf().from(document.getElementById("contenidoCarta")).save("Carta_Lettera.pdf");
     });
   </script>
