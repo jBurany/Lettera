@@ -162,18 +162,25 @@
  </div>
   
   <script>
-  document.addEventListener("DOMContentLoaded", () => {
+  document.addEventListener("DOMContentLoaded", function () {
     const params = new URLSearchParams(window.location.search);
     const tipoCartaParam = params.get("tipoCarta");
 
     if (tipoCartaParam) {
-      const selectCarta = document.getElementById("tipoCarta");
-      if (selectCarta) {
-        selectCarta.value = tipoCartaParam;
+      const select = document.getElementById("tipoCarta");
+      if (select) {
+        // Buscar la opción dentro del select y seleccionarla si existe
+        for (let i = 0; i < select.options.length; i++) {
+          if (select.options[i].value === tipoCartaParam) {
+            select.selectedIndex = i;
+            break;
+          }
+        }
       }
     }
   });
 </script>
+
 
  </body>
  </html>
