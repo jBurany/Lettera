@@ -125,7 +125,8 @@
 
       if (tipoCarta && estilosPorTipo[tipoCarta]) {
         const estilo = estilosPorTipo[tipoCarta];
-        document.body.className = `${estilo.fondo} ${estilo.texto} font-sans`;
+        estilo.fondo.split(" ").forEach(cl => document.body.classList.add(cl));
+        document.body.classList.add(estilo.texto, "font-sans");
         if (titulo) titulo.textContent = estilo.titulo;
         if (boton) boton.className = `w-full text-white py-2 rounded-xl ${estilo.boton}`;
         tipoSelect.value = tipoCarta;
@@ -142,7 +143,7 @@
 
       if (plan && estilosPorPlan[plan]) {
         const estilo = estilosPorPlan[plan];
-        form.classList.add(estilo.fondo);
+        estilo.fondo.split(" ").forEach(cl => form.classList.add(cl));
         estilo.borde.split(" ").forEach(cl => form.classList.add(cl));
         boton.className = `w-full text-white py-2 rounded-xl ${estilo.boton}`;
 
