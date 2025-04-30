@@ -7,10 +7,10 @@
   <script src="https://cdn.tailwindcss.com"></script>
 </head>
 <body class="bg-gray-100 text-gray-900 font-sans">
-  <main class="max-w-4xl mx-auto py-10">
+  <main class="max-w-xl mx-auto py-10">
     <h1 class="text-3xl font-bold mb-6 text-center">Formulario: Carta</h1>
 
-    <form id="loveLetterForm" class="p-6 rounded-xl shadow space-y-4 bg-white">
+    <form id="loveLetterForm" class="p-6 rounded-xl shadow space-y-4">
       <!-- Tipo de carta -->
       <div id="tipoWrapper">
         <label class="block font-semibold mb-1">¿Qué tipo de carta querés?</label>
@@ -31,18 +31,6 @@
           <option value="basico">Básico (hasta 200 palabras)</option>
           <option value="intermedio">Intermedio (hasta 350 palabras)</option>
           <option value="completo">Completo (hasta 500 palabras)</option>
-        </select>
-      </div>
-
-      <!-- Color de fondo -->
-      <div>
-        <label class="block font-semibold mb-1">Color de fondo de la carta</label>
-        <select id="colorFondo" name="colorFondo" class="w-full border p-2 rounded">
-          <option value="#ffffff">Blanco</option>
-          <option value="#f3f4f6">Gris claro</option>
-          <option value="#ffe4e6">Rosa suave</option>
-          <option value="#e0f2fe">Celeste claro</option>
-          <option value="#fef3c7">Beige cálido</option>
         </select>
       </div>
 
@@ -90,19 +78,17 @@
       </div>
 
       <!-- Botón de envío -->
-      <button type="submit" class="w-full bg-blue-600 text-white py-2 rounded-xl hover:bg-blue-700">
+      <button type="submit" class="w-full text-white py-2 rounded-xl">
         Generar carta
       </button>
     </form>
 
     <!-- Aquí se mostrará la carta -->
-    <section id="cartaGenerada" class="flex items-center justify-center mt-10">
-      <div id="contenidoCarta" class="w-[800px] h-[550px] p-10 bg-white shadow-xl rounded-xl border text-center flex items-center justify-center text-lg" style="background-color: #ffffff;">
-        Tu carta aparecerá aquí.
-      </div>
-
-      <div class="text-center mt-6 w-full">
-        <button onclick="descargarPDF()" class="px-6 py-3 mt-6 bg-green-600 text-white rounded-xl hover:bg-green-700">
+    <section id="cartaGenerada" class="bg-white p-6 mt-10 rounded-xl shadow hidden">
+      <h2 class="text-2xl font-bold mb-4 text-center">Tu Carta Generada</h2>
+      <div id="contenidoCarta" class="text-gray-700 space-y-4"></div>
+      <div class="text-center mt-6">
+        <button onclick="descargarPDF()" class="px-6 py-3 bg-green-600 text-white rounded-xl hover:bg-green-700">
           Descargar como PDF
         </button>
       </div>
@@ -112,36 +98,116 @@
   <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
 
   <script>
+    document.addEventListener("DOMContentLoaded", function () {
+      const params = new URLSearchParams(window.location.search);
+      const tipoCarta = params.get("tipoCarta");
+      const plan = params.get("plan");
+      const form = document.getElementById("loveLetterForm");
+      const boton = form.querySelector("button[type='submit']");
+      const titulo = document.querySelector("h1");
+      const planSelect = document.getElementById("plan");
+      const tipoSelect = document.getElementById("tipoCarta");
+
+      const estilosPorTipo = {
+        amor: { titulo: "Formulario: Carta de Amor", fondo: "bg-pink-100", boton: "bg-pink-600 hover:bg-pink-700", texto: "text-pink-900" },
+        perdon: { titulo: "Formulario: Carta de Perdón", fondo: "bg-yellow-100", boton: "bg-yellow-600 hover:bg-yellow-700", texto: "text-yellow-900" },
+        felicitacion: { titulo: "Formulario: Carta de Felicitación", fondo: "bg-purple-100", boton: "bg-purple-600 hover:bg-purple-700", texto: "text-purple-900" },
+        agradecimiento: { titulo: "Formulario: Carta de Agradecimiento", fondo: "bg-green-100", boton: "bg-green-600 hover:bg-green-700", texto: "text-green-900" },
+        laboral: { titulo: "Formulario: Carta Laboral", fondo: "bg-blue-100", boton: "bg-blue-600 hover:bg-blue-700", texto: "text-blue-900" },
+        libro: { titulo: "Formulario: Libro Personalizado", fondo: "bg-gray-200", boton: "bg-gray-700 hover:bg-gray-800", texto: "text-gray-800" }
+      };
+
+      const estilosPorPlan = {
+        basico: { fondo: "bg-gray-100", borde: "border border-gray-300", boton: "bg-blue-600 hover:bg-blue-700" },
+        intermedio: { fondo: "bg-yellow-50", borde: "border-2 border-yellow-400 shadow", boton: "bg-yellow-600 hover:bg-yellow-700" },
+        completo: { fondo: "bg-gradient-to-br from-green-100 to-white", borde: "border-4 border-green-500 shadow-xl", boton: "bg-green-700 hover:bg-green-800" }
+      };
+
+      if (tipoCarta && estilosPorTipo[tipoCarta]) {
+        const estilo = estilosPorTipo[tipoCarta];
+        estilo.fondo.split(" ").forEach(cl => document.body.classList.add(cl));
+        document.body.classList.add(estilo.texto, "font-sans");
+        if (titulo) titulo.textContent = estilo.titulo;
+        if (boton) boton.className = `w-full text-white py-2 rounded-xl ${estilo.boton}`;
+        tipoSelect.value = tipoCarta;
+
+        const tipoLabel = tipoSelect.closest("div").querySelector("label");
+        const textoTipo = document.createElement("p");
+        textoTipo.textContent = `Tipo seleccionado: ${tipoSelect.options[tipoSelect.selectedIndex].text}`;
+        textoTipo.className = "font-semibold text-sm mt-1";
+
+        tipoSelect.classList.add("hidden");
+        tipoSelect.setAttribute("disabled", true);
+        tipoLabel.parentNode.insertBefore(textoTipo, tipoSelect.nextSibling);
+      }
+
+      if (plan && estilosPorPlan[plan]) {
+        const estilo = estilosPorPlan[plan];
+        estilo.fondo.split(" ").forEach(cl => form.classList.add(cl));
+        estilo.borde.split(" ").forEach(cl => form.classList.add(cl));
+        boton.className = `w-full text-white py-2 rounded-xl ${estilo.boton}`;
+
+        const nombrePlan = {
+          basico: 'Básico (hasta 200 palabras)',
+          intermedio: 'Intermedio (hasta 350 palabras)',
+          completo: 'Completo (hasta 500 palabras)'
+        }[plan] || plan;
+
+        const planWrapper = document.getElementById("planWrapper");
+        const textoPlan = `
+          <label class="block font-semibold mb-1">Elegí el plan</label>
+          <p class="font-semibold text-sm mt-1">Plan seleccionado: ${nombrePlan}</p>
+        `;
+        planWrapper.innerHTML = textoPlan;
+      }
+    });
+
     document.getElementById("loveLetterForm").addEventListener("submit", async function (e) {
       e.preventDefault();
+      document.getElementById("loaderOverlay").classList.remove("hidden");
 
-      const colorFondo = document.getElementById("colorFondo").value;
-      const destinatario = document.getElementById("destinatario").value.trim();
-      const mensaje = document.getElementById("mensaje").value.trim();
-      const estilo = document.getElementById("estilo").value.trim() || "romántico";
-      const entrega = document.getElementById("entrega").value;
-      const firmaTipo = document.getElementById("firmaTipo").value;
-      const firmaPersonalizada = document.getElementById("firmaPersonalizada").value.trim();
+      const datos = {
+        tipoCarta: document.getElementById("tipoCarta")?.value || "",
+        plan: document.getElementById("plan")?.value || "",
+        destinatario: document.getElementById("destinatario").value.trim(),
+        mensaje: document.getElementById("mensaje").value.trim(),
+        estilo: document.getElementById("estilo").value.trim() || "romántico",
+        entrega: document.getElementById("entrega").value,
+        firmaTipo: document.getElementById("firmaTipo").value,
+        firmaPersonalizada: document.getElementById("firmaPersonalizada").value.trim()
+      };
 
-      // Simulación del texto generado
-      const textoGenerado = `Querido/a ${destinatario},\n\n${mensaje}\n\n${firmaTipo === 'anonima' ? '' : firmaPersonalizada}`;
+      try {
+        const res = await fetch("/api/generar-carta", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(datos)
+        });
 
-      const carta = document.getElementById("contenidoCarta");
-      carta.innerHTML = textoGenerado.replace(/\n/g, "<br>");
-      carta.style.backgroundColor = colorFondo;
+        const data = await res.json();
+        document.getElementById("loaderOverlay").classList.add("hidden");
+
+        if (data.carta) {
+          document.getElementById("contenidoCarta").innerHTML = data.carta.replace(/\n/g, "<br>");
+          document.getElementById("cartaGenerada").classList.remove("hidden");
+        } else {
+          alert("❌ Error generando la carta: " + (data.error || "Desconocido"));
+        }
+      } catch (err) {
+        document.getElementById("loaderOverlay").classList.add("hidden");
+        alert("⚠️ Error al conectar con el servidor:\n" + err.message);
+      }
     });
 
     function descargarPDF() {
       const element = document.getElementById("contenidoCarta");
-      const opt = {
-        margin: 0,
-        filename: 'Carta_Lettera.pdf',
-        image: { type: 'jpeg', quality: 0.98 },
-        html2canvas: { scale: 2 },
-        jsPDF: { unit: 'pt', format: 'a4', orientation: 'landscape' }
-      };
-      html2pdf().set(opt).from(element).save();
+      html2pdf().from(element).save("Carta_Lettera.pdf");
     }
   </script>
+
+  <div id="loaderOverlay" class="fixed inset-0 bg-white bg-opacity-80 flex flex-col items-center justify-center z-50 hidden">
+    <div class="animate-spin rounded-full h-16 w-16 border-t-4 border-blue-600 border-opacity-50 mb-4"></div>
+    <p class="text-gray-700 text-lg font-medium">Generando tu carta... por favor esperá unos segundos.</p>
+  </div>
 </body>
 </html>
