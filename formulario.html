@@ -137,6 +137,7 @@
         textoTipo.className = "font-semibold text-sm mt-1";
 
         tipoSelect.style.display = "none";
+        tipoSelect.disabled = true;
         tipoLabel.parentNode.insertBefore(textoTipo, tipoSelect.nextSibling);
       }
 
@@ -152,6 +153,7 @@
         textoPlan.className = "font-semibold text-sm mt-1";
 
         planSelect.style.display = "none";
+        planSelect.disabled = true;
         planLabel.parentNode.insertBefore(textoPlan, planSelect.nextSibling);
       }
     });
