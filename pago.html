@@ -1,172 +1,125 @@
+<!-- pago.html -->
 <!DOCTYPE html>
 <html lang="es">
 <head>
-  <meta charset="UTF-8"/>
+  <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title data-i18n="pageTitle">Pagar carta personalizada</title>
+  <title>Pagar carta personalizada</title>
   <script src="https://cdn.tailwindcss.com"></script>
 </head>
-<body class="h-screen bg-gray-100 text-gray-900 font-sans">
+<body class="bg-gray-100 text-gray-900 font-sans">
+  <main class="max-w-2xl mx-auto py-10 px-4">
+    <h1 id="tituloCarta" class="text-3xl font-bold mb-6 text-center">Cargando...</h1>
 
-  <!-- 1. Overlay de selección de idioma -->
-  <div id="langOverlay"
-       class="fixed inset-0 bg-white/90 flex items-center justify-center z-50"
-       style="display: none;">
-    <div class="bg-white p-8 rounded-xl shadow-lg text-center">
-      <h2 class="text-2xl mb-4">Selecciona tu idioma / Select your language</h2>
-      <button onclick="setLanguage('es')"
-              class="mx-2 px-4 py-2 bg-pink-500 text-white rounded">
-        Español
-      </button>
-      <button onclick="setLanguage('en')"
-              class="mx-2 px-4 py-2 bg-blue-600 text-white rounded">
-        English
-      </button>
-    </div>
-  </div>
+    <div class="bg-white rounded-xl shadow p-6">
+      <p id="descripcionCarta" class="text-gray-700 text-sm mb-6 text-center"></p>
 
-  <!-- 2. Contenido principal -->
-  <main class="relative z-10 max-w-2xl mx-auto py-10 px-4 overflow-auto">
-    <!-- Título dinámico -->
-    <h1 id="tituloCarta"
-        data-i18n="loadingTitle"
-        class="text-3xl font-bold mb-4 text-center">
-      Cargando…
-    </h1>
-    <!-- Descripción dinámica -->
-    <p id="descripcionCarta"
-       data-i18n="loadingDesc"
-       class="text-gray-700 mb-8 text-center">
-      Por favor espera mientras cargamos los detalles de tu carta.
-    </p>
-    <!-- Selector de plan -->
-    <h2 data-i18n="choosePlan"
-        class="text-xl font-semibold mb-4 text-center">
-      Elegí tu plan:
-    </h2>
-    <div class="space-y-4">
-      <button id="planBasico"
-              data-i18n="basicPlan"
-              class="w-full bg-blue-600 hover:bg-blue-700 text-white py-3 rounded-xl">
-        Plan Básico
-      </button>
-      <button id="planIntermedio"
-              data-i18n="intermediatePlan"
-              class="w-full bg-yellow-500 hover:bg-yellow-600 text-white py-3 rounded-xl">
-        Plan Intermedio
-      </button>
-      <button id="planCompleto"
-              data-i18n="completePlan"
-              class="w-full bg-green-600 hover:bg-green-700 text-white py-3 rounded-xl">
-        Plan Completo
-      </button>
+      <h2 class="text-lg font-semibold mb-2 text-center">Elegí tu plan:</h2>
+
+      <div class="space-y-4">
+
+        <!-- Botón Plan Básico -->
+        <form id="btnBasico" action="https://www.paypal.com/cgi-bin/webscr" method="post" target="_top">
+          <input type="hidden" name="business" value="juanpab737@gmail.com">
+          <input type="hidden" name="cmd" value="_xclick">
+          <input type="hidden" name="item_name" value="Carta Lettera - Plan Básico">
+          <input type="hidden" name="amount" value="4.00">
+          <input type="hidden" name="currency_code" value="USD">
+          <input id="returnBasico" type="hidden" name="return" value="">
+          <input type="hidden" name="cancel_return" value="https://lettera-one.vercel.app/">
+          <input type="submit" value="Comprar Plan Básico – $4 USD" class="w-full bg-blue-600 text-white py-2 rounded-xl hover:bg-blue-700">
+        </form>
+
+        <!-- Botón Plan Intermedio -->
+        <form id="btnIntermedio" action="https://www.paypal.com/cgi-bin/webscr" method="post" target="_top">
+          <input type="hidden" name="business" value="juanpab737@gmail.com">
+          <input type="hidden" name="cmd" value="_xclick">
+          <input type="hidden" name="item_name" value="Carta Lettera - Plan Intermedio">
+          <input type="hidden" name="amount" value="6.00">
+          <input type="hidden" name="currency_code" value="USD">
+          <input id="returnIntermedio" type="hidden" name="return" value="">
+          <input type="hidden" name="cancel_return" value="https://lettera-one.vercel.app/">
+          <input type="submit" value="Comprar Plan Intermedio – $6 USD" class="w-full bg-yellow-500 text-white py-2 rounded-xl hover:bg-yellow-600">
+        </form>
+
+        <!-- Botón Plan Completo -->
+        <form id="btnCompleto" action="https://www.paypal.com/cgi-bin/webscr" method="post" target="_top">
+          <input type="hidden" name="business" value="juanpab737@gmail.com">
+          <input type="hidden" name="cmd" value="_xclick">
+          <input type="hidden" name="item_name" value="Carta Lettera - Plan Completo">
+          <input type="hidden" name="amount" value="9.00">
+          <input type="hidden" name="currency_code" value="USD">
+          <input id="returnCompleto" type="hidden" name="return" value="">
+          <input type="hidden" name="cancel_return" value="https://lettera-one.vercel.app/">
+          <input type="submit" value="Comprar Plan Completo – $9 USD" class="w-full bg-green-600 text-white py-2 rounded-xl hover:bg-green-700">
+        </form>
+
+      </div>
     </div>
+
+    <!-- BOTÓN MERCADOPAGO -->
+    <button onclick="pagarConMercadoPago()" class="w-full bg-indigo-600 hover:bg-indigo-700 text-white py-2 rounded-xl mt-4">
+      Pagar con MercadoPago 💳
+    </button>
   </main>
 
-  <!-- 3. Scripts de idioma y simulación -->
   <script>
-    // Diccionario de traducciones
-    const translations = {
-      es: {
-        pageTitle:       "Pagar carta personalizada",
-        loadingTitle:    "Cargando…",
-        loadingDesc:     "Por favor espera mientras cargamos los detalles de tu carta.",
-        choosePlan:      "Elegí tu plan:",
-        basicPlan:       "Plan Básico",
-        intermediatePlan:"Plan Intermedio",
-        completePlan:    "Plan Completo",
-        // dinámicos por tipo de carta:
-        title_amor:         "Carta de Amor",
-        desc_amor:          "Expresá tus sentimientos con una carta romántica y personalizada.",
-        title_perdon:       "Carta de Perdón",
-        desc_perdon:        "Para pedir disculpas con sinceridad y empatía.",
-        title_felicitacion: "Carta de Felicitación",
-        desc_felicitacion:  "Perfecta para celebrar logros, cumpleaños o nacimientos.",
-        title_agradecimiento:"Carta de Agradecimiento",
-        desc_agradecimiento: "Muestra gratitud de forma única y emotiva.",
-        title_laboral:      "Carta Laboral",
-        desc_laboral:       "Resalta tus habilidades y motivación para un trabajo.",
-        title_libro:        "Libro Personalizado",
-        desc_libro:         "Un regalo literario hecho a medida y lleno de emoción."
-      },
-      en: {
-        pageTitle:       "Pay for your letter",
-        loadingTitle:    "Loading…",
-        loadingDesc:     "Please wait while we load your letter details.",
-        choosePlan:      "Choose your plan:",
-        basicPlan:       "Basic Plan",
-        intermediatePlan:"Intermediate Plan",
-        completePlan:    "Complete Plan",
-        // dinámicos por tipo de carta:
-        title_amor:         "Love Letter",
-        desc_amor:          "Express deep feelings with a romantic, personalized letter.",
-        title_perdon:       "Apology Letter",
-        desc_perdon:        "To sincerely apologize with empathy.",
-        title_felicitacion: "Congratulation Letter",
-        desc_felicitacion:  "Perfect for celebrations, birthdays or new beginnings.",
-        title_agradecimiento:"Thank You Letter",
-        desc_agradecimiento: "Show gratitude in a unique and heartfelt way.",
-        title_laboral:      "Job Application Letter",
-        desc_laboral:       "Highlight your skills and motivation for a job.",
-        title_libro:        "Personalized Book",
-        desc_libro:         "A tailor-made literary gift full of emotion."
+    async function pagarConMercadoPago() {
+      const tipoCarta = new URLSearchParams(window.location.search).get("tipoCarta");
+      const plan = prompt("¿Qué plan querés pagar? Escribí: basico, intermedio o completo");
+
+      if (!["basico", "intermedio", "completo"].includes(plan)) {
+        alert("⚠️ Plan inválido. Escribí exactamente: basico, intermedio o completo.");
+        return;
       }
-    };
 
-    // Aplica textos traducidos
-    function applyTranslations(lang) {
-      document.querySelectorAll('[data-i18n]').forEach(el => {
-        const key = el.getAttribute('data-i18n');
-        if (translations[lang] && translations[lang][key]) {
-          el.textContent = translations[lang][key];
+      try {
+        const response = await fetch("/api/crear-preferencia", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ tipoCarta, plan })
+        });
+
+        const data = await response.json();
+        if (data.link) {
+          window.location.href = data.link;
+        } else {
+          alert("❌ Error al crear el link de pago");
         }
-      });
-      document.title = translations[lang]?.pageTitle || document.title;
+      } catch (err) {
+        alert("⚠️ Error al conectar con el servidor:\n" + err.message);
+      }
     }
 
-    // Maneja selección de idioma
-    function setLanguage(lang) {
-      sessionStorage.setItem('lang', lang);
-      applyTranslations(lang);
-      document.getElementById('langOverlay').style.display = 'none';
-      initPage();  // una vez elegido, inicializamos el resto
-    }
+    document.addEventListener("DOMContentLoaded", () => {
+      const params = new URLSearchParams(window.location.search);
+      const tipo = params.get("tipoCarta");
+      const base = "https://lettera-one.vercel.app/formulario.html";
+      document.getElementById("returnBasico").value      = `${base}?tipoCarta=${tipo}&plan=basico&paid=true`;
+      document.getElementById("returnIntermedio").value  = `${base}?tipoCarta=${tipo}&plan=intermedio&paid=true`;
+      document.getElementById("returnCompleto").value    = `${base}?tipoCarta=${tipo}&plan=completo&paid=true`;
 
-    // Simula pago y redirige al formulario con paid=true
-    function simulatePayment(plan) {
-      const tipoCarta = new URLSearchParams(location.search).get("tipoCarta") || "amor";
-      location.href = `/formulario.html?tipoCarta=${tipoCarta}&plan=${plan}&paid=true`;
-    }
+      const titulos = {
+        amor: "Carta de Amor",
+        perdon: "Carta de Perdón",
+        felicitacion: "Carta de Felicitación",
+        agradecimiento: "Carta de Agradecimiento",
+        laboral: "Carta Laboral",
+        libro: "Libro Personalizado"
+      };
 
-    // Inicializa dinámicos de la página
-    function initPage() {
-      const lang = sessionStorage.getItem('lang') || 'es';
-      // Traducción estática ya aplicada
+      const descripciones = {
+        amor: "Expresá tus sentimientos con una carta romántica y personalizada.",
+        perdon: "Decí lo que sentís con una carta sincera y empática.",
+        felicitacion: "Ideal para cumpleaños, logros o nacimientos.",
+        agradecimiento: "Una forma única de mostrar gratitud.",
+        laboral: "Tu presentación perfecta para un empleo.",
+        libro: "Un regalo literario hecho a medida, emocional y único."
+      };
 
-      // Dinámicos: título y descripción según tipoCarta
-      const tipo = new URLSearchParams(location.search).get("tipoCarta") || "amor";
-      const tKey = `title_${tipo}`, dKey = `desc_${tipo}`;
-      document.getElementById('tituloCarta').textContent     =
-        translations[lang][tKey] || document.getElementById('tituloCarta').textContent;
-      document.getElementById('descripcionCarta').textContent =
-        translations[lang][dKey] || document.getElementById('descripcionCarta').textContent;
-
-      // Asignar listeners de simulación de pago
-      document.getElementById('planBasico').onclick      = () => simulatePayment('basico');
-      document.getElementById('planIntermedio').onclick  = () => simulatePayment('intermedio');
-      document.getElementById('planCompleto').onclick    = () => simulatePayment('completo');
-    }
-
-    // Al cargar la página
-    document.addEventListener('DOMContentLoaded', () => {
-      const overlay = document.getElementById('langOverlay');
-      const lang = sessionStorage.getItem('lang');
-      if (!lang) {
-        overlay.style.display = 'flex';
-      } else {
-        overlay.style.display = 'none';
-        applyTranslations(lang);
-        initPage();
+      if (tipo && titulos[tipo]) {
+        document.getElementById("tituloCarta").textContent       = titulos[tipo];
+        document.getElementById("descripcionCarta").textContent   = descripciones[tipo];
       }
     });
   </script>
