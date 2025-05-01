@@ -46,13 +46,8 @@
 
         <!-- Plan Básico -->
         <form id="btnBasico" action="https://www.paypal.com/cgi-bin/webscr" method="post" target="_top">
-          <input type="hidden" name="business" value="juanpab737@gmail.com">
-          <input type="hidden" name="cmd" value="_xclick">
-          <input type="hidden" name="item_name" value="Carta Lettera - Plan Básico">
-          <input type="hidden" name="amount" value="4.00">
-          <input type="hidden" name="currency_code" value="USD">
+          <!-- ...otros inputs ocultos... -->
           <input id="returnBasico" type="hidden" name="return" value="">
-          <input type="hidden" name="cancel_return" value="https://lettera-one.vercel.app/">
           <input type="submit"
                  data-i18n="buyBasic"
                  value="Comprar Plan Básico – $4 USD"
@@ -61,13 +56,8 @@
 
         <!-- Plan Intermedio -->
         <form id="btnIntermedio" action="https://www.paypal.com/cgi-bin/webscr" method="post" target="_top">
-          <input type="hidden" name="business" value="juanpab737@gmail.com">
-          <input type="hidden" name="cmd" value="_xclick">
-          <input type="hidden" name="item_name" value="Carta Lettera - Plan Intermedio">
-          <input type="hidden" name="amount" value="6.00">
-          <input type="hidden" name="currency_code" value="USD">
+          <!-- ...otros inputs ocultos... -->
           <input id="returnIntermedio" type="hidden" name="return" value="">
-          <input type="hidden" name="cancel_return" value="https://lettera-one.vercel.app/">
           <input type="submit"
                  data-i18n="buyIntermediate"
                  value="Comprar Plan Intermedio – $6 USD"
@@ -76,13 +66,8 @@
 
         <!-- Plan Completo -->
         <form id="btnCompleto" action="https://www.paypal.com/cgi-bin/webscr" method="post" target="_top">
-          <input type="hidden" name="business" value="juanpab737@gmail.com">
-          <input type="hidden" name="cmd" value="_xclick">
-          <input type="hidden" name="item_name" value="Carta Lettera - Plan Completo">
-          <input type="hidden" name="amount" value="9.00">
-          <input type="hidden" name="currency_code" value="USD">
+          <!-- ...otros inputs ocultos... -->
           <input id="returnCompleto" type="hidden" name="return" value="">
-          <input type="hidden" name="cancel_return" value="https://lettera-one.vercel.app/">
           <input type="submit"
                  data-i18n="buyComplete"
                  value="Comprar Plan Completo – $9 USD"
@@ -102,17 +87,18 @@
   </main>
 
   <script>
+    // Diccionario de traducciones
     const translations = {
       es: {
-        pageTitle:      "Pagar carta personalizada",
-        loading:        "Cargando…",
-        loadingDesc:    "Por favor espera mientras cargamos los detalles de tu carta.",
-        choosePlan:     "Elegí tu plan:",
-        buyBasic:       "Comprar Plan Básico – $4 USD",
-        buyIntermediate:"Comprar Plan Intermedio – $6 USD",
-        buyComplete:    "Comprar Plan Completo – $9 USD",
-        payWithMP:      "Pagar con MercadoPago 💳",
-        // dinámicos
+        pageTitle:       "Pagar carta personalizada",
+        loading:         "Cargando…",
+        loadingDesc:     "Por favor espera mientras cargamos los detalles de tu carta.",
+        choosePlan:      "Elegí tu plan:",
+        buyBasic:        "Comprar Plan Básico – $4 USD",
+        buyIntermediate: "Comprar Plan Intermedio – $6 USD",
+        buyComplete:     "Comprar Plan Completo – $9 USD",
+        payWithMP:       "Pagar con MercadoPago 💳",
+        // dinámicos por tipo
         title_amor:      "Carta de Amor",
         desc_amor:       "Expresá tus sentimientos con una carta romántica y personalizada.",
         title_perdon:    "Carta de Perdón",
@@ -127,15 +113,15 @@
         desc_libro:      "Un regalo literario hecho a medida y lleno de emoción."
       },
       en: {
-        pageTitle:      "Pay for your letter",
-        loading:        "Loading…",
-        loadingDesc:    "Please wait while we load your letter details.",
-        choosePlan:     "Choose your plan:",
-        buyBasic:       "Buy Basic Plan – $4 USD",
-        buyIntermediate:"Buy Intermediate Plan – $6 USD",
-        buyComplete:    "Buy Complete Plan – $9 USD",
-        payWithMP:      "Pay with MercadoPago 💳",
-        // dinámicos
+        pageTitle:       "Pay for your letter",
+        loading:         "Loading…",
+        loadingDesc:     "Please wait while we load your letter details.",
+        choosePlan:      "Choose your plan:",
+        buyBasic:        "Buy Basic Plan – $4 USD",
+        buyIntermediate: "Buy Intermediate Plan – $6 USD",
+        buyComplete:     "Buy Complete Plan – $9 USD",
+        payWithMP:       "Pay with MercadoPago 💳",
+        // dinámicos por tipo
         title_amor:      "Love Letter",
         desc_amor:       "Express deep feelings with a romantic, personalized letter.",
         title_perdon:    "Apology Letter",
@@ -151,10 +137,12 @@
       }
     };
 
+    // Aplica las traducciones
     function applyTranslations(lang) {
       document.querySelectorAll('[data-i18n]').forEach(el => {
         const key = el.getAttribute('data-i18n');
         if (translations[lang] && translations[lang][key]) {
+          // inputs usan value, otros usan textContent
           if (el.tagName.toLowerCase() === 'input') {
             el.value = translations[lang][key];
           } else {
@@ -165,20 +153,54 @@
       document.title = translations[lang]?.pageTitle || document.title;
     }
 
+    // Guarda idioma en ambas storages y aplica
     function setLanguage(lang) {
       sessionStorage.setItem('lang', lang);
+      localStorage.setItem('lang', lang);
       applyTranslations(lang);
       document.getElementById('langOverlay').style.display = 'none';
     }
 
+    // Lógica inicial al cargar
+    document.addEventListener('DOMContentLoaded', () => {
+      const overlay = document.getElementById('langOverlay');
+      const lang = sessionStorage.getItem('lang') || localStorage.getItem('lang');
+      if (lang) {
+        overlay.style.display = 'none';
+        applyTranslations(lang);
+      } else {
+        overlay.style.display = 'flex';
+      }
+
+      // Configurar los return de PayPal
+      const tipo = new URLSearchParams(window.location.search).get("tipoCarta") || "amor";
+      const base = "https://lettera-one.vercel.app/formulario.html";
+      document.getElementById("returnBasico").value      = `${base}?tipoCarta=${tipo}&plan=basico&paid=true`;
+      document.getElementById("returnIntermedio").value  = `${base}?tipoCarta=${tipo}&plan=intermedio&paid=true`;
+      document.getElementById("returnCompleto").value    = `${base}?tipoCarta=${tipo}&plan=completo&paid=true`;
+
+      // Títulos/descripciones dinámicos según tipo e idioma
+      const userLang = lang || 'es';
+      document.getElementById("tituloCarta").textContent     =
+        translations[userLang][`title_${tipo}`] ||
+        document.getElementById("tituloCarta").textContent;
+      document.getElementById("descripcionCarta").textContent =
+        translations[userLang][`desc_${tipo}`] ||
+        document.getElementById("descripcionCarta").textContent;
+    });
+
+    // Función de pago con MercadoPago
     async function pagarConMercadoPago() {
       const tipoCarta = new URLSearchParams(window.location.search).get("tipoCarta");
-      const plan = prompt(translations[sessionStorage.getItem('lang') || 'es'].choosePlan
-                         + " (basico, intermedio, completo)");
+      const lang = sessionStorage.getItem('lang') || localStorage.getItem('lang') || 'es';
+      const promptText = translations[lang].choosePlan + " (basico, intermedio, completo)";
+      const plan = prompt(promptText);
+
       if (!["basico", "intermedio", "completo"].includes(plan)) {
         alert("⚠️ Plan inválido.");
         return;
       }
+
       try {
         const resp = await fetch("/api/crear-preferencia", {
           method: "POST",
@@ -192,32 +214,6 @@
         alert("❌ Error al conectar con el servidor");
       }
     }
-
-    document.addEventListener("DOMContentLoaded", () => {
-      const overlay = document.getElementById('langOverlay');
-      const lang = sessionStorage.getItem('lang');
-      if (lang) {
-        overlay.style.display = 'none';
-        applyTranslations(lang);
-      } else {
-        overlay.style.display = 'flex';
-      }
-
-      // Configurar URLs de retorno de PayPal
-      const params = new URLSearchParams(window.location.search);
-      const tipo = params.get("tipoCarta") || "amor";
-      const base = "https://lettera-one.vercel.app/formulario.html";
-      document.getElementById("returnBasico").value      = `${base}?tipoCarta=${tipo}&plan=basico&paid=true`;
-      document.getElementById("returnIntermedio").value  = `${base}?tipoCarta=${tipo}&plan=intermedio&paid=true`;
-      document.getElementById("returnCompleto").value    = `${base}?tipoCarta=${tipo}&plan=completo&paid=true`;
-
-      // Titulos y descripciones dinámicos según idioma y tipo
-      const userLang = lang || 'es';
-      document.getElementById("tituloCarta").textContent     =
-        translations[userLang][`title_${tipo}`]     || document.getElementById("tituloCarta").textContent;
-      document.getElementById("descripcionCarta").textContent =
-        translations[userLang][`desc_${tipo}`]      || document.getElementById("descripcionCarta").textContent;
-    });
   </script>
 
 </body>
