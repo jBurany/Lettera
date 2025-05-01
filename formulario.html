@@ -182,5 +182,10 @@
       window.descargarPDF=()=>html2pdf().from(document.getElementById('contenidoCarta')).save('Carta_Lettera.pdf');
     });
   </script>
+  <script src="js/lang.js"></script>
+  <script>
+    // Arranca la detección y aplicación de idioma
+    initLanguage();
+  </script>
 </body>
 </html>
