@@ -6,29 +6,44 @@
   <title data-i18n="pageTitle">Pagar carta personalizada</title>
   <script src="https://cdn.tailwindcss.com"></script>
 </head>
-<body class="bg-gray-100 text-gray-900 font-sans">
+<body class="h-screen bg-gray-100 text-gray-900 font-sans">
 
-  <!-- Overlay de selección de idioma -->
+  <!-- 1. Overlay de selección de idioma -->
   <div id="langOverlay"
        class="fixed inset-0 bg-white/90 flex items-center justify-center z-50"
        style="display: none;">
     <div class="bg-white p-8 rounded-xl shadow-lg text-center">
       <h2 class="text-2xl mb-4">Selecciona tu idioma / Select your language</h2>
-      <button onclick="setLanguage('es')" class="mx-2 px-4 py-2 bg-pink-500 text-white rounded">Español</button>
-      <button onclick="setLanguage('en')" class="mx-2 px-4 py-2 bg-blue-600 text-white rounded">English</button>
+      <button onclick="setLanguage('es')"
+              class="mx-2 px-4 py-2 bg-pink-500 text-white rounded">
+        Español
+      </button>
+      <button onclick="setLanguage('en')"
+              class="mx-2 px-4 py-2 bg-blue-600 text-white rounded">
+        English
+      </button>
     </div>
   </div>
 
-  <!-- Contenido principal -->
-  <main id="content" class="max-w-2xl mx-auto py-10 px-4">
-    <h1 id="pageTitle" data-i18n="pageTitle" class="text-3xl font-bold mb-6 text-center">
-      Pagar carta personalizada
+  <!-- 2. Contenido principal -->
+  <main class="relative z-10 max-w-2xl mx-auto py-10 px-4 overflow-auto">
+    <!-- Título dinámico -->
+    <h1 id="tituloCarta"
+        data-i18n="loadingTitle"
+        class="text-3xl font-bold mb-4 text-center">
+      Cargando…
     </h1>
-
-    <p id="choosePlan" data-i18n="choosePlan" class="text-lg font-semibold mb-4 text-center">
-      Elegí tu plan:
+    <!-- Descripción dinámica -->
+    <p id="descripcionCarta"
+       data-i18n="loadingDesc"
+       class="text-gray-700 mb-8 text-center">
+      Por favor espera mientras cargamos los detalles de tu carta.
     </p>
-
+    <!-- Selector de plan -->
+    <h2 data-i18n="choosePlan"
+        class="text-xl font-semibold mb-4 text-center">
+      Elegí tu plan:
+    </h2>
     <div class="space-y-4">
       <button id="planBasico"
               data-i18n="basicPlan"
@@ -48,26 +63,57 @@
     </div>
   </main>
 
+  <!-- 3. Scripts de idioma y simulación -->
   <script>
     // Diccionario de traducciones
     const translations = {
       es: {
-        pageTitle:      "Pagar carta personalizada",
-        choosePlan:     "Elegí tu plan:",
-        basicPlan:      "Plan Básico",
+        pageTitle:       "Pagar carta personalizada",
+        loadingTitle:    "Cargando…",
+        loadingDesc:     "Por favor espera mientras cargamos los detalles de tu carta.",
+        choosePlan:      "Elegí tu plan:",
+        basicPlan:       "Plan Básico",
         intermediatePlan:"Plan Intermedio",
-        completePlan:   "Plan Completo"
+        completePlan:    "Plan Completo",
+        // dinámicos por tipo de carta:
+        title_amor:         "Carta de Amor",
+        desc_amor:          "Expresá tus sentimientos con una carta romántica y personalizada.",
+        title_perdon:       "Carta de Perdón",
+        desc_perdon:        "Para pedir disculpas con sinceridad y empatía.",
+        title_felicitacion: "Carta de Felicitación",
+        desc_felicitacion:  "Perfecta para celebrar logros, cumpleaños o nacimientos.",
+        title_agradecimiento:"Carta de Agradecimiento",
+        desc_agradecimiento: "Muestra gratitud de forma única y emotiva.",
+        title_laboral:      "Carta Laboral",
+        desc_laboral:       "Resalta tus habilidades y motivación para un trabajo.",
+        title_libro:        "Libro Personalizado",
+        desc_libro:         "Un regalo literario hecho a medida y lleno de emoción."
       },
       en: {
-        pageTitle:      "Pay for your letter",
-        choosePlan:     "Choose your plan:",
-        basicPlan:      "Basic Plan",
+        pageTitle:       "Pay for your letter",
+        loadingTitle:    "Loading…",
+        loadingDesc:     "Please wait while we load your letter details.",
+        choosePlan:      "Choose your plan:",
+        basicPlan:       "Basic Plan",
         intermediatePlan:"Intermediate Plan",
-        completePlan:   "Complete Plan"
+        completePlan:    "Complete Plan",
+        // dinámicos por tipo de carta:
+        title_amor:         "Love Letter",
+        desc_amor:          "Express deep feelings with a romantic, personalized letter.",
+        title_perdon:       "Apology Letter",
+        desc_perdon:        "To sincerely apologize with empathy.",
+        title_felicitacion: "Congratulation Letter",
+        desc_felicitacion:  "Perfect for celebrations, birthdays or new beginnings.",
+        title_agradecimiento:"Thank You Letter",
+        desc_agradecimiento: "Show gratitude in a unique and heartfelt way.",
+        title_laboral:      "Job Application Letter",
+        desc_laboral:       "Highlight your skills and motivation for a job.",
+        title_libro:        "Personalized Book",
+        desc_libro:         "A tailor-made literary gift full of emotion."
       }
     };
 
-    // Aplica las traducciones a todos los elementos marcados
+    // Aplica textos traducidos
     function applyTranslations(lang) {
       document.querySelectorAll('[data-i18n]').forEach(el => {
         const key = el.getAttribute('data-i18n');
@@ -78,21 +124,41 @@
       document.title = translations[lang]?.pageTitle || document.title;
     }
 
-    // Selección de idioma
+    // Maneja selección de idioma
     function setLanguage(lang) {
       sessionStorage.setItem('lang', lang);
       applyTranslations(lang);
       document.getElementById('langOverlay').style.display = 'none';
+      initPage();  // una vez elegido, inicializamos el resto
     }
 
-    // Simulación de pago: redirige al formulario con paid=true
+    // Simula pago y redirige al formulario con paid=true
     function simulatePayment(plan) {
-      const tipoCarta = new URLSearchParams(window.location.search).get("tipoCarta") || "amor";
-      window.location.href = `/formulario.html?tipoCarta=${tipoCarta}&plan=${plan}&paid=true`;
+      const tipoCarta = new URLSearchParams(location.search).get("tipoCarta") || "amor";
+      location.href = `/formulario.html?tipoCarta=${tipoCarta}&plan=${plan}&paid=true`;
     }
 
+    // Inicializa dinámicos de la página
+    function initPage() {
+      const lang = sessionStorage.getItem('lang') || 'es';
+      // Traducción estática ya aplicada
+
+      // Dinámicos: título y descripción según tipoCarta
+      const tipo = new URLSearchParams(location.search).get("tipoCarta") || "amor";
+      const tKey = `title_${tipo}`, dKey = `desc_${tipo}`;
+      document.getElementById('tituloCarta').textContent     =
+        translations[lang][tKey] || document.getElementById('tituloCarta').textContent;
+      document.getElementById('descripcionCarta').textContent =
+        translations[lang][dKey] || document.getElementById('descripcionCarta').textContent;
+
+      // Asignar listeners de simulación de pago
+      document.getElementById('planBasico').onclick      = () => simulatePayment('basico');
+      document.getElementById('planIntermedio').onclick  = () => simulatePayment('intermedio');
+      document.getElementById('planCompleto').onclick    = () => simulatePayment('completo');
+    }
+
+    // Al cargar la página
     document.addEventListener('DOMContentLoaded', () => {
-      // Mostrar overlay si no hay idioma en sesión
       const overlay = document.getElementById('langOverlay');
       const lang = sessionStorage.getItem('lang');
       if (!lang) {
@@ -100,12 +166,8 @@
       } else {
         overlay.style.display = 'none';
         applyTranslations(lang);
+        initPage();
       }
-
-      // Botones de plan
-      document.getElementById('planBasico').addEventListener('click', () => simulatePayment('basico'));
-      document.getElementById('planIntermedio').addEventListener('click', () => simulatePayment('intermedio'));
-      document.getElementById('planCompleto').addEventListener('click', () => simulatePayment('completo'));
     });
   </script>
 </body>
