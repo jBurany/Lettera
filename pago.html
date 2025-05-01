@@ -3,13 +3,15 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Pagar carta personalizada</title>
+  <title data-i18n="pageTitle">Pagar carta personalizada</title>
   <script src="https://cdn.tailwindcss.com"></script>
 </head>
 <body class="bg-gray-100 text-gray-900 font-sans">
 
   <!-- Overlay de selección de idioma -->
-  <div id="langOverlay" class="fixed inset-0 bg-white/90 flex items-center justify-center z-50" style="display: none;">
+  <div id="langOverlay"
+       class="fixed inset-0 bg-white/90 flex items-center justify-center z-50"
+       style="display: none;">
     <div class="bg-white p-8 rounded-xl shadow-lg text-center">
       <h2 class="text-2xl mb-4">Selecciona tu idioma / Select your language</h2>
       <button onclick="setLanguage('es')" class="mx-2 px-4 py-2 bg-pink-500 text-white rounded">Español</button>
@@ -17,17 +19,32 @@
     </div>
   </div>
 
-  <main class="max-w-2xl mx-auto py-10 px-4">
-    <h1 id="tituloCarta" class="text-3xl font-bold mb-6 text-center">Cargando...</h1>
+  <main class="max-w-2xl mx-auto py-10 px-4 overflow-auto">
+
+    <!-- Título dinámico -->
+    <h1 id="tituloCarta"
+        data-i18n="loading"
+        class="text-3xl font-bold mb-6 text-center">
+      Cargando...
+    </h1>
 
     <div class="bg-white rounded-xl shadow p-6">
-      <p id="descripcionCarta" class="text-gray-700 text-sm mb-6 text-center"></p>
 
-      <h2 class="text-lg font-semibold mb-2 text-center">Elegí tu plan:</h2>
+      <!-- Descripción dinámica -->
+      <p id="descripcionCarta"
+         class="text-gray-700 text-sm mb-6 text-center"
+         data-i18n="loadingDesc">
+        Por favor espera...
+      </p>
+
+      <!-- Título del selector de plan -->
+      <h2 data-i18n="choosePlan" class="text-lg font-semibold mb-2 text-center">
+        Elegí tu plan:
+      </h2>
 
       <div class="space-y-4">
 
-        <!-- Botón Plan Básico -->
+        <!-- Plan Básico -->
         <form id="btnBasico" action="https://www.paypal.com/cgi-bin/webscr" method="post" target="_top">
           <input type="hidden" name="business" value="juanpab737@gmail.com">
           <input type="hidden" name="cmd" value="_xclick">
@@ -36,10 +53,12 @@
           <input type="hidden" name="currency_code" value="USD">
           <input id="returnBasico" type="hidden" name="return" value="">
           <input type="hidden" name="cancel_return" value="https://lettera-one.vercel.app/">
-          <input type="submit" value="Comprar Plan Básico – $4 USD" class="w-full bg-blue-600 text-white py-2 rounded-xl hover:bg-blue-700">
+          <input type="submit" data-i18n="buyBasic"
+                 value="Comprar Plan Básico – $4 USD"
+                 class="w-full bg-blue-600 text-white py-2 rounded-xl hover:bg-blue-700">
         </form>
 
-        <!-- Botón Plan Intermedio -->
+        <!-- Plan Intermedio -->
         <form id="btnIntermedio" action="https://www.paypal.com/cgi-bin/webscr" method="post" target="_top">
           <input type="hidden" name="business" value="juanpab737@gmail.com">
           <input type="hidden" name="cmd" value="_xclick">
@@ -48,10 +67,12 @@
           <input type="hidden" name="currency_code" value="USD">
           <input id="returnIntermedio" type="hidden" name="return" value="">
           <input type="hidden" name="cancel_return" value="https://lettera-one.vercel.app/">
-          <input type="submit" value="Comprar Plan Intermedio – $6 USD" class="w-full bg-yellow-500 text-white py-2 rounded-xl hover:bg-yellow-600">
+          <input type="submit" data-i18n="buyIntermediate"
+                 value="Comprar Plan Intermedio – $6 USD"
+                 class="w-full bg-yellow-500 text-white py-2 rounded-xl hover:bg-yellow-600">
         </form>
 
-        <!-- Botón Plan Completo -->
+        <!-- Plan Completo -->
         <form id="btnCompleto" action="https://www.paypal.com/cgi-bin/webscr" method="post" target="_top">
           <input type="hidden" name="business" value="juanpab737@gmail.com">
           <input type="hidden" name="cmd" value="_xclick">
@@ -60,90 +81,49 @@
           <input type="hidden" name="currency_code" value="USD">
           <input id="returnCompleto" type="hidden" name="return" value="">
           <input type="hidden" name="cancel_return" value="https://lettera-one.vercel.app/">
-          <input type="submit" value="Comprar Plan Completo – $9 USD" class="w-full bg-green-600 text-white py-2 rounded-xl hover:bg-green-700">
+          <input type="submit" data-i18n="buyComplete"
+                 value="Comprar Plan Completo – $9 USD"
+                 class="w-full bg-green-600 text-white py-2 rounded-xl hover:bg-green-700">
         </form>
 
       </div>
     </div>
 
-    <!-- BOTÓN MERCADOPAGO -->
-    <button onclick="pagarConMercadoPago()" class="w-full bg-indigo-600 hover:bg-indigo-700 text-white py-2 rounded-xl mt-4">
+    <!-- Botón MercadoPago -->
+    <button onclick="pagarConMercadoPago()"
+            data-i18n="payWithMP"
+            class="w-full bg-indigo-600 hover:bg-indigo-700 text-white py-2 rounded-xl mt-4">
       Pagar con MercadoPago 💳
     </button>
+
   </main>
 
   <script>
-    // Función de pago con MercadoPago
-    async function pagarConMercadoPago() {
-      const tipoCarta = new URLSearchParams(window.location.search).get("tipoCarta");
-      const plan = prompt("¿Qué plan querés pagar? Escribí: basico, intermedio o completo");
-
-      if (!["basico", "intermedio", "completo"].includes(plan)) {
-        alert("⚠️ Plan inválido. Escribí exactamente: basico, intermedio o completo.");
-        return;
-      }
-
-      try {
-        const response = await fetch("/api/crear-preferencia", {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ tipoCarta, plan })
-        });
-
-        const data = await response.json();
-        if (data.link) {
-          window.location.href = data.link;
-        } else {
-          alert("❌ Error al crear el link de pago");
-        }
-      } catch (err) {
-        alert("❌ Error al conectar con el servidor");
-        console.error(err);
-      }
-    }
-
-    // Configuración de URLs de retorno para PayPal
-    document.addEventListener("DOMContentLoaded", () => {
-      const params = new URLSearchParams(window.location.search);
-      const tipo = params.get("tipoCarta") || "amor";
-      const base = "https://lettera-one.vercel.app/formulario.html";
-      document.getElementById("returnBasico").value      = `${base}?tipoCarta=${tipo}&plan=basico&paid=true`;
-      document.getElementById("returnIntermedio").value  = `${base}?tipoCarta=${tipo}&plan=intermedio&paid=true`;
-      document.getElementById("returnCompleto").value    = `${base}?tipoCarta=${tipo}&plan=completo&paid=true`;
-
-      // Titulos dinámicos
-      const titulos = {
-        amor: "Carta de Amor",
-        perdon: "Carta de Perdón",
-        felicitacion: "Carta de Felicitación",
-        agradecimiento: "Carta de Agradecimiento",
-        laboral: "Carta Laboral",
-        libro: "Libro Personalizado"
-      };
-      const descripciones = {
-        amor: "Expresá tus sentimientos con una carta romántica y personalizada.",
-        perdon: "Decí lo que sentís con una carta sincera y empática.",
-        felicitacion: "Ideal para cumpleaños, logros o nacimientos.",
-        agradecimiento: "Una forma única de mostrar gratitud.",
-        laboral: "Tu presentación perfecta para un empleo.",
-        libro: "Un regalo literario hecho a medida, emocional y único."
-      };
-      document.getElementById("tituloCarta").textContent = titulos[tipo] || "Carta Lettera";
-      document.getElementById("descripcionCarta").textContent = descripciones[tipo] || "";
-    });
-  </script>
-
-  <!-- Script de selección y aplicación de idioma -->
-  <script>
+    // Traducciones para esta página
     const translations = {
       es: {
-        // Aquí podrías añadir claves/data-i18n si deseas traducir textos estáticos de esta página
+        pageTitle:     "Pagar carta personalizada",
+        loading:       "Cargando…",
+        loadingDesc:   "Por favor espera mientras cargamos los detalles de tu carta.",
+        choosePlan:    "Elegí tu plan:",
+        buyBasic:      "Comprar Plan Básico – $4 USD",
+        buyIntermediate:"Comprar Plan Intermedio – $6 USD",
+        buyComplete:   "Comprar Plan Completo – $9 USD",
+        payWithMP:     "Pagar con MercadoPago 💳"
       },
       en: {
-        // Y sus equivalentes en inglés
+        pageTitle:     "Pay for your letter",
+        loading:       "Loading…",
+        loadingDesc:   "Please wait while we load your letter details.",
+        choosePlan:    "Choose your plan:",
+        buyBasic:      "Buy Basic Plan – $4 USD",
+        buyIntermediate:"Buy Intermediate Plan – $6 USD",
+        buyComplete:   "Buy Complete Plan – $9 USD",
+        payWithMP:     "Pay with MercadoPago 💳"
       }
     };
 
+    // Aplica textos traducidos
     function applyTranslations(lang) {
       document.querySelectorAll('[data-i18n]').forEach(el => {
         const key = el.getAttribute('data-i18n');
@@ -151,15 +131,45 @@
           el.textContent = translations[lang][key];
         }
       });
+      // también traducimos <title>
+      document.title = translations[lang]?.pageTitle || document.title;
     }
 
+    // Selección de idioma
     function setLanguage(lang) {
       sessionStorage.setItem('lang', lang);
       applyTranslations(lang);
       document.getElementById('langOverlay').style.display = 'none';
     }
 
-    document.addEventListener('DOMContentLoaded', () => {
+    // Pago MercadoPago
+    async function pagarConMercadoPago() {
+      const tipoCarta = new URLSearchParams(window.location.search).get("tipoCarta");
+      const plan = prompt(translations[sessionStorage.getItem('lang') || 'es'].choosePlan
+                         + " (basico, intermedio, completo)");
+
+      if (!["basico", "intermedio", "completo"].includes(plan)) {
+        alert("⚠️ Plan inválido.");
+        return;
+      }
+
+      try {
+        const resp = await fetch("/api/crear-preferencia", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ tipoCarta, plan })
+        });
+        const data = await resp.json();
+        if (data.link) window.location.href = data.link;
+        else alert("❌ Error al crear link de pago");
+      } catch {
+        alert("❌ Error al conectar con el servidor");
+      }
+    }
+
+    // Configuración inicial
+    document.addEventListener("DOMContentLoaded", () => {
+      // Overlay y traducción
       const overlay = document.getElementById('langOverlay');
       const lang = sessionStorage.getItem('lang');
       if (!lang) {
@@ -168,6 +178,38 @@
         overlay.style.display = 'none';
         applyTranslations(lang);
       }
+
+      // Dinámicos: títulos y descripciones
+      const tipo = new URLSearchParams(window.location.search).get("tipoCarta") || "amor";
+      const base = "https://lettera-one.vercel.app/formulario.html";
+      document.getElementById("returnBasico").value      = `${base}?tipoCarta=${tipo}&plan=basico&paid=true`;
+      document.getElementById("returnIntermedio").value  = `${base}?tipoCarta=${tipo}&plan=intermedio&paid=true`;
+      document.getElementById("returnCompleto").value    = `${base}?tipoCarta=${tipo}&plan=completo&paid=true`;
+
+      const titles = {
+        es:    { amor: "Carta de Amor",    perdon: "Carta de Perdón", felicitacion: "Carta de Felicitación",
+                 agradecimiento: "Carta de Agradecimiento", laboral: "Carta Laboral", libro: "Libro Personalizado" },
+        en:    { amor: "Love Letter",      perdon: "Apology Letter",   felicitacion: "Congratulation Letter",
+                 agradecimiento: "Thank You Letter", laboral: "Job Application",    libro: "Personalized Book" }
+      };
+      const descs = {
+        es:    { amor: "Expresá tus sentimientos con una carta romántica y personalizada.",
+                 perdon: "Decí lo que sentís con una carta sincera y empática.",
+                 felicitacion: "Ideal para cumpleaños, logros o nacimientos.",
+                 agradecimiento: "Una forma única de mostrar gratitud.",
+                 laboral: "Tu presentación perfecta para un empleo.",
+                 libro: "Un regalo literario hecho a medida, emocional y único." },
+        en:    { amor: "Express deep feelings with a romantic, personalized letter.",
+                 perdon: "Say how you feel with a sincere, empathetic letter.",
+                 felicitacion: "Ideal for birthdays, achievements or births.",
+                 agradecimiento: "A unique way to show gratitude.",
+                 laboral: "Your perfect job application letter.",
+                 libro: "A tailored, emotional literary gift." }
+      };
+
+      const userLang = lang || 'es';
+      document.getElementById("tituloCarta").textContent       = titles[userLang][tipo];
+      document.getElementById("descripcionCarta").textContent   = descs[userLang][tipo];
     });
   </script>
 
