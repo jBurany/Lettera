@@ -41,17 +41,53 @@
             <li data-i18n="loveFeature3">• Opciones visuales premium</li>
           </ul>
         </div>
-        <button data-i18n="chooseThis"
-                onclick="irAFormulario('amor')"
-                class="mt-4 bg-red-500 hover:bg-red-600 text-white py-2 px-4 rounded-xl">
+        <button data-i18n="chooseThis" onclick="irAFormulario('amor')" class="mt-4 bg-red-500 hover:bg-red-600 text-white py-2 px-4 rounded-xl">
           Elegir este
         </button>
       </div>
 
-      <!-- Aquí podrías insertar las otras tarjetas (Perdón, Laboral, etc.), 
-           marcando sus textos con data-i18n en una etapa posterior. -->
+      <!-- Carta de Perdón -->
+      <div class="bg-white rounded-2xl shadow hover:shadow-lg transition p-6 flex flex-col justify-between">
+        <div>
+          <h2 data-i18n="pardonTitle" class="text-2xl font-semibold mb-2 text-yellow-600">
+            Carta de Perdón
+          </h2>
+          <p data-i18n="pardonDesc" class="mb-4 text-sm text-gray-600">
+            Para pedir disculpas con sinceridad, mostrar arrepentimiento y abrir la puerta al diálogo emocional.
+          </p>
+          <ul class="text-sm text-gray-700 mb-4">
+            <li data-i18n="pardonFeature1">• 3 niveles de profundidad y extensión</li>
+            <li data-i18n="pardonFeature2">• Tono empático y reflexivo</li>
+            <li data-i18n="pardonFeature3">• Opciones de anonimato</li>
+          </ul>
+        </div>
+        <button data-i18n="chooseThis" onclick="irAFormulario('perdon')" class="mt-4 bg-yellow-500 hover:bg-yellow-600 text-white py-2 px-4 rounded-xl">
+          Elegir este
+        </button>
+      </div>
+
+      <!-- Carta de Presentación Laboral -->
+      <div class="bg-white rounded-2xl shadow hover:shadow-lg transition p-6 flex flex-col justify-between">
+        <div>
+          <h2 data-i18n="laborTitle" class="text-2xl font-semibold mb-2 text-blue-600">
+            Carta de Presentación Laboral
+          </h2>
+          <p data-i18n="laborDesc" class="mb-4 text-sm text-gray-600">
+            Redactada para destacar tus habilidades, experiencia y motivación para postularte a un trabajo.
+          </p>
+          <ul class="text-sm text-gray-700 mb-4">
+            <li data-i18n="laborFeature1">• Claridad, profesionalismo y empatía</li>
+            <li data-i18n="laborFeature2">• Adaptada a tu perfil</li>
+            <li data-i18n="laborFeature3">• Opcional: versión en inglés</li>
+          </ul>
+        </div>
+        <button data-i18n="chooseThis" onclick="irAFormulario('laboral')" class="mt-4 bg-blue-500 hover:bg-blue-600 text-white py-2 px-4 rounded-xl">
+          Elegir este
+        </button>
+      </div>
 
     </div>
+
   </main>
 
   <script>
@@ -64,22 +100,48 @@
   <script>
     const translations = {
       es: {
-        welcome:     "Elegí tu carta perfecta",
-        loveTitle:   "Carta de Amor",
-        loveDesc:    "Expresá sentimientos profundos a esa persona especial. Ideal para declaraciones, aniversarios o reconciliaciones.",
-        loveFeature1:"• Disponible en 3 niveles (Básico, Intermedio, Completo)",
-        loveFeature2:"• Estilos romántico o poético",
-        loveFeature3:"• Opciones visuales premium",
-        chooseThis:  "Elegir este"
+        welcome:      "Elegí tu carta perfecta",
+        loveTitle:    "Carta de Amor",
+        loveDesc:     "Expresá sentimientos profundos a esa persona especial. Ideal para declaraciones, aniversarios o reconciliaciones.",
+        loveFeature1: "• Disponible en 3 niveles (Básico, Intermedio, Completo)",
+        loveFeature2: "• Estilos romántico o poético",
+        loveFeature3: "• Opciones visuales premium",
+
+        pardonTitle:    "Carta de Perdón",
+        pardonDesc:     "Para pedir disculpas con sinceridad, mostrar arrepentimiento y abrir la puerta al diálogo emocional.",
+        pardonFeature1: "• 3 niveles de profundidad y extensión",
+        pardonFeature2: "• Tono empático y reflexivo",
+        pardonFeature3: "• Opciones de anonimato",
+
+        laborTitle:    "Carta de Presentación Laboral",
+        laborDesc:     "Redactada para destacar tus habilidades, experiencia y motivación para postularte a un trabajo.",
+        laborFeature1:"• Claridad, profesionalismo y empatía",
+        laborFeature2:"• Adaptada a tu perfil",
+        laborFeature3:"• Opcional: versión en inglés",
+
+        chooseThis:   "Elegir este"
       },
       en: {
-        welcome:     "Choose your perfect letter",
-        loveTitle:   "Love Letter",
-        loveDesc:    "Express deep feelings to that special someone. Ideal for declarations, anniversaries, or reconciliations.",
-        loveFeature1:"• Available in 3 tiers (Basic, Intermediate, Complete)",
-        loveFeature2:"• Romantic or poetic styles",
-        loveFeature3:"• Premium visual options",
-        chooseThis:  "Choose this"
+        welcome:      "Choose your perfect letter",
+        loveTitle:    "Love Letter",
+        loveDesc:     "Express deep feelings to that special someone. Ideal for declarations, anniversaries, or reconciliations.",
+        loveFeature1: "• Available in 3 tiers (Basic, Intermediate, Complete)",
+        loveFeature2: "• Romantic or poetic styles",
+        loveFeature3: "• Premium visual options",
+
+        pardonTitle:    "Apology Letter",
+        pardonDesc:     "To sincerely apologize, show remorse and open the door to emotional dialogue.",
+        pardonFeature1: "• 3 levels of depth and length",
+        pardonFeature2: "• Empathetic and reflective tone",
+        pardonFeature3: "• Anonymity options",
+
+        laborTitle:    "Job Application Letter",
+        laborDesc:     "Crafted to highlight your skills, experience, and motivation to apply for a job.",
+        laborFeature1:"• Clarity, professionalism, and empathy",
+        laborFeature2:"• Tailored to your profile",
+        laborFeature3:"• Optional English version",
+
+        chooseThis:   "Choose this"
       }
     };
 
@@ -93,7 +155,6 @@
     }
 
     function setLanguage(lang) {
-      // Guardamos en sessionStorage para mantener durante la sesión
       sessionStorage.setItem('lang', lang);
       applyTranslations(lang);
       document.getElementById('langOverlay').style.display = 'none';
@@ -103,10 +164,8 @@
       const overlay = document.getElementById('langOverlay');
       const lang = sessionStorage.getItem('lang');
       if (!lang) {
-        // No hay idioma en sesión → mostramos overlay
         overlay.style.display = 'flex';
       } else {
-        // Ya había idioma seleccionado → aplicamos y ocultamos overlay
         overlay.style.display = 'none';
         applyTranslations(lang);
       }
