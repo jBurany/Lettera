@@ -1,3 +1,4 @@
+<!-- index.html -->
 <!DOCTYPE html>
 <html lang="es">
 <head>
@@ -7,41 +8,25 @@
   <script src="https://cdn.tailwindcss.com"></script>
 </head>
 <body class="bg-gray-100 text-gray-900 font-sans">
-
-  <!-- Overlay de selección de idioma -->
-  <div id="langOverlay" class="fixed inset-0 bg-white/90 flex items-center justify-center z-50" style="display: none;">
-    <div class="bg-white p-8 rounded-xl shadow-lg text-center">
-      <h2 class="text-2xl mb-4">Selecciona tu idioma / Select your language</h2>
-      <button onclick="setLanguage('es')" class="mx-2 px-4 py-2 bg-pink-500 text-white rounded">Español</button>
-      <button onclick="setLanguage('en')" class="mx-2 px-4 py-2 bg-blue-600 text-white rounded">English</button>
-    </div>
-  </div>
-
   <main class="max-w-5xl mx-auto py-10 px-4">
-
-    <!-- Título principal -->
-    <h1 data-i18n="welcome" class="text-4xl font-bold text-center mb-10">
-      Elegí tu carta perfecta
-    </h1>
+    <h1 class="text-4xl font-bold text-center mb-10">Elegí tu carta perfecta</h1>
 
     <div class="grid md:grid-cols-3 gap-6">
 
       <!-- Carta de Amor -->
       <div class="bg-white rounded-2xl shadow hover:shadow-lg transition p-6 flex flex-col justify-between">
         <div>
-          <h2 data-i18n="loveTitle" class="text-2xl font-semibold mb-2 text-red-600">
-            Carta de Amor
-          </h2>
-          <p data-i18n="loveDesc" class="mb-4 text-sm text-gray-600">
+          <h2 class="text-2xl font-semibold mb-2 text-red-600">Carta de Amor</h2>
+          <p class="mb-4 text-sm text-gray-600">
             Expresá sentimientos profundos a esa persona especial. Ideal para declaraciones, aniversarios o reconciliaciones.
           </p>
           <ul class="text-sm text-gray-700 mb-4">
-            <li data-i18n="loveFeature1">• Disponible en 3 niveles (Básico, Intermedio, Completo)</li>
-            <li data-i18n="loveFeature2">• Estilos romántico o poético</li>
-            <li data-i18n="loveFeature3">• Opciones visuales premium</li>
+            <li>• Disponible en 3 niveles (Básico, Intermedio, Completo)</li>
+            <li>• Estilos romántico o poético</li>
+            <li>• Opciones visuales premium</li>
           </ul>
         </div>
-        <button data-i18n="chooseThis" onclick="irAFormulario('amor')" class="mt-4 bg-red-500 hover:bg-red-600 text-white py-2 px-4 rounded-xl">
+        <button onclick="irAFormulario('amor')" class="mt-4 bg-red-500 hover:bg-red-600 text-white py-2 px-4 rounded-xl">
           Elegir este
         </button>
       </div>
@@ -49,19 +34,17 @@
       <!-- Carta de Perdón -->
       <div class="bg-white rounded-2xl shadow hover:shadow-lg transition p-6 flex flex-col justify-between">
         <div>
-          <h2 data-i18n="pardonTitle" class="text-2xl font-semibold mb-2 text-yellow-600">
-            Carta de Perdón
-          </h2>
-          <p data-i18n="pardonDesc" class="mb-4 text-sm text-gray-600">
+          <h2 class="text-2xl font-semibold mb-2 text-yellow-600">Carta de Perdón</h2>
+          <p class="mb-4 text-sm text-gray-600">
             Para pedir disculpas con sinceridad, mostrar arrepentimiento y abrir la puerta al diálogo emocional.
           </p>
           <ul class="text-sm text-gray-700 mb-4">
-            <li data-i18n="pardonFeature1">• 3 niveles de profundidad y extensión</li>
-            <li data-i18n="pardonFeature2">• Tono empático y reflexivo</li>
-            <li data-i18n="pardonFeature3">• Opciones de anonimato</li>
+            <li>• 3 niveles de profundidad y extensión</li>
+            <li>• Tono empático y reflexivo</li>
+            <li>• Opciones de anonimato</li>
           </ul>
         </div>
-        <button data-i18n="chooseThis" onclick="irAFormulario('perdon')" class="mt-4 bg-yellow-500 hover:bg-yellow-600 text-white py-2 px-4 rounded-xl">
+        <button onclick="irAFormulario('perdon')" class="mt-4 bg-yellow-500 hover:bg-yellow-600 text-white py-2 px-4 rounded-xl">
           Elegir este
         </button>
       </div>
@@ -69,107 +52,28 @@
       <!-- Carta de Presentación Laboral -->
       <div class="bg-white rounded-2xl shadow hover:shadow-lg transition p-6 flex flex-col justify-between">
         <div>
-          <h2 data-i18n="laborTitle" class="text-2xl font-semibold mb-2 text-blue-600">
-            Carta de Presentación Laboral
-          </h2>
-          <p data-i18n="laborDesc" class="mb-4 text-sm text-gray-600">
+          <h2 class="text-2xl font-semibold mb-2 text-blue-600">Carta de Presentación Laboral</h2>
+          <p class="mb-4 text-sm text-gray-600">
             Redactada para destacar tus habilidades, experiencia y motivación para postularte a un trabajo.
           </p>
           <ul class="text-sm text-gray-700 mb-4">
-            <li data-i18n="laborFeature1">• Claridad, profesionalismo y empatía</li>
-            <li data-i18n="laborFeature2">• Adaptada a tu perfil</li>
-            <li data-i18n="laborFeature3">• Opcional: versión en inglés</li>
+            <li>• Claridad, profesionalismo y empatía</li>
+            <li>• Adaptada a tu perfil</li>
+            <li>• Opcional: versión en inglés</li>
           </ul>
         </div>
-        <button data-i18n="chooseThis" onclick="irAFormulario('laboral')" class="mt-4 bg-blue-500 hover:bg-blue-600 text-white py-2 px-4 rounded-xl">
+        <button onclick="irAFormulario('laboral')" class="mt-4 bg-blue-500 hover:bg-blue-600 text-white py-2 px-4 rounded-xl">
           Elegir este
         </button>
       </div>
 
     </div>
-
   </main>
 
   <script>
     function irAFormulario(tipo) {
       window.location.href = `/pago.html?tipoCarta=${tipo}`;
     }
-  </script>
-
-  <!-- Script de selección y aplicación de idioma -->
-  <script>
-    const translations = {
-      es: {
-        welcome:      "Elegí tu carta perfecta",
-        loveTitle:    "Carta de Amor",
-        loveDesc:     "Expresá sentimientos profundos a esa persona especial. Ideal para declaraciones, aniversarios o reconciliaciones.",
-        loveFeature1: "• Disponible en 3 niveles (Básico, Intermedio, Completo)",
-        loveFeature2: "• Estilos romántico o poético",
-        loveFeature3: "• Opciones visuales premium",
-
-        pardonTitle:    "Carta de Perdón",
-        pardonDesc:     "Para pedir disculpas con sinceridad, mostrar arrepentimiento y abrir la puerta al diálogo emocional.",
-        pardonFeature1: "• 3 niveles de profundidad y extensión",
-        pardonFeature2: "• Tono empático y reflexivo",
-        pardonFeature3: "• Opciones de anonimato",
-
-        laborTitle:    "Carta de Presentación Laboral",
-        laborDesc:     "Redactada para destacar tus habilidades, experiencia y motivación para postularte a un trabajo.",
-        laborFeature1:"• Claridad, profesionalismo y empatía",
-        laborFeature2:"• Adaptada a tu perfil",
-        laborFeature3:"• Opcional: versión en inglés",
-
-        chooseThis:   "Elegir este"
-      },
-      en: {
-        welcome:      "Choose your perfect letter",
-        loveTitle:    "Love Letter",
-        loveDesc:     "Express deep feelings to that special someone. Ideal for declarations, anniversaries, or reconciliations.",
-        loveFeature1: "• Available in 3 tiers (Basic, Intermediate, Complete)",
-        loveFeature2: "• Romantic or poetic styles",
-        loveFeature3: "• Premium visual options",
-
-        pardonTitle:    "Apology Letter",
-        pardonDesc:     "To sincerely apologize, show remorse and open the door to emotional dialogue.",
-        pardonFeature1: "• 3 levels of depth and length",
-        pardonFeature2: "• Empathetic and reflective tone",
-        pardonFeature3: "• Anonymity options",
-
-        laborTitle:    "Job Application Letter",
-        laborDesc:     "Crafted to highlight your skills, experience, and motivation to apply for a job.",
-        laborFeature1:"• Clarity, professionalism, and empathy",
-        laborFeature2:"• Tailored to your profile",
-        laborFeature3:"• Optional English version",
-
-        chooseThis:   "Choose this"
-      }
-    };
-
-    function applyTranslations(lang) {
-      document.querySelectorAll('[data-i18n]').forEach(el => {
-        const key = el.getAttribute('data-i18n');
-        if (translations[lang] && translations[lang][key]) {
-          el.textContent = translations[lang][key];
-        }
-      });
-    }
-
-    function setLanguage(lang) {
-      sessionStorage.setItem('lang', lang);
-      applyTranslations(lang);
-      document.getElementById('langOverlay').style.display = 'none';
-    }
-
-    document.addEventListener('DOMContentLoaded', () => {
-      const overlay = document.getElementById('langOverlay');
-      const lang = sessionStorage.getItem('lang');
-      if (!lang) {
-        overlay.style.display = 'flex';
-      } else {
-        overlay.style.display = 'none';
-        applyTranslations(lang);
-      }
-    });
   </script>
 </body>
 </html>
