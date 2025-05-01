@@ -1,54 +1,45 @@
 // public/js/lang.js
 
-// 1. Diccionario de traducciones global
+// 1. Diccionario de traducciones
 const translations = {
   es: {
-    pageTitle:       "Pagar carta personalizada",
+    // index.html
+    pageTitle:       "Elegí tu carta perfecta",
+    title_amor:      "Carta de Amor",
+    desc_amor:       "Expresá sentimientos profundos a esa persona especial. Ideal para declaraciones, aniversarios o reconciliaciones.",
+    title_perdon:    "Carta de Perdón",
+    desc_perdon:     "Para pedir disculpas con sinceridad, mostrar arrepentimiento y abrir la puerta al diálogo emocional.",
+    title_laboral:   "Carta de Presentación Laboral",
+    desc_laboral:    "Redactada para destacar tus habilidades, experiencia y motivación para postularte a un trabajo.",
+    // pago.html
+    pageTitlePago:   "Pagar carta personalizada",
     loadingTitle:    "Cargando…",
     loadingDesc:     "Por favor espera mientras cargamos los detalles de tu carta.",
     choosePlan:      "Elegí tu plan:",
     basicPlan:       "Plan Básico",
     intermediatePlan:"Plan Intermedio",
-    completePlan:    "Plan Completo",
-    // dinámicos por tipo de carta:
-    title_amor:         "Carta de Amor",
-    desc_amor:          "Expresá tus sentimientos con una carta romántica y personalizada.",
-    title_perdon:       "Carta de Perdón",
-    desc_perdon:        "Para pedir disculpas con sinceridad y empatía.",
-    title_felicitacion: "Carta de Felicitación",
-    desc_felicitacion:  "Perfecta para celebrar logros, cumpleaños o nacimientos.",
-    title_agradecimiento:"Carta de Agradecimiento",
-    desc_agradecimiento: "Muestra gratitud de forma única y emotiva.",
-    title_laboral:      "Carta Laboral",
-    desc_laboral:       "Resalta tus habilidades y motivación para un trabajo.",
-    title_libro:        "Libro Personalizado",
-    desc_libro:         "Un regalo literario hecho a medida y lleno de emoción."
+    completePlan:    "Plan Completo"
+    // (añade aquí claves de formulario.html si las marcaste con data-i18n)
   },
   en: {
-    pageTitle:       "Pay for your letter",
+    pageTitle:       "Choose your perfect letter",
+    title_amor:      "Love Letter",
+    desc_amor:       "Express deep feelings to that special someone. Ideal for declarations, anniversaries or reconciliations.",
+    title_perdon:    "Apology Letter",
+    desc_perdon:     "To sincerely apologize, show remorse and open the door to emotional dialogue.",
+    title_laboral:   "Job Application Letter",
+    desc_laboral:    "Crafted to highlight your skills, experience, and motivation to apply for a job.",
+    pageTitlePago:   "Pay for your letter",
     loadingTitle:    "Loading…",
     loadingDesc:     "Please wait while we load your letter details.",
     choosePlan:      "Choose your plan:",
     basicPlan:       "Basic Plan",
     intermediatePlan:"Intermediate Plan",
-    completePlan:    "Complete Plan",
-    // dinámicos por tipo de carta:
-    title_amor:         "Love Letter",
-    desc_amor:          "Express deep feelings with a romantic, personalized letter.",
-    title_perdon:       "Apology Letter",
-    desc_perdon:        "To sincerely apologize with empathy.",
-    title_felicitacion: "Congratulation Letter",
-    desc_felicitacion:  "Perfect for celebrations, birthdays or new beginnings.",
-    title_agradecimiento:"Thank You Letter",
-    desc_agradecimiento: "Show gratitude in a unique and heartfelt way.",
-    title_laboral:      "Job Application Letter",
-    desc_laboral:       "Highlight your skills and motivation for a job.",
-    title_libro:        "Personalized Book",
-    desc_libro:         "A tailor-made literary gift full of emotion."
+    completePlan:    "Complete Plan"
   }
 };
 
-// 2. Aplica traducciones a todos los elementos marcados con data-i18n
+// 2. Aplica traducciones a todos los elementos con [data-i18n]
 function applyTranslations(lang) {
   document.querySelectorAll('[data-i18n]').forEach(el => {
     const key = el.getAttribute('data-i18n');
@@ -56,28 +47,36 @@ function applyTranslations(lang) {
       el.textContent = translations[lang][key];
     }
   });
-  if (translations[lang]?.pageTitle) {
-    document.title = translations[lang].pageTitle;
+  // Ajusta <title> para la página de pago
+  const pageTitleKey = document.title.includes("Pagar") ? 'pageTitlePago' : 'pageTitle';
+  if (translations[lang] && translations[lang][pageTitleKey]) {
+    document.title = translations[lang][pageTitleKey];
   }
 }
 
-// 3. Guarda la elección en sessionStorage y aplica la traducción
+// 3. Guarda el idioma y oculta el overlay de inmediato
 function setLanguage(lang) {
   sessionStorage.setItem('lang', lang);
   applyTranslations(lang);
+  const overlay = document.getElementById('langOverlay');
+  if (overlay) overlay.style.display = 'none';
 }
 
-// 4. Inicializa el overlay y la traducción al cargar la página
+// 4. Inicializa el overlay y la traducción al cargar
 function initLanguage() {
   const overlay = document.getElementById('langOverlay');
   const lang    = sessionStorage.getItem('lang');
   if (!lang) {
-    overlay.style.display = 'flex';
+    // No hay idioma en sesión → mostramos overlay
+    if (overlay) overlay.style.display = 'flex';
   } else {
-    overlay.style.display = 'none';
+    // Idioma ya seleccionado → ocultamos overlay y aplicamos
+    if (overlay) overlay.style.display = 'none';
     applyTranslations(lang);
   }
 }
 
-// Exportamos para usar en módulos si fuera necesario (opcional)
-// export { initLanguage, setLanguage, applyTranslations };
+// Exponer funciones globalmente
+window.initLanguage = initLanguage;
+window.setLanguage   = setLanguage;
+window.applyTranslations = applyTranslations;
