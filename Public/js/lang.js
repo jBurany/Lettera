@@ -1,16 +1,16 @@
 // public/js/lang.js
 
-// 1. Diccionario de traducciones
 const translations = {
   es: {
+    // index.html
     pageTitle:       "Elegí tu carta perfecta",
     title_amor:      "Carta de Amor",
     desc_amor:       "Expresá sentimientos profundos a esa persona especial. Ideal para declaraciones, aniversarios o reconciliaciones.",
     title_perdon:    "Carta de Perdón",
-    desc_perdon:     "Para pedir disculpas con sinceridad, mostrar arrepentimiento y abrir la puerta al diálogo emocional.",
+    desc_perdon:     "Para pedir disculpas con sinceridad y empatía.",
     title_laboral:   "Carta de Presentación Laboral",
-    desc_laboral:    "Redactada para destacar tus habilidades, experiencia y motivación para postularte a un trabajo."
-    
+    desc_laboral:    "Resalta tus habilidades y motivación para un trabajo.",
+
     // pago.html
     pageTitlePago:   "Pagar carta personalizada",
     loadingTitle:    "Cargando…",
@@ -21,7 +21,7 @@ const translations = {
     completePlan:    "Plan Completo",
     payWithMP:       "Pagar con MercadoPago 💳",
 
-  // formulario.html
+    // formulario.html
     formTitle:       "Formulario: Carta",
     label_destinatario: "¿A quién va dirigida la carta?",
     label_mensaje:      "¿Qué querés transmitir?",
@@ -39,18 +39,17 @@ const translations = {
     btn_generar:        "Generar carta",
     tuCarta:            "Tu Carta Generada",
     btn_descargar:      "Descargar PDF"
-    
-    // …añade más claves según necesites…
   },
   en: {
+    // index.html
     pageTitle:       "Choose your perfect letter",
     title_amor:      "Love Letter",
     desc_amor:       "Express deep feelings to that special someone. Ideal for declarations, anniversaries or reconciliations.",
     title_perdon:    "Apology Letter",
-    desc_perdon:     "To sincerely apologize, show remorse and open the door to emotional dialogue.",
+    desc_perdon:     "To sincerely apologize with empathy.",
     title_laboral:   "Job Application Letter",
-    desc_laboral:    "Crafted to highlight your skills, experience, and motivation to apply for a job."
-   
+    desc_laboral:    "Highlight your skills and motivation for a job.",
+
     // pago.html
     pageTitlePago:   "Pay for your letter",
     loadingTitle:    "Loading…",
@@ -79,12 +78,9 @@ const translations = {
     btn_generar:        "Generate letter",
     tuCarta:            "Your Generated Letter",
     btn_descargar:      "Download PDF"
-      
-    // …añade más claves traducidas…
   }
 };
 
-// 2. Aplica traducciones a todos los elementos con [data-i18n]
 function applyTranslations(lang) {
   document.querySelectorAll('[data-i18n]').forEach(el => {
     const key = el.getAttribute('data-i18n');
@@ -92,40 +88,31 @@ function applyTranslations(lang) {
       el.textContent = translations[lang][key];
     }
   });
-  if (translations[lang]?.pageTitle) {
-    document.title = translations[lang].pageTitle;
+  // ajustar <title>
+  const titleKey = document.title.includes("Pagar") ? 'pageTitlePago' : 'pageTitle';
+  if (translations[lang] && translations[lang][titleKey]) {
+    document.title = translations[lang][titleKey];
   }
 }
 
-// 3. Guarda el idioma y destruye el overlay
 function setLanguage(lang) {
   sessionStorage.setItem('lang', lang);
   applyTranslations(lang);
   const overlay = document.getElementById('langOverlay');
-  if (overlay) overlay.remove();  // lo quitamos del DOM
+  if (overlay) overlay.style.display = 'none';
 }
 
-// 4. Inicializa el overlay y la traducción al cargar
 function initLanguage() {
   const overlay = document.getElementById('langOverlay');
   const lang    = sessionStorage.getItem('lang');
-
-  if (!overlay) return; 
   if (!lang) {
-    // mostramos overlay y conectamos botones
     overlay.style.display = 'flex';
-    // manejadores de click *después* de que exista el DOM
-    document.getElementById('btnEs').addEventListener('click', () => setLanguage('es'));
-    document.getElementById('btnEn').addEventListener('click', () => setLanguage('en'));
   } else {
-    // idioma ya elegido: destruyo overlay y aplico
-    overlay.remove();
+    overlay.style.display = 'none';
     applyTranslations(lang);
   }
 }
 
-
-// Exponer en window
-window.initLanguage   = initLanguage;
-window.setLanguage    = setLanguage;
-window.applyTranslations = applyTranslations;
+// Exponer
+window.initLanguage = initLanguage;
+window.setLanguage  = setLanguage;
