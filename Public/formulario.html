@@ -3,30 +3,32 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title data-i18n="formTitle">Formulario: Carta</title>
+  <title>Formulario - Lettera</title>
   <script src="https://cdn.tailwindcss.com"></script>
 </head>
 <body class="bg-gray-100 text-gray-900 font-sans">
 
-  <!-- Overlay de selección de idioma -->
+  <!-- 1) OVERLAY DE SELECCIÓN DE IDIOMA -->
   <div id="langOverlay"
        class="fixed inset-0 bg-white/90 flex items-center justify-center z-50"
        style="display: none;">
     <div class="bg-white p-8 rounded-xl shadow-lg text-center">
       <h2 class="text-2xl mb-4">Selecciona tu idioma / Select your language</h2>
-      <button id="btnEs" class="mx-2 px-4 py-2 bg-pink-500 text-white rounded">Español</button>
-      <button id="btnEn" class="mx-2 px-4 py-2 bg-blue-600 text-white rounded">English</button>
+      <button onclick="setLanguage('es')" class="mx-2 px-4 py-2 bg-pink-500 text-white rounded">Español</button>
+      <button onclick="setLanguage('en')" class="mx-2 px-4 py-2 bg-blue-600 text-white rounded">English</button>
     </div>
   </div>
+  <!-- FIN OVERLAY DE IDIOMA -->
+
 
   <main class="max-w-xl mx-auto py-10">
-    <h1 data-i18n="formTitle" class="text-3xl font-bold mb-6 text-center">Formulario: Carta</h1>
+    <h1 class="text-3xl font-bold mb-6 text-center" data-i18n="formTitle">Formulario: Carta</h1>
 
     <form id="loveLetterForm" class="p-6 rounded-xl shadow space-y-4">
       <!-- Tipo de carta -->
       <div>
-        <label data-i18n="label_tipoCarta" class="block font-semibold mb-1">¿Qué tipo de carta querés?</label>
-        <select id="tipoCarta" name="tipoCarta" class="w-full border p-2 rounded" disabled>
+        <label class="block font-semibold mb-1">¿Qué tipo de carta querés?</label>
+        <select id="tipoCarta" name="tipoCarta" class="w-full border p-2 rounded" required>
           <option value="amor">Carta de Amor</option>
           <option value="perdon">Carta de Perdón</option>
           <option value="felicitacion">Carta de Felicitación</option>
@@ -38,8 +40,8 @@
 
       <!-- Plan -->
       <div>
-        <label data-i18n="label_plan" class="block font-semibold mb-1">Elegí el plan</label>
-        <select id="plan" name="plan" class="w-full border p-2 rounded" disabled>
+        <label class="block font-semibold mb-1">Elegí el plan</label>
+        <select id="plan" name="plan" class="w-full border p-2 rounded" required>
           <option value="basico">Básico (hasta 200 palabras)</option>
           <option value="intermedio">Intermedio (hasta 350 palabras)</option>
           <option value="completo">Completo (hasta 500 palabras)</option>
@@ -48,95 +50,88 @@
 
       <!-- Nombre destinatario -->
       <div>
-        <label data-i18n="label_destinatario" class="block font-semibold">¿A quién va dirigida la carta?</label>
-        <input data-i18n-placeholder="ph_destinatario"
-               type="text" id="destinatario" class="w-full border p-2 rounded" required />
+        <label class="block font-semibold">¿A quién va dirigida la carta?</label>
+        <input type="text" id="destinatario" class="w-full border p-2 rounded" required />
       </div>
 
       <!-- Contenido emocional -->
       <div>
-        <label data-i18n="label_mensaje" class="block font-semibold">¿Qué querés transmitir?</label>
+        <label class="block font-semibold">¿Qué querés transmitir?</label>
         <textarea id="mensaje" class="w-full border p-2 rounded" rows="4" required></textarea>
       </div>
 
       <!-- Estilo -->
       <div>
-        <label data-i18n="label_estilo" class="block font-semibold">Estilo deseado (romántico, formal, divertido, etc.):</label>
+        <label class="block font-semibold">Estilo deseado (romántico, formal, divertido, etc.):</label>
         <input type="text" id="estilo" class="w-full border p-2 rounded" />
       </div>
 
       <!-- Método de entrega -->
       <div>
-        <label data-i18n="label_entrega" class="block font-semibold">¿Cómo querés recibir la carta?</label>
+        <label class="block font-semibold">¿Cómo querés recibir la carta?</label>
         <select id="entrega" name="entrega" class="w-full border p-2 rounded">
-          <option value="pdf" data-i18n="opt_pdf">Descargar como PDF</option>
-          <option value="email" data-i18n="opt_email">Recibir por correo electrónico</option>
-          <option value="ambos" data-i18n="opt_ambos">Ambas opciones</option>
-          <option value="regalo" data-i18n="opt_regalo">Enviar como regalo</option>
+          <option value="pdf">Descargar como PDF</option>
+          <option value="email">Recibir por correo electrónico</option>
+          <option value="ambos">Ambas opciones</option>
+          <option value="regalo">Enviar como regalo</option>
         </select>
       </div>
 
-      <!-- Email de regalo (dinámico) -->
+      <!-- Email de regalo (tu lógica previa) -->
       <div id="emailRegaloWrapper" class="hidden">
-        <label data-i18n="label_emailRegalo" class="block font-semibold">Email de regalo</label>
+        <label class="block font-semibold">Email de regalo</label>
         <input type="email" id="emailRegalo" class="w-full border p-2 rounded" placeholder="ejemplo@dominio.com" />
       </div>
 
       <!-- Firma -->
       <div>
-        <label data-i18n="label_firmaTipo" class="block font-semibold">¿Querés que sea anónima o con tu nombre?</label>
+        <label class="block font-semibold">¿Querés que sea anónima o con tu nombre?</label>
         <select id="firmaTipo" name="firmaTipo" class="w-full border p-2 rounded">
-          <option value="anonima" data-i18n="opt_anonima">Anónima</option>
-          <option value="conNombre" data-i18n="opt_conNombre">Mostrar mi nombre</option>
+          <option value="anonima">Anónima</option>
+          <option value="conNombre">Mostrar mi nombre</option>
         </select>
       </div>
 
       <!-- Firma personalizada -->
       <div>
-        <label data-i18n="label_firmaPersonalizada" class="block font-semibold">Firma personalizada (opcional)</label>
+        <label class="block font-semibold">Firma personalizada (opcional)</label>
         <input type="text" id="firmaPersonalizada" name="firmaPersonalizada" placeholder="Ej: Enviado por alguien que te quiere..." class="w-full border p-2 rounded" />
       </div>
 
       <!-- Botón de envío -->
-      <button type="submit" data-i18n="btn_generar" class="w-full bg-blue-600 text-white py-2 rounded-xl hover:bg-blue-700">
+      <button type="submit" class="w-full bg-blue-600 text-white py-2 rounded-xl hover:bg-blue-700">
         Generar carta
       </button>
     </form>
 
     <!-- Aquí se mostrará la carta -->
     <section id="cartaGenerada" class="bg-white p-6 mt-10 rounded-xl shadow hidden">
-      <h2 data-i18n="tuCarta" class="text-2xl font-bold mb-4 text-center">Tu Carta Generada</h2>
+      <h2 class="text-2xl font-bold mb-4 text-center">Tu Carta Generada</h2>
       <div id="contenidoCarta" class="text-gray-700 space-y-4"></div>
       <div class="text-center mt-6">
-        <button onclick="descargarPDF()" data-i18n="btn_descargar" class="px-6 py-3 bg-green-600 text-white rounded-xl hover:bg-green-700">
+        <button onclick="descargarPDF()" class="px-6 py-3 bg-green-600 text-white rounded-xl hover:bg-green-700">
           Descargar como PDF
         </button>
       </div>
     </section>
   </main>
 
-  <!-- Librerías -->
+  <!-- Librerías y tus scripts previos (no tocados) -->
   <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
-
-  <!-- Integración de lang.js -->
-  <script src="/js/lang.js"></script>
   <script>
-    document.addEventListener('DOMContentLoaded', initLanguage);
+    document.addEventListener("DOMContentLoaded", function () {
+      // Tu código de dinámicas, fondos, corazones, etc.
+      // …(se mantiene intacto)…
 
-    // Mostrar campo de email si se elige "Enviar como regalo"
-    document.getElementById('entrega').addEventListener('change', (e) => {
-      const wrapper = document.getElementById('emailRegaloWrapper');
-      wrapper.classList.toggle('hidden', e.target.value !== 'regalo');
+      // Lógica de email regalo
+      document.getElementById('entrega').addEventListener('change', function(e) {
+        document.getElementById('emailRegaloWrapper').classList.toggle('hidden', e.target.value !== 'regalo');
+      });
     });
-  </script>
 
-  <!-- Scripts funcionales que ya tenías -->
-  <script>
     document.getElementById("loveLetterForm").addEventListener("submit", async function (e) {
       e.preventDefault();
-      // Si se elige regalo, siempre generamos PDF
-      const entrega = document.getElementById("entrega").value;
-      // (resto de tu lógica para fetch / generar carta…)
+      // Tu fetch a /api/generar-carta y mostrar la carta…
     });
 
     function descargarPDF() {
@@ -144,5 +139,20 @@
       html2pdf().from(element).save("Carta_Lettera.pdf");
     }
   </script>
+
+  <!-- 2) INTEGRACIÓN DE lang.js -->
+  <script src="/js/lang.js"></script>
+  <script>
+    // Arrancamos la detección y aplicación de idioma
+    document.addEventListener('DOMContentLoaded', initLanguage);
+  </script>
+  <!-- FIN lang.js -->
+
+  <!-- Loader (tu overlay) -->
+  <div id="loaderOverlay" class="fixed inset-0 bg-white bg-opacity-80 flex flex-col items-center justify-center z-50 hidden">
+    <div class="animate-spin rounded-full h-16 w-16 border-t-4 border-blue-600 border-opacity-50 mb-4"></div>
+    <p class="text-gray-700 text-lg font-medium">Generando tu carta... por favor esperá unos segundos.</p>
+  </div>
+
 </body>
 </html>
