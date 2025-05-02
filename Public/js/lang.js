@@ -50,20 +50,18 @@ function initLanguage() {
   const overlay = document.getElementById('langOverlay');
   const lang    = sessionStorage.getItem('lang');
 
+  if (!overlay) return; 
   if (!lang) {
-    // no hay idioma → mostramos overlay
+    // mostramos overlay y conectamos botones
     overlay.style.display = 'flex';
+    // manejadores de click *después* de que exista el DOM
+    document.getElementById('btnEs').addEventListener('click', () => setLanguage('es'));
+    document.getElementById('btnEn').addEventListener('click', () => setLanguage('en'));
   } else {
-    // ya existe idioma → ocultamos overlay y aplicamos traducción
-    overlay.style.display = 'none';
+    // idioma ya elegido: destruyo overlay y aplico
+    overlay.remove();
     applyTranslations(lang);
   }
-}
-
-function setLanguage(lang) {
-  sessionStorage.setItem('lang', lang);
-  applyTranslations(lang);
-  document.getElementById('langOverlay').style.display = 'none';
 }
 
 
